@@ -29,4 +29,7 @@ public interface StockService {
 
 //    提示买(定时任务)
     public void noticeBuy();
+
+//    获取当前已经买了的
+    public List<BuySellRecord> getAllBuyRecord();
 }
