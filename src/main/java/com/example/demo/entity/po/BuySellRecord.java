@@ -1,4 +1,4 @@
-package com.example.demo.entity;/*
+package com.example.demo.entity.po;/*
  * @author p78o2
  * @date 2019/8/27
  */
@@ -18,6 +18,7 @@ public class BuySellRecord {
     private String stockNum;
     private boolean isfinish;
     private int buyNum;
+    private short sendTimes;
 
     public BuySellRecord() {
     }
@@ -119,7 +120,15 @@ public class BuySellRecord {
         this.buyNum = buyNum;
     }
 
-    public BuySellRecord(Integer id, float buyPrice, Date buyTime, float sellPrice, Date sellTime, float profitOrLoss, Integer stockId, String stockName, int category, String stockNum, boolean isfinish, int buyNum) {
+    public short getSendTimes() {
+        return sendTimes;
+    }
+
+    public void setSendTimes(short sendTimes) {
+        this.sendTimes = sendTimes;
+    }
+
+    public BuySellRecord(Integer id, float buyPrice, Date buyTime, float sellPrice, Date sellTime, float profitOrLoss, Integer stockId, String stockName, int category, String stockNum, boolean isfinish, int buyNum, short sendTimes) {
         this.id = id;
         this.buyPrice = buyPrice;
         this.buyTime = buyTime;
@@ -132,5 +141,6 @@ public class BuySellRecord {
         this.stockNum = stockNum;
         this.isfinish = isfinish;
         this.buyNum = buyNum;
+        this.sendTimes = sendTimes;
     }
 }

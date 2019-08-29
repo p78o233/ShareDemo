@@ -3,8 +3,8 @@ package com.example.demo.service;/*
  * @date 2019/8/27
  */
 
-import com.example.demo.entity.BuySellRecord;
-import com.example.demo.entity.Stock;
+import com.example.demo.entity.po.BuySellRecord;
+import com.example.demo.entity.po.Stock;
 
 import java.io.IOException;
 import java.util.List;

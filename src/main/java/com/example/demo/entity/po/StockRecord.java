@@ -1,4 +1,4 @@
-package com.example.demo.entity;/*
+package com.example.demo.entity.po;/*
  * @author p78o2
  * @date 2019/8/27
  */
