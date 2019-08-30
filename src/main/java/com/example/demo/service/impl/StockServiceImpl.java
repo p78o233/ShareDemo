@@ -82,7 +82,7 @@ public class StockServiceImpl implements StockService {
     public boolean updateSellRecord(BuySellRecord buySellRecord) {
         BuySellRecord buySellRecordOld = new BuySellRecord();
         buySellRecordOld = stockMapper.getOneBuySellRecord(buySellRecord.getId());
-        buySellRecord.setProfitOrLoss(buySellRecord.getSellPrice() - buySellRecordOld.getBuyPrice());
+        buySellRecord.setProfitOrLoss((buySellRecord.getSellPrice() - buySellRecordOld.getBuyPrice())*Float.valueOf(buySellRecordOld.getBuyNum()));
         buySellRecord.setSellTime(new Date());
         if (stockMapper.updateSellRecord(buySellRecord) > 0)
             return true;

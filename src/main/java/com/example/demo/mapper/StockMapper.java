@@ -33,7 +33,7 @@ public interface StockMapper {
             ",#{b.stockNum},#{b.stockName},#{b.category},#{b.stockId},#{b.buyNum})")
     int insertBuyRecord(@Param("b")BuySellRecord buySellRecord);
 
-    @Update("update buy_sell_record set sellPrice = #{b.sellPrice},sellTime = #{b.sellTime},profitOrLoss = #{b.profitOrLoss},isFinish = 1")
+    @Update("update buy_sell_record set sellPrice = #{b.sellPrice},sellTime = #{b.sellTime},profitOrLoss = #{b.profitOrLoss},isFinish = 1 where id = #{b.id}")
     int updateSellRecord(@Param("b")BuySellRecord buySellRecord);
 
     @Select("select * from buy_sell_record where id = #{id}")
