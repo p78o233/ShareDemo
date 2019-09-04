@@ -160,8 +160,37 @@ public class StockServiceImpl implements StockService {
                         lowRecord.setMinPrice(stockMinPrice);
                         lowRecord.setRecordPrice(Float.valueOf(result[3]));
                         lowRecord.setRecordTime(new Date());
-//                        检查趋势暂时不做，暂时想不到
-                        lowRecord.setTrend((short) 0);
+//                        检查趋势，若是小于10天则检查全部，若是20天看10天 50天看20天
+                        List<StockRecord> stockRecords = new ArrayList<StockRecord>();
+                        if(dayList.get(i)<=10){
+                            Date oldDateGetRecods = new Date();
+                            oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) *24* 60 * 60 * 1000));
+                            stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
+                        }else if(dayList.get(i)==20){
+                            Date oldDateGetRecods = new Date();
+                            oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 10 *24* 60 * 60 * 1000));
+                            stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
+                        }else if(dayList.get(i)==50){
+                            Date oldDateGetRecods = new Date();
+                            oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 20 *24* 60 * 60 * 1000));
+                            stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
+                        }
+//                        结束价钱小于起始价钱
+                        float collectData = 0.0f;
+                        for(StockRecord stockRecord : stockRecords){
+                            if(stockRecord.getEndPrice()<stockRecord.getBeginPrice()){
+                                collectData+=1.0f;
+                            }else{
+                                continue;
+                            }
+                        }
+                        if(collectData/stockRecords.size()>6){
+                            lowRecord.setTrend((short) -1);
+                        }else if(collectData/stockRecords.size()<4){
+                            lowRecord.setTrend((short) 1);
+                        }else {
+                            lowRecord.setTrend((short) 0);
+                        }
                         stockMapper.insertLowRecord(lowRecord);
                     } else {
                         continue;
