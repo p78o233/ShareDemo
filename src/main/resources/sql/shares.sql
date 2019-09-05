@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2019-09-04 16:46:42
+Date: 2019-09-05 16:36:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -157,7 +157,7 @@ CREATE TABLE `stock_record` (
   `category` int(11) DEFAULT NULL COMMENT '1 股票 2基金 3黄金 4期货',
   `recordTime` date DEFAULT NULL COMMENT '记录创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of stock_record
@@ -232,3 +232,13 @@ INSERT INTO `stock_record` VALUES ('73', '1.61', '1.61', '1.62', '1.6', '7', 'sh
 INSERT INTO `stock_record` VALUES ('74', '7.93', '8.08', '8.08', '7.89', '8', 'sh600740', '山西焦化', '1', '2019-09-04');
 INSERT INTO `stock_record` VALUES ('75', '1.16', '1.17', '1.18', '1.16', '9', 'sh601558', 'ST锐电', '1', '2019-09-04');
 INSERT INTO `stock_record` VALUES ('76', '0.95', '0.99', '0.99', '0.94', '10', 'sh600240', '*ST华业', '1', '2019-09-04');
+INSERT INTO `stock_record` VALUES ('77', '1.53', '1.54', '1.56', '1.53', '1', 'sh600022', '山东钢铁', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('78', '2.88', '2.87', '2.91', '2.86', '2', 'sh600698', '*ST天雁', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('79', '6.78', '6.68', '6.82', '6.68', '3', 'sh600879', '航天电子', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('80', '4.85', '4.75', '4.87', '4.74', '4', 'sh600497', '驰宏锌锗', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('81', '0.94', '0.92', '0.94', '0.91', '5', 'sh600747', '*ST大控', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('82', '1.26', '1.26', '1.26', '1.26', '6', 'sh600614', '*ST鹏起', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('83', '1.62', '1.63', '1.66', '1.61', '7', 'sh603077', '和邦生物', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('84', '8.09', '8.04', '8.19', '8.01', '8', 'sh600740', '山西焦化', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('85', '1.18', '1.18', '1.19', '1.17', '9', 'sh601558', 'ST锐电', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('86', '0.99', '0.99', '0.99', '0.97', '10', 'sh600240', '*ST华业', '1', '2019-09-05');

@@ -11,10 +11,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -28,12 +30,14 @@ public class StockController {
     @ResponseBody
     @ApiOperation("测试链接")
     public void test() {
+        System.err.println("执行静态定时任务时间: " + LocalDateTime.now());
         stockService.testList();
     }
 
     @RequestMapping(value = "/daylyRecord", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("每天记录关注的")
+    @Scheduled(cron = "0 0 16 * * ? ")
     public void daylyRecord()throws IOException {
         stockService.daylyRecord();
     }
@@ -41,6 +45,7 @@ public class StockController {
     @RequestMapping(value = "/noticeBuy", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("买")
+    @Scheduled(cron = "0 0 11,15 * * ? ")
     public void noticeBuy() {
         stockService.noticeBuy();
     }
