@@ -3,10 +3,12 @@ package com.example.demo.service.impl;/*
  * @date 2019/8/27
  */
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.LowRecord;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
+import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.entity.vo.StockRecordVo;
 import com.example.demo.mapper.StockMapper;
 import com.example.demo.service.StockService;
@@ -249,5 +251,34 @@ public class StockServiceImpl implements StockService {
         String resultStr = HttpUtils.get("http://hq.sinajs.cn", params);
         String result[] = resultStr.split(",");
         return result;
+    }
+
+    @Override
+    public List<StockPriceVo> checkNowPrice(List<String> stockNums) {
+        List<StockPriceVo> stockPriceVoList = new ArrayList<StockPriceVo>();
+        if(stockNums.size()==0){
+            stockNums = stockMapper.getAllStockNums();
+        }
+        for (String stockNum : stockNums){
+            StockPriceVo stockPriceVo = new StockPriceVo();
+            stockPriceVo = stockMapper.getMaxHisHighLowPrice(stockNum);
+            String result[] = getStockNowPrice(stockNum);
+            stockPriceVo.setNowPrice(Float.valueOf(result[3]));
+            stockPriceVoList.add(stockPriceVo);
+        }
+        return stockPriceVoList;
+    }
+
+    @Override
+    public JSONObject getHistoryPrice(String stockNum) {
+        List<StockRecord> list = new ArrayList<StockRecord>();
+        list = stockMapper.getHistoryPrice(stockNum);
+        StockPriceVo stockPriceVo = new StockPriceVo();
+        stockPriceVo = stockMapper.getMaxHisHighLowPrice(stockNum);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list",list);
+        jsonObject.put("historyHighPrice",stockPriceVo.getHeightPriceHis());
+        jsonObject.put("historyLowPrice",stockPriceVo.getLowPriceHis());
+        return jsonObject;
     }
 }

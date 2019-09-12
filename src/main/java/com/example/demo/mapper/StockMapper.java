@@ -7,20 +7,25 @@ import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.LowRecord;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
+import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.entity.vo.StockRecordVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface StockMapper {
-    @Select("select * from stock")
+    @Select("select * from stock order by weight desc")
     List<Stock> getAllStock();
+
+    @Select("select stockNum from stock order by weight desc")
+    List<String> getAllStockNums();
 
     @Insert("insert into stock (stockNum,stockName,createTime,category) values (#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category})")
     int insertStock(@Param("s")Stock stock);
@@ -68,4 +73,10 @@ public interface StockMapper {
 
     @Update("update low_record set isSend = 1 where isSend = 0")
     int updateLowRecordIsSend();
+
+    @Select("select stockName,stockNum,MAX(endPrice) as heightPriceHis,MIN(endPrice) as lowPriceHis,count(1) as dayNums from stock_record where stockNum = #{stockNum} GROUP BY stockNum")
+    StockPriceVo getMaxHisHighLowPrice(@Param("stockNum")String stockNum);
+
+    @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
+    List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);
 }

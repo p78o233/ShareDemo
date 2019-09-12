@@ -11,17 +11,26 @@ public class Stock {
     private String stockName;
     private Date createTime;
     private int category;
+    private int weight;
 
     public Stock() {
     }
 
-    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category) {
+    public int getWeight() {
+        return weight;
+    }
 
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category, int weight) {
         this.id = id;
         this.stockNum = stockNum;
         this.stockName = stockName;
         this.createTime = createTime;
         this.category = category;
+        this.weight = weight;
     }
 
     public Integer getId() {

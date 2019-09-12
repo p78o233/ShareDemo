@@ -3,6 +3,7 @@ package com.example.demo.controller;/*
  * @date 2019/8/27
  */
 
+import com.example.demo.callback.R;
 import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.service.StockService;
@@ -78,5 +79,17 @@ public class StockController {
     @ApiOperation("获取当前已经买到的")
     public void getAllBuyRecord() {
         stockService.getAllBuyRecord();
+    }
+    @RequestMapping(value = "/getNowPrice", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("查询当前价格")
+    public R getNowPrice(@RequestBody List<String>stockNums){
+        return new R(true,200,stockService.checkNowPrice(stockNums),"");
+    }
+    @RequestMapping(value = "/getHistoryPrice",method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("获取某个的历史")
+    public R getHistoryPrice(@RequestParam String stockNum){
+        return new R(true,200,stockService.getHistoryPrice(stockNum),"");
     }
 }

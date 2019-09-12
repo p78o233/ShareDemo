@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2019-09-05 16:36:46
+Date: 2019-09-12 17:03:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -62,7 +62,7 @@ CREATE TABLE `low_record` (
   `isSend` bit(1) DEFAULT b'0' COMMENT '是否已经发送',
   `trend` tinyint(1) DEFAULT NULL COMMENT '在最低价监视日子内趋势 -1跌的日子比较多  0 震荡  1上涨的日子比较多',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of low_record
@@ -113,6 +113,26 @@ INSERT INTO `low_record` VALUES ('43', '4', 'sh600497', '驰宏锌锗', '1', '1'
 INSERT INTO `low_record` VALUES ('44', '6', 'sh600614', '*ST鹏起', '1', '1', '1.15', '1.09', '2019-08-29 15:24:33', '', '0');
 INSERT INTO `low_record` VALUES ('45', '4', 'sh600497', '驰宏锌锗', '1', '1', '4.55', '4.52', '2019-08-29 15:24:58', '', '0');
 INSERT INTO `low_record` VALUES ('46', '6', 'sh600614', '*ST鹏起', '1', '1', '1.15', '1.09', '2019-08-29 15:24:58', '', '0');
+INSERT INTO `low_record` VALUES ('47', '2', 'sh600698', '*ST天雁', '1', '5', '2.87', '2.86', '2019-09-11 10:49:46', '', '1');
+INSERT INTO `low_record` VALUES ('48', '5', 'sh600747', '*ST大控', '1', '5', '0.86', '0.83', '2019-09-11 10:49:47', '', '1');
+INSERT INTO `low_record` VALUES ('49', '10', 'sh600240', '*ST华业', '1', '5', '0.89', '0.86', '2019-09-11 10:49:47', '', '1');
+INSERT INTO `low_record` VALUES ('50', '5', 'sh600747', '*ST大控', '1', '10', '0.86', '0.83', '2019-09-11 10:49:47', '', '1');
+INSERT INTO `low_record` VALUES ('51', '10', 'sh600240', '*ST华业', '1', '10', '0.89', '0.86', '2019-09-11 10:49:47', '', '1');
+INSERT INTO `low_record` VALUES ('52', '2', 'sh600698', '*ST天雁', '1', '5', '2.87', '2.85', '2019-09-11 11:03:13', '', '1');
+INSERT INTO `low_record` VALUES ('53', '5', 'sh600747', '*ST大控', '1', '5', '0.86', '0.83', '2019-09-11 11:03:13', '', '1');
+INSERT INTO `low_record` VALUES ('54', '10', 'sh600240', '*ST华业', '1', '5', '0.89', '0.86', '2019-09-11 11:03:13', '', '1');
+INSERT INTO `low_record` VALUES ('55', '5', 'sh600747', '*ST大控', '1', '10', '0.86', '0.83', '2019-09-11 11:03:13', '', '1');
+INSERT INTO `low_record` VALUES ('56', '10', 'sh600240', '*ST华业', '1', '10', '0.89', '0.86', '2019-09-11 11:03:13', '', '1');
+INSERT INTO `low_record` VALUES ('57', '5', 'sh600747', '*ST大控', '1', '5', '0.86', '0.83', '2019-09-11 11:32:59', '', '1');
+INSERT INTO `low_record` VALUES ('58', '10', 'sh600240', '*ST华业', '1', '5', '0.89', '0.86', '2019-09-11 11:32:59', '', '1');
+INSERT INTO `low_record` VALUES ('59', '5', 'sh600747', '*ST大控', '1', '10', '0.86', '0.83', '2019-09-11 11:32:59', '', '1');
+INSERT INTO `low_record` VALUES ('60', '10', 'sh600240', '*ST华业', '1', '10', '0.89', '0.86', '2019-09-11 11:32:59', '', '1');
+INSERT INTO `low_record` VALUES ('61', '2', 'sh600698', '*ST天雁', '1', '5', '2.87', '2.85', '2019-09-11 15:00:00', '', '1');
+INSERT INTO `low_record` VALUES ('62', '3', 'sh600879', '航天电子', '1', '5', '6.67', '6.66', '2019-09-11 15:00:00', '', '1');
+INSERT INTO `low_record` VALUES ('63', '5', 'sh600747', '*ST大控', '1', '5', '0.86', '0.83', '2019-09-11 15:00:00', '', '1');
+INSERT INTO `low_record` VALUES ('64', '5', 'sh600747', '*ST大控', '1', '10', '0.86', '0.83', '2019-09-11 15:00:01', '', '1');
+INSERT INTO `low_record` VALUES ('65', '5', 'sh600747', '*ST大控', '1', '5', '0.83', '0.79', '2019-09-12 11:26:38', '', '1');
+INSERT INTO `low_record` VALUES ('66', '5', 'sh600747', '*ST大控', '1', '10', '0.83', '0.79', '2019-09-12 11:26:39', '', '1');
 
 -- ----------------------------
 -- Table structure for `stock`
@@ -124,22 +144,23 @@ CREATE TABLE `stock` (
   `stockName` varchar(10) DEFAULT NULL COMMENT '名称',
   `createTime` date DEFAULT NULL COMMENT '创建时间',
   `category` int(11) DEFAULT NULL COMMENT '1 股票 2基金 3黄金 4期货',
+  `weight` int(11) DEFAULT '0' COMMENT '权重',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of stock
 -- ----------------------------
-INSERT INTO `stock` VALUES ('1', 'sh600022', '山东钢铁', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('2', 'sh600698', '*ST天雁', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('3', 'sh600879', '航天电子', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('4', 'sh600497', '驰宏锌锗', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('5', 'sh600747', '*ST大控', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('6', 'sh600614', '*ST鹏起', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('7', 'sh603077', '和邦生物', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('8', 'sh600740', '山西焦化', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('9', 'sh601558', 'ST锐电', '2019-08-27', '1');
-INSERT INTO `stock` VALUES ('10', 'sh600240', '*ST华业', '2019-08-27', '1');
+INSERT INTO `stock` VALUES ('1', 'sh600022', '山东钢铁', '2019-08-27', '1', '7');
+INSERT INTO `stock` VALUES ('2', 'sh600698', '*ST天雁', '2019-08-27', '1', '5');
+INSERT INTO `stock` VALUES ('3', 'sh600879', '航天电子', '2019-08-27', '1', '9');
+INSERT INTO `stock` VALUES ('4', 'sh600497', '驰宏锌锗', '2019-08-27', '1', '8');
+INSERT INTO `stock` VALUES ('5', 'sh600747', '*ST大控', '2019-08-27', '1', '6');
+INSERT INTO `stock` VALUES ('6', 'sh600614', '*ST鹏起', '2019-08-27', '1', '4');
+INSERT INTO `stock` VALUES ('7', 'sh603077', '和邦生物', '2019-08-27', '1', '2');
+INSERT INTO `stock` VALUES ('8', 'sh600740', '山西焦化', '2019-08-27', '1', '3');
+INSERT INTO `stock` VALUES ('9', 'sh601558', 'ST锐电', '2019-08-27', '1', '0');
+INSERT INTO `stock` VALUES ('10', 'sh600240', '*ST华业', '2019-08-27', '1', '0');
 
 -- ----------------------------
 -- Table structure for `stock_record`
@@ -157,7 +178,7 @@ CREATE TABLE `stock_record` (
   `category` int(11) DEFAULT NULL COMMENT '1 股票 2基金 3黄金 4期货',
   `recordTime` date DEFAULT NULL COMMENT '记录创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of stock_record
@@ -242,3 +263,63 @@ INSERT INTO `stock_record` VALUES ('83', '1.62', '1.63', '1.66', '1.61', '7', 's
 INSERT INTO `stock_record` VALUES ('84', '8.09', '8.04', '8.19', '8.01', '8', 'sh600740', '山西焦化', '1', '2019-09-05');
 INSERT INTO `stock_record` VALUES ('85', '1.18', '1.18', '1.19', '1.17', '9', 'sh601558', 'ST锐电', '1', '2019-09-05');
 INSERT INTO `stock_record` VALUES ('86', '0.99', '0.99', '0.99', '0.97', '10', 'sh600240', '*ST华业', '1', '2019-09-05');
+INSERT INTO `stock_record` VALUES ('87', '1.54', '1.53', '1.55', '1.52', '1', 'sh600022', '山东钢铁', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('88', '2.87', '2.9', '2.9', '2.87', '2', 'sh600698', '*ST天雁', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('89', '6.68', '6.73', '6.81', '6.67', '3', 'sh600879', '航天电子', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('90', '4.76', '4.76', '4.8', '4.73', '4', 'sh600497', '驰宏锌锗', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('91', '0.92', '0.92', '0.93', '0.91', '5', 'sh600747', '*ST大控', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('92', '1.23', '1.2', '1.25', '1.2', '6', 'sh600614', '*ST鹏起', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('93', '1.63', '1.62', '1.64', '1.61', '7', 'sh603077', '和邦生物', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('94', '8.07', '8.05', '8.11', '7.99', '8', 'sh600740', '山西焦化', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('95', '1.18', '1.17', '1.19', '1.16', '9', 'sh601558', 'ST锐电', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('96', '0.98', '0.95', '0.99', '0.94', '10', 'sh600240', '*ST华业', '1', '2019-09-06');
+INSERT INTO `stock_record` VALUES ('97', '1.55', '1.55', '1.55', '1.53', '1', 'sh600022', '山东钢铁', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('98', '2.92', '2.9', '2.93', '2.88', '2', 'sh600698', '*ST天雁', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('99', '6.75', '6.79', '6.8', '6.69', '3', 'sh600879', '航天电子', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('100', '4.79', '4.8', '4.81', '4.73', '4', 'sh600497', '驰宏锌锗', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('101', '0.92', '0.91', '0.93', '0.91', '5', 'sh600747', '*ST大控', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('102', '1.2', '1.2', '1.21', '1.16', '6', 'sh600614', '*ST鹏起', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('103', '1.63', '1.64', '1.65', '1.62', '7', 'sh603077', '和邦生物', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('104', '8.09', '8.18', '8.18', '8.05', '8', 'sh600740', '山西焦化', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('105', '1.17', '1.17', '1.18', '1.16', '9', 'sh601558', 'ST锐电', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('106', '0.95', '0.94', '0.96', '0.91', '10', 'sh600240', '*ST华业', '1', '2019-09-09');
+INSERT INTO `stock_record` VALUES ('107', '1.55', '1.55', '1.55', '1.53', '1', 'sh600022', '山东钢铁', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('108', '2.9', '2.89', '2.91', '2.87', '2', 'sh600698', '*ST天雁', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('109', '6.77', '6.72', '6.9', '6.69', '3', 'sh600879', '航天电子', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('110', '4.79', '4.77', '4.82', '4.74', '4', 'sh600497', '驰宏锌锗', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('111', '0.89', '0.87', '0.92', '0.86', '5', 'sh600747', '*ST大控', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('112', '1.18', '1.18', '1.2', '1.16', '6', 'sh600614', '*ST鹏起', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('113', '1.65', '1.67', '1.68', '1.63', '7', 'sh603077', '和邦生物', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('114', '8.15', '8.12', '8.17', '8.06', '8', 'sh600740', '山西焦化', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('115', '1.17', '1.17', '1.18', '1.16', '9', 'sh601558', 'ST锐电', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('116', '0.93', '0.9', '0.93', '0.89', '10', 'sh600240', '*ST华业', '1', '2019-09-10');
+INSERT INTO `stock_record` VALUES ('117', '1.55', '1.54', '1.55', '1.54', '1', 'sh600022', '山东钢铁', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('118', '2.88', '2.85', '2.9', '2.83', '2', 'sh600698', '*ST天雁', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('119', '6.74', '6.66', '6.75', '6.63', '3', 'sh600879', '航天电子', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('120', '4.8', '4.76', '4.8', '4.72', '4', 'sh600497', '驰宏锌锗', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('121', '0.83', '0.83', '0.84', '0.83', '5', 'sh600747', '*ST大控', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('122', '1.19', '1.24', '1.24', '1.17', '6', 'sh600614', '*ST鹏起', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('123', '1.67', '1.65', '1.67', '1.64', '7', 'sh603077', '和邦生物', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('124', '8.13', '8.12', '8.28', '8.11', '8', 'sh600740', '山西焦化', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('125', '1.17', '1.17', '1.18', '1.16', '9', 'sh601558', 'ST锐电', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('126', '0.89', '0.94', '0.95', '0.86', '10', 'sh600240', '*ST华业', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('127', '1.55', '1.54', '1.55', '1.54', '1', 'sh600022', '山东钢铁', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('128', '2.88', '2.85', '2.9', '2.83', '2', 'sh600698', '*ST天雁', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('129', '6.74', '6.66', '6.75', '6.63', '3', 'sh600879', '航天电子', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('130', '4.8', '4.76', '4.8', '4.72', '4', 'sh600497', '驰宏锌锗', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('131', '0.83', '0.83', '0.84', '0.83', '5', 'sh600747', '*ST大控', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('132', '1.19', '1.24', '1.24', '1.17', '6', 'sh600614', '*ST鹏起', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('133', '1.67', '1.65', '1.67', '1.64', '7', 'sh603077', '和邦生物', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('134', '8.13', '8.12', '8.28', '8.11', '8', 'sh600740', '山西焦化', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('135', '1.17', '1.17', '1.18', '1.16', '9', 'sh601558', 'ST锐电', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('136', '0.89', '0.94', '0.95', '0.86', '10', 'sh600240', '*ST华业', '1', '2019-09-11');
+INSERT INTO `stock_record` VALUES ('137', '6.67', '6.67', '6.69', '6.63', '3', 'sh600879', '航天电子', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('138', '4.78', '4.75', '4.78', '4.71', '4', 'sh600497', '驰宏锌锗', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('139', '1.55', '1.55', '1.56', '1.54', '1', 'sh600022', '山东钢铁', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('140', '0.79', '0.79', '0.86', '0.79', '5', 'sh600747', '*ST大控', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('141', '2.84', '2.87', '2.87', '2.83', '2', 'sh600698', '*ST天雁', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('142', '1.24', '1.3', '1.3', '1.23', '6', 'sh600614', '*ST鹏起', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('143', '8.12', '8.14', '8.15', '8.04', '8', 'sh600740', '山西焦化', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('144', '1.66', '1.66', '1.66', '1.63', '7', 'sh603077', '和邦生物', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('145', '1.17', '1.17', '1.17', '1.15', '9', 'sh601558', 'ST锐电', '1', '2019-09-12');
+INSERT INTO `stock_record` VALUES ('146', '0.92', '0.95', '0.95', '0.9', '10', 'sh600240', '*ST华业', '1', '2019-09-12');

@@ -3,8 +3,10 @@ package com.example.demo.service;/*
  * @date 2019/8/27
  */
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.Stock;
+import com.example.demo.entity.vo.StockPriceVo;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,4 +34,11 @@ public interface StockService {
 
 //    获取当前已经买了的
     public List<BuySellRecord> getAllBuyRecord();
+
+//    查询当前价格,以及记录最低价和记录最高价
+    public List<StockPriceVo> checkNowPrice(List<String> stockNums);
+
+//    历史数据图
+    public JSONObject getHistoryPrice(String stockNum);
+
 }
