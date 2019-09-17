@@ -64,8 +64,8 @@ public interface StockMapper {
     @Select("select * from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
     List<StockRecord> getLatestRate(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
 
-    @Insert("insert into low_record (stockId,stockNum,stockName,category,recordDay,minPrice,recordPrice,recordTime,trend) values " +
-            "(#{l.stockId},#{l.stockNum},#{l.stockName},#{l.category},#{l.recordDay},#{l.minPrice},#{l.recordPrice},#{l.recordTime},#{l.trend})")
+    @Insert("insert into low_record (stockId,stockNum,stockName,category,recordDay,minPrice,recordPrice,recordTime,trend,lowHis,dayBefore) values " +
+            "(#{l.stockId},#{l.stockNum},#{l.stockName},#{l.category},#{l.recordDay},#{l.minPrice},#{l.recordPrice},#{l.recordTime},#{l.trend},#{l.lowHis},#{l.dayBefore})")
     int insertLowRecord(@Param("l")LowRecord lowRecord);
 
     @Select("select * from low_record where isSend = 0")
@@ -76,6 +76,9 @@ public interface StockMapper {
 
     @Select("select stockName,stockNum,MAX(endPrice) as heightPriceHis,MIN(endPrice) as lowPriceHis,count(1) as dayNums from stock_record where stockNum = #{stockNum} GROUP BY stockNum")
     StockPriceVo getMaxHisHighLowPrice(@Param("stockNum")String stockNum);
+
+    @Select("select * from stock_record where stockNum = #{stockNum} order by lowPrice asc limit 0,1")
+    StockRecord getLowestRecord(@Param("stockNum")String stockNum);
 
     @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
     List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);

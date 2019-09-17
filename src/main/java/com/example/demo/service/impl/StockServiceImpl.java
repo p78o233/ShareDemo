@@ -14,6 +14,7 @@ import com.example.demo.mapper.StockMapper;
 import com.example.demo.service.StockService;
 import com.example.demo.utils.HttpUtils;
 import com.example.demo.utils.MailUtils;
+import com.example.demo.utils.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -162,6 +163,8 @@ public class StockServiceImpl implements StockService {
                         lowRecord.setMinPrice(stockMinPrice);
                         lowRecord.setRecordPrice(Float.valueOf(result[3]));
                         lowRecord.setRecordTime(new Date());
+                        lowRecord.setLowHis(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getLowPrice());
+                        lowRecord.setDayBefore((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getRecordTime(),new Date()));
 //                        检查趋势，若是小于10天则检查全部，若是20天看10天 50天看20天
                         List<StockRecord> stockRecords = new ArrayList<StockRecord>();
                         if(dayList.get(i)<=10){
@@ -177,7 +180,7 @@ public class StockServiceImpl implements StockService {
                             oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 20 *24* 60 * 60 * 1000));
                             stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
                         }
-//                        结束价钱小于起始价钱
+//                        结束价钱小于起始价钱天数
                         float collectData = 0.0f;
                         for(StockRecord stockRecord : stockRecords){
                             if(stockRecord.getEndPrice()<stockRecord.getBeginPrice()){
@@ -224,7 +227,7 @@ public class StockServiceImpl implements StockService {
                     break;
             }
             String content = "购买名称："+low.getStockName()+",编号："+low.getStockNum()+",类别："+category+","+low.getRecordDay()+"天最低价："+low.getMinPrice()+
-                    ",当前记录价："+low.getRecordPrice()+"\n";
+                    ",当前记录价："+low.getRecordPrice()+",历史最低价"+low.getLowHis()+",距今天"+low.getDayBefore()+"天"+"\n";
             mailContent.add(content);
         }
         if(mailContent.size()>0) {
