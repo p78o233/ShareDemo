@@ -74,11 +74,14 @@ public interface StockMapper {
     @Update("update low_record set isSend = 1 where isSend = 0")
     int updateLowRecordIsSend();
 
-    @Select("select stockName,stockNum,MAX(endPrice) as heightPriceHis,MIN(endPrice) as lowPriceHis,count(1) as dayNums from stock_record where stockNum = #{stockNum} GROUP BY stockNum")
+    @Select("select stockName,stockNum,MAX(highPrice) as heightPriceHis,MIN(lowPrice) as lowPriceHis,count(1) as dayNums from stock_record where stockNum = #{stockNum} GROUP BY stockNum")
     StockPriceVo getMaxHisHighLowPrice(@Param("stockNum")String stockNum);
 
     @Select("select * from stock_record where stockNum = #{stockNum} order by lowPrice asc limit 0,1")
     StockRecord getLowestRecord(@Param("stockNum")String stockNum);
+
+    @Select("select * from stock_record where stockNum = #{stockNum} order by highPrice desc limit 0,1")
+    StockRecord getHighestRecord(@Param("stockNum")String stockNum);
 
     @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
     List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);

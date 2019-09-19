@@ -9,8 +9,12 @@ public class StockPriceVo {
     private float heightPriceHis;
     private float nowPrice;
     private float lowPriceHis;
+//    统计天数
     private int dayNums;
-
+//    最高是多少天前
+    private int heighDays;
+//    最低是多少天前
+    private int lowDays;
     public StockPriceVo() {
     }
 
@@ -62,12 +66,30 @@ public class StockPriceVo {
         this.dayNums = dayNums;
     }
 
-    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, float nowPrice, float lowPriceHis, int dayNums) {
+    public int getHeighDays() {
+        return heighDays;
+    }
+
+    public void setHeighDays(int heighDays) {
+        this.heighDays = heighDays;
+    }
+
+    public int getLowDays() {
+        return lowDays;
+    }
+
+    public void setLowDays(int lowDays) {
+        this.lowDays = lowDays;
+    }
+
+    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, float nowPrice, float lowPriceHis, int dayNums, int heighDays, int lowDays) {
         this.stockName = stockName;
         this.stockNum = stockNum;
         this.heightPriceHis = heightPriceHis;
         this.nowPrice = nowPrice;
         this.lowPriceHis = lowPriceHis;
         this.dayNums = dayNums;
+        this.heighDays = heighDays;
+        this.lowDays = lowDays;
     }
 }

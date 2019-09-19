@@ -3,6 +3,7 @@ package com.example.demo.service.impl;/*
  * @date 2019/8/27
  */
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.LowRecord;
@@ -189,9 +190,9 @@ public class StockServiceImpl implements StockService {
                                 continue;
                             }
                         }
-                        if(collectData/stockRecords.size()>6){
+                        if(collectData/stockRecords.size()>0.6){
                             lowRecord.setTrend((short) -1);
-                        }else if(collectData/stockRecords.size()<4){
+                        }else if(collectData/stockRecords.size()<0.4){
                             lowRecord.setTrend((short) 1);
                         }else {
                             lowRecord.setTrend((short) 0);
@@ -226,8 +227,16 @@ public class StockServiceImpl implements StockService {
                     category = "期货";
                     break;
             }
+            String trend = "";
+            if(low.getTrend()==(short)-1){
+                trend = "下跌";
+            }else if(low.getTrend()==(short)1){
+                trend = "上升";
+            }else {
+                trend = "震荡";
+            }
             String content = "购买名称："+low.getStockName()+",编号："+low.getStockNum()+",类别："+category+","+low.getRecordDay()+"天最低价："+low.getMinPrice()+
-                    ",当前记录价："+low.getRecordPrice()+",历史最低价"+low.getLowHis()+",距今天"+low.getDayBefore()+"天"+"\n";
+                    ",当前记录价："+low.getRecordPrice()+",历史最低价"+low.getLowHis()+",距今天"+low.getDayBefore()+"天    "+"趋势：  "+trend +"\n";
             mailContent.add(content);
         }
         if(mailContent.size()>0) {
@@ -267,6 +276,8 @@ public class StockServiceImpl implements StockService {
             stockPriceVo = stockMapper.getMaxHisHighLowPrice(stockNum);
             String result[] = getStockNowPrice(stockNum);
             stockPriceVo.setNowPrice(Float.valueOf(result[3]));
+            stockPriceVo.setLowDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockNum).getRecordTime(),new Date()));
+            stockPriceVo.setHeighDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getHighestRecord(stockNum).getRecordTime(),new Date()));
             stockPriceVoList.add(stockPriceVo);
         }
         return stockPriceVoList;
