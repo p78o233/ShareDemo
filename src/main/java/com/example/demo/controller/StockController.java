@@ -38,7 +38,7 @@ public class StockController {
     @RequestMapping(value = "/daylyRecord", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("每天记录关注的")
-    @Scheduled(cron = "0 0 16 * * ? ")
+    @Scheduled(cron = "0 5 15 * * ? ")
     public void daylyRecord()throws IOException {
         stockService.daylyRecord();
     }
@@ -46,7 +46,7 @@ public class StockController {
     @RequestMapping(value = "/noticeBuy", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("买")
-    @Scheduled(cron = "0 0 11,15 * * ? ")
+    @Scheduled(cron = "0 0,30 11,14 * * ? ")
     public void noticeBuy() {
         stockService.noticeBuy();
     }

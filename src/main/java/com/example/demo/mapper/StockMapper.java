@@ -59,7 +59,7 @@ public interface StockMapper {
     List<StockRecordVo> getStockNums(@Param("dayNum")int dayNum);
 
     @Select("select min(lowPrice) from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
-    float getLatestLowestPrice(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
+    Float getLatestLowestPrice(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
 
     @Select("select * from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
     List<StockRecord> getLatestRate(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);

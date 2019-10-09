@@ -152,54 +152,56 @@ public class StockServiceImpl implements StockService {
                     nowDate = sDateFormat.parse(sDateFormat.format(new Date()));
                     Date oldDate = new Date();
                     oldDate = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) *24* 60 * 60 * 1000));
-                    float stockMinPrice = stockMapper.getLatestLowestPrice(oldDate, nowDate, stockRecordVo.getStockNum());
-                    if (Float.valueOf(result[3]) < stockMinPrice) {
+                    Float stockMinPrice = stockMapper.getLatestLowestPrice(oldDate, nowDate, stockRecordVo.getStockNum());
+                    if(stockMinPrice!=null){
+                        if (Float.valueOf(result[3]) < stockMinPrice) {
 //                        小于dayList.get(i)日的最低价存入数据库
-                        LowRecord lowRecord = new LowRecord();
-                        lowRecord.setStockId(stockRecordVo.getStockId());
-                        lowRecord.setStockNum(stockRecordVo.getStockNum());
-                        lowRecord.setStockName(stockRecordVo.getStockName());
-                        lowRecord.setCategory(stockRecordVo.getCategory());
-                        lowRecord.setRecordDay(dayList.get(i));
-                        lowRecord.setMinPrice(stockMinPrice);
-                        lowRecord.setRecordPrice(Float.valueOf(result[3]));
-                        lowRecord.setRecordTime(new Date());
-                        lowRecord.setLowHis(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getLowPrice());
-                        lowRecord.setDayBefore((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getRecordTime(),new Date()));
+                            LowRecord lowRecord = new LowRecord();
+                            lowRecord.setStockId(stockRecordVo.getStockId());
+                            lowRecord.setStockNum(stockRecordVo.getStockNum());
+                            lowRecord.setStockName(stockRecordVo.getStockName());
+                            lowRecord.setCategory(stockRecordVo.getCategory());
+                            lowRecord.setRecordDay(dayList.get(i));
+                            lowRecord.setMinPrice(stockMinPrice);
+                            lowRecord.setRecordPrice(Float.valueOf(result[3]));
+                            lowRecord.setRecordTime(new Date());
+                            lowRecord.setLowHis(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getLowPrice());
+                            lowRecord.setDayBefore((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getRecordTime(),new Date()));
 //                        检查趋势，若是小于10天则检查全部，若是20天看10天 50天看20天
-                        List<StockRecord> stockRecords = new ArrayList<StockRecord>();
-                        if(dayList.get(i)<=10){
-                            Date oldDateGetRecods = new Date();
-                            oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) *24* 60 * 60 * 1000));
-                            stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
-                        }else if(dayList.get(i)==20){
-                            Date oldDateGetRecods = new Date();
-                            oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 10 *24* 60 * 60 * 1000));
-                            stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
-                        }else if(dayList.get(i)==50){
-                            Date oldDateGetRecods = new Date();
-                            oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 20 *24* 60 * 60 * 1000));
-                            stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
-                        }
-//                        结束价钱小于起始价钱天数
-                        float collectData = 0.0f;
-                        for(StockRecord stockRecord : stockRecords){
-                            if(stockRecord.getEndPrice()<stockRecord.getBeginPrice()){
-                                collectData+=1.0f;
-                            }else{
-                                continue;
+                            List<StockRecord> stockRecords = new ArrayList<StockRecord>();
+                            if(dayList.get(i)<=10){
+                                Date oldDateGetRecods = new Date();
+                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) *24* 60 * 60 * 1000));
+                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
+                            }else if(dayList.get(i)==20){
+                                Date oldDateGetRecods = new Date();
+                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 10 *24* 60 * 60 * 1000));
+                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
+                            }else if(dayList.get(i)==50){
+                                Date oldDateGetRecods = new Date();
+                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 20 *24* 60 * 60 * 1000));
+                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
                             }
+//                        结束价钱小于起始价钱天数
+                            float collectData = 0.0f;
+                            for(StockRecord stockRecord : stockRecords){
+                                if(stockRecord.getEndPrice()<stockRecord.getBeginPrice()){
+                                    collectData+=1.0f;
+                                }else{
+                                    continue;
+                                }
+                            }
+                            if(collectData/stockRecords.size()>0.6){
+                                lowRecord.setTrend((short) -1);
+                            }else if(collectData/stockRecords.size()<0.4){
+                                lowRecord.setTrend((short) 1);
+                            }else {
+                                lowRecord.setTrend((short) 0);
+                            }
+                            stockMapper.insertLowRecord(lowRecord);
+                        } else {
+                            continue;
                         }
-                        if(collectData/stockRecords.size()>0.6){
-                            lowRecord.setTrend((short) -1);
-                        }else if(collectData/stockRecords.size()<0.4){
-                            lowRecord.setTrend((short) 1);
-                        }else {
-                            lowRecord.setTrend((short) 0);
-                        }
-                        stockMapper.insertLowRecord(lowRecord);
-                    } else {
-                        continue;
                     }
                 } catch (ParseException px) {
                     px.printStackTrace();
