@@ -85,4 +85,11 @@ public interface StockMapper {
 
     @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
     List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);
+
+    @Select("select max(highPrice) from stock_record where stockNum = #{stockNum} and recordTime > #{beginTime} and recordTime < #{endTime}")
+    Float getStockLastestHigh(@Param("stockNum")String stockNum,@Param("beginTime")Date beginTime,@Param("endTime")Date endTime);
+
+    @Select("select min(lowPrice) from stock_record where stockNum = #{stockNum} and recordTime > #{beginTime} and recordTime < #{endTime}")
+    Float getStockLastestlow(@Param("stockNum")String stockNum,@Param("beginTime")Date beginTime,@Param("endTime")Date endTime);
+
 }

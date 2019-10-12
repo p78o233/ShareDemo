@@ -86,7 +86,7 @@ public class StockServiceImpl implements StockService {
     public boolean updateSellRecord(BuySellRecord buySellRecord) {
         BuySellRecord buySellRecordOld = new BuySellRecord();
         buySellRecordOld = stockMapper.getOneBuySellRecord(buySellRecord.getId());
-        buySellRecord.setProfitOrLoss((buySellRecord.getSellPrice() - buySellRecordOld.getBuyPrice())*Float.valueOf(buySellRecordOld.getBuyNum()));
+        buySellRecord.setProfitOrLoss((buySellRecord.getSellPrice() - buySellRecordOld.getBuyPrice()) * Float.valueOf(buySellRecordOld.getBuyNum()));
         buySellRecord.setSellTime(new Date());
         if (stockMapper.updateSellRecord(buySellRecord) > 0)
             return true;
@@ -112,21 +112,21 @@ public class StockServiceImpl implements StockService {
             String content = "";
             if (Float.valueOf(result[3]) / buySellRecord.getBuyPrice() > 1.015) {
 //                超过1.5%发邮件
-                content = "涨，出售名称："+buySellRecord.getStockName()+",编号："+buySellRecord.getStockNum()+",购入价格，"+buySellRecord.getBuyPrice()+
-                        ",当前价格："+Float.valueOf(result[3])+"涨幅："+(Float.valueOf(result[3]) / buySellRecord.getBuyPrice()-1)*100+"%\n";
+                content = "涨，出售名称：" + buySellRecord.getStockName() + ",编号：" + buySellRecord.getStockNum() + ",购入价格，" + buySellRecord.getBuyPrice() +
+                        ",当前价格：" + Float.valueOf(result[3]) + "涨幅：" + (Float.valueOf(result[3]) / buySellRecord.getBuyPrice() - 1) * 100 + "%\n";
                 mailContent.add(content);
                 sendMailIds.add(buySellRecord.getId());
             } else if (Float.valueOf(result[3]) / buySellRecord.getBuyPrice() < 0.98) {
 //                跌超过2%发邮件
-                content = "跌，出售名称："+buySellRecord.getStockName()+",编号："+buySellRecord.getStockNum()+",购入价格，"+buySellRecord.getBuyPrice()+
-                        ",当前价格："+Float.valueOf(result[3])+"跌幅："+(1-Float.valueOf(result[3]) / buySellRecord.getBuyPrice())*100+"%\n";
+                content = "跌，出售名称：" + buySellRecord.getStockName() + ",编号：" + buySellRecord.getStockNum() + ",购入价格，" + buySellRecord.getBuyPrice() +
+                        ",当前价格：" + Float.valueOf(result[3]) + "跌幅：" + (1 - Float.valueOf(result[3]) / buySellRecord.getBuyPrice()) * 100 + "%\n";
                 mailContent.add(content);
                 sendMailIds.add(buySellRecord.getId());
             } else {
                 continue;
             }
         }
-        if(mailContent.size()>0) {
+        if (mailContent.size() > 0) {
             MailUtils.sendSimpleMail(sender, "953712390@qq.com", "卖", mailContent.toString());
             stockMapper.updateBuySellRecordSendTimes(sendMailIds);
         }
@@ -151,9 +151,9 @@ public class StockServiceImpl implements StockService {
                     Date nowDate = new Date();
                     nowDate = sDateFormat.parse(sDateFormat.format(new Date()));
                     Date oldDate = new Date();
-                    oldDate = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) *24* 60 * 60 * 1000));
+                    oldDate = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) * 24 * 60 * 60 * 1000));
                     Float stockMinPrice = stockMapper.getLatestLowestPrice(oldDate, nowDate, stockRecordVo.getStockNum());
-                    if(stockMinPrice!=null){
+                    if (stockMinPrice != null) {
                         if (Float.valueOf(result[3]) < stockMinPrice) {
 //                        小于dayList.get(i)日的最低价存入数据库
                             LowRecord lowRecord = new LowRecord();
@@ -166,36 +166,36 @@ public class StockServiceImpl implements StockService {
                             lowRecord.setRecordPrice(Float.valueOf(result[3]));
                             lowRecord.setRecordTime(new Date());
                             lowRecord.setLowHis(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getLowPrice());
-                            lowRecord.setDayBefore((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getRecordTime(),new Date()));
+                            lowRecord.setDayBefore((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getRecordTime(), new Date()));
 //                        检查趋势，若是小于10天则检查全部，若是20天看10天 50天看20天
                             List<StockRecord> stockRecords = new ArrayList<StockRecord>();
-                            if(dayList.get(i)<=10){
+                            if (dayList.get(i) <= 10) {
                                 Date oldDateGetRecods = new Date();
-                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) *24* 60 * 60 * 1000));
-                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
-                            }else if(dayList.get(i)==20){
+                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - dayList.get(i) * 24 * 60 * 60 * 1000));
+                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods, nowDate, stockRecordVo.getStockNum());
+                            } else if (dayList.get(i) == 20) {
                                 Date oldDateGetRecods = new Date();
-                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 10 *24* 60 * 60 * 1000));
-                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
-                            }else if(dayList.get(i)==50){
+                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 10 * 24 * 60 * 60 * 1000));
+                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods, nowDate, stockRecordVo.getStockNum());
+                            } else if (dayList.get(i) == 50) {
                                 Date oldDateGetRecods = new Date();
-                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 20 *24* 60 * 60 * 1000));
-                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods,nowDate,stockRecordVo.getStockNum());
+                                oldDateGetRecods = sDateFormat.parse(sDateFormat.format(new Date().getTime() - 20 * 24 * 60 * 60 * 1000));
+                                stockRecords = stockMapper.getLatestRate(oldDateGetRecods, nowDate, stockRecordVo.getStockNum());
                             }
 //                        结束价钱小于起始价钱天数
                             float collectData = 0.0f;
-                            for(StockRecord stockRecord : stockRecords){
-                                if(stockRecord.getEndPrice()<stockRecord.getBeginPrice()){
-                                    collectData+=1.0f;
-                                }else{
+                            for (StockRecord stockRecord : stockRecords) {
+                                if (stockRecord.getEndPrice() < stockRecord.getBeginPrice()) {
+                                    collectData += 1.0f;
+                                } else {
                                     continue;
                                 }
                             }
-                            if(collectData/stockRecords.size()>0.6){
+                            if (collectData / stockRecords.size() > 0.6) {
                                 lowRecord.setTrend((short) -1);
-                            }else if(collectData/stockRecords.size()<0.4){
+                            } else if (collectData / stockRecords.size() < 0.4) {
                                 lowRecord.setTrend((short) 1);
-                            }else {
+                            } else {
                                 lowRecord.setTrend((short) 0);
                             }
                             stockMapper.insertLowRecord(lowRecord);
@@ -212,10 +212,10 @@ public class StockServiceImpl implements StockService {
         List<LowRecord> lowList = new ArrayList<LowRecord>();
         lowList = stockMapper.getAllLowRecordNotSend();
         List<String> mailContent = new ArrayList<String>();
-        for(LowRecord low : lowList){
+        for (LowRecord low : lowList) {
             String category = "";
 //                    1 股票 2基金 3黄金 4期货
-            switch (low.getCategory()){
+            switch (low.getCategory()) {
                 case 1:
                     category = "股票";
                     break;
@@ -230,18 +230,18 @@ public class StockServiceImpl implements StockService {
                     break;
             }
             String trend = "";
-            if(low.getTrend()==(short)-1){
+            if (low.getTrend() == (short) -1) {
                 trend = "下跌";
-            }else if(low.getTrend()==(short)1){
+            } else if (low.getTrend() == (short) 1) {
                 trend = "上升";
-            }else {
+            } else {
                 trend = "震荡";
             }
-            String content = "购买名称："+low.getStockName()+",编号："+low.getStockNum()+",类别："+category+","+low.getRecordDay()+"天最低价："+low.getMinPrice()+
-                    ",当前记录价："+low.getRecordPrice()+",历史最低价"+low.getLowHis()+",距今天"+low.getDayBefore()+"天    "+"趋势：  "+trend +"\n";
+            String content = "购买名称：" + low.getStockName() + ",编号：" + low.getStockNum() + ",类别：" + category + "," + low.getRecordDay() + "天最低价：" + low.getMinPrice() +
+                    ",当前记录价：" + low.getRecordPrice() + ",历史最低价" + low.getLowHis() + ",距今天" + low.getDayBefore() + "天    " + "趋势：  " + trend + "\n";
             mailContent.add(content);
         }
-        if(mailContent.size()>0) {
+        if (mailContent.size() > 0) {
             MailUtils.sendSimpleMail(sender, "953712390@qq.com", "买", mailContent.toString());
             stockMapper.updateLowRecordIsSend();
         }
@@ -270,17 +270,43 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<StockPriceVo> checkNowPrice(List<String> stockNums) {
         List<StockPriceVo> stockPriceVoList = new ArrayList<StockPriceVo>();
-        if(stockNums.size()==0){
+        if (stockNums.size() == 0) {
             stockNums = stockMapper.getAllStockNums();
         }
-        for (String stockNum : stockNums){
+        for (String stockNum : stockNums) {
             StockPriceVo stockPriceVo = new StockPriceVo();
             stockPriceVo = stockMapper.getMaxHisHighLowPrice(stockNum);
-            String result[] = getStockNowPrice(stockNum);
-            stockPriceVo.setNowPrice(Float.valueOf(result[3]));
-            stockPriceVo.setLowDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockNum).getRecordTime(),new Date()));
-            stockPriceVo.setHeighDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getHighestRecord(stockNum).getRecordTime(),new Date()));
-            stockPriceVoList.add(stockPriceVo);
+            try {
+                if(stockPriceVo==null){
+                    stockPriceVo = new StockPriceVo();
+                }
+                String result[] = getStockNowPrice(stockNum);
+                stockPriceVo.setNowPrice(Float.valueOf(result[3]));
+                if(stockMapper.getLowestRecord(stockNum)!=null) {
+                    stockPriceVo.setLowDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockNum).getRecordTime(), new Date()));
+                    stockPriceVo.setHeighDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getHighestRecord(stockNum).getRecordTime(), new Date()));
+                }
+                if (stockPriceVo.getDayNums() > 20) {
+//                取20天最小值,最大值
+                    stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, new Date(new Date().getTime() - (long) 26 * 24 * 60 * 60 * 1000), new Date()));
+                    stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, new Date(new Date().getTime() - (long) 26 * 24 * 60 * 60 * 1000), new Date()));
+                } else {
+                    stockPriceVo.setLastestTwenHeight(null);
+                    stockPriceVo.setLastestTwenLow(null);
+                }
+                if (stockPriceVo.getDayNums() > 10) {
+//                取10天最小值，最大值
+                    stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), new Date()));
+                    stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), new Date()));
+                } else {
+                    stockPriceVo.setLastestTenHeight(null);
+                    stockPriceVo.setLastestTenLow(null);
+                }
+                stockPriceVoList.add(stockPriceVo);
+            } catch (Exception e) {
+                System.out.println(stockNum);
+            }
+
         }
         return stockPriceVoList;
     }
@@ -292,9 +318,9 @@ public class StockServiceImpl implements StockService {
         StockPriceVo stockPriceVo = new StockPriceVo();
         stockPriceVo = stockMapper.getMaxHisHighLowPrice(stockNum);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("list",list);
-        jsonObject.put("historyHighPrice",stockPriceVo.getHeightPriceHis());
-        jsonObject.put("historyLowPrice",stockPriceVo.getLowPriceHis());
+        jsonObject.put("list", list);
+        jsonObject.put("historyHighPrice", stockPriceVo.getHeightPriceHis());
+        jsonObject.put("historyLowPrice", stockPriceVo.getLowPriceHis());
         return jsonObject;
     }
 }
