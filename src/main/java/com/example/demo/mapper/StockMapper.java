@@ -92,4 +92,7 @@ public interface StockMapper {
     @Select("select min(lowPrice) from stock_record where stockNum = #{stockNum} and recordTime > #{beginTime} and recordTime < #{endTime}")
     Float getStockLastestlow(@Param("stockNum")String stockNum,@Param("beginTime")Date beginTime,@Param("endTime")Date endTime);
 
+    @Select("select * from stock_record where stockNum = #{stockNum} order by id desc limit 0,1")
+    StockRecord getYesterdayRecord(@Param("stockNum")String stockNum);
+
 }

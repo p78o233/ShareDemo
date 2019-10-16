@@ -302,6 +302,19 @@ public class StockServiceImpl implements StockService {
                     stockPriceVo.setLastestTenHeight(null);
                     stockPriceVo.setLastestTenLow(null);
                 }
+                StockRecord yesterdayRecord = stockMapper.getYesterdayRecord(stockNum);
+                if(yesterdayRecord!=null){
+                    stockPriceVo.setYesterdayPrice(yesterdayRecord.getEndPrice());
+                    if(yesterdayRecord.getBeginPrice()>yesterdayRecord.getEndPrice())
+                        stockPriceVo.setStauts("跌");
+                    else if(yesterdayRecord.getBeginPrice()<yesterdayRecord.getEndPrice())
+                        stockPriceVo.setStauts("涨");
+                    else
+                        stockPriceVo.setStauts("平");
+                }else{
+                    stockPriceVo.setYesterdayPrice(0.0f);
+                    stockPriceVo.setStauts("未知");
+                }
                 stockPriceVoList.add(stockPriceVo);
             } catch (Exception e) {
                 System.out.println(stockNum);

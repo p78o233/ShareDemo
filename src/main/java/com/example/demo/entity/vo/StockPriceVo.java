@@ -11,6 +11,10 @@ public class StockPriceVo {
     private Float lastestTwenHeight;
 //    最近10天最大值
     private Float lastestTenHeight;
+//    上个交易日的价格
+    private Float yesterdayPrice;
+//    上个交易日涨跌情况
+    private String stauts;
     private float nowPrice;
 //    最近10天最小值
     private Float lastestTenLow;
@@ -23,6 +27,7 @@ public class StockPriceVo {
     private int heighDays;
 //    最低是多少天前
     private int lowDays;
+
     public StockPriceVo() {
     }
 
@@ -122,12 +127,31 @@ public class StockPriceVo {
         this.lastestTwenLow = lastestTwenLow;
     }
 
-    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays) {
+
+    public Float getYesterdayPrice() {
+        return yesterdayPrice;
+    }
+
+    public void setYesterdayPrice(Float yesterdayPrice) {
+        this.yesterdayPrice = yesterdayPrice;
+    }
+
+    public String getStauts() {
+        return stauts;
+    }
+
+    public void setStauts(String stauts) {
+        this.stauts = stauts;
+    }
+
+    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, Float yesterdayPrice, String stauts, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays) {
         this.stockName = stockName;
         this.stockNum = stockNum;
         this.heightPriceHis = heightPriceHis;
         this.lastestTwenHeight = lastestTwenHeight;
         this.lastestTenHeight = lastestTenHeight;
+        this.yesterdayPrice = yesterdayPrice;
+        this.stauts = stauts;
         this.nowPrice = nowPrice;
         this.lastestTenLow = lastestTenLow;
         this.lastestTwenLow = lastestTwenLow;
