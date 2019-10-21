@@ -27,7 +27,8 @@ public class StockPriceVo {
     private int heighDays;
 //    最低是多少天前
     private int lowDays;
-
+//    当前涨跌幅度
+    private String rate;
     public StockPriceVo() {
     }
 
@@ -144,7 +145,15 @@ public class StockPriceVo {
         this.stauts = stauts;
     }
 
-    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, Float yesterdayPrice, String stauts, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays) {
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, Float yesterdayPrice, String stauts, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays, String rate) {
         this.stockName = stockName;
         this.stockNum = stockNum;
         this.heightPriceHis = heightPriceHis;
@@ -159,5 +168,6 @@ public class StockPriceVo {
         this.dayNums = dayNums;
         this.heighDays = heighDays;
         this.lowDays = lowDays;
+        this.rate = rate;
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -280,7 +281,12 @@ public class StockServiceImpl implements StockService {
                 if(stockPriceVo==null){
                     stockPriceVo = new StockPriceVo();
                 }
+//                昨天的记录
+                StockRecord yesterdayRecord = stockMapper.getYesterdayRecord(stockNum);
                 String result[] = getStockNowPrice(stockNum);
+                DecimalFormat decimalFormat=new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                String p= decimalFormat.format(((Float.valueOf(result[3])/Float.valueOf(yesterdayRecord.getEndPrice()))-1)*100);//format 返回的是字符串
+                stockPriceVo.setRate(p+"%");
                 stockPriceVo.setNowPrice(Float.valueOf(result[3]));
                 if(stockMapper.getLowestRecord(stockNum)!=null) {
                     stockPriceVo.setLowDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockNum).getRecordTime(), new Date()));
@@ -302,7 +308,7 @@ public class StockServiceImpl implements StockService {
                     stockPriceVo.setLastestTenHeight(null);
                     stockPriceVo.setLastestTenLow(null);
                 }
-                StockRecord yesterdayRecord = stockMapper.getYesterdayRecord(stockNum);
+
                 if(yesterdayRecord!=null){
                     stockPriceVo.setYesterdayPrice(yesterdayRecord.getEndPrice());
                     if(yesterdayRecord.getBeginPrice()>yesterdayRecord.getEndPrice())
