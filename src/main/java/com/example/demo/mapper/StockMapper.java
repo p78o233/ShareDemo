@@ -99,11 +99,11 @@ public interface StockMapper {
     void setRankNum();
     @Select("select rank_no from (select id,@rank:=@rank + 1 AS rank_no from stock_record where stockNum = #{stockNum})t " +
             "where id = (select id from stock_record where highPrice = " +
-            "(select max(highPrice) as highprice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum});")
+            "(select max(highPrice) as highprice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum} order by id desc limit 0,1);")
     int getHeightPriceRecordDay(@Param("stockNum")String stockNum);
     @Select("select rank_no from (select id,@rank:=@rank + 1 AS rank_no from stock_record where stockNum = #{stockNum})t " +
             "where id = (select id from stock_record where lowPrice = " +
-            "(select min(lowPrice) as lowPrice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum});")
+            "(select min(lowPrice) as lowPrice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum} order by id desc limit 0,1);")
     int getLowPriceRecordDay(@Param("stockNum")String stockNum);
 
 }

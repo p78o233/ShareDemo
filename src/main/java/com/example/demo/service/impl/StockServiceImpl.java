@@ -277,7 +277,7 @@ public class StockServiceImpl implements StockService {
         for (String stockNum : stockNums) {
             StockPriceVo stockPriceVo = new StockPriceVo();
             stockPriceVo = stockMapper.getMaxHisHighLowPrice(stockNum);
-            try {
+//            try {
                 if(stockPriceVo==null){
                     stockPriceVo = new StockPriceVo();
                 }
@@ -324,9 +324,9 @@ public class StockServiceImpl implements StockService {
                     stockPriceVo.setStauts("未知");
                 }
                 stockPriceVoList.add(stockPriceVo);
-            } catch (Exception e) {
-                System.out.println(stockNum);
-            }
+//            } catch (Exception e) {
+//                System.out.println(stockNum);
+//            }
 
         }
         return stockPriceVoList;
