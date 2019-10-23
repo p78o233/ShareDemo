@@ -86,13 +86,24 @@ public interface StockMapper {
     @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
     List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);
 
-    @Select("select max(highPrice) from stock_record where stockNum = #{stockNum} and recordTime > #{beginTime} and recordTime < #{endTime}")
-    Float getStockLastestHigh(@Param("stockNum")String stockNum,@Param("beginTime")Date beginTime,@Param("endTime")Date endTime);
+    @Select("select max(highPrice) from (select highPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t ")
+    Float getStockLastestHigh(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
 
-    @Select("select min(lowPrice) from stock_record where stockNum = #{stockNum} and recordTime > #{beginTime} and recordTime < #{endTime}")
-    Float getStockLastestlow(@Param("stockNum")String stockNum,@Param("beginTime")Date beginTime,@Param("endTime")Date endTime);
+    @Select("select min(lowPrice) from (select lowPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t")
+    Float getStockLastestlow(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
 
     @Select("select * from stock_record where stockNum = #{stockNum} order by id desc limit 0,1")
     StockRecord getYesterdayRecord(@Param("stockNum")String stockNum);
+
+    @Select("set @rank = 0;")
+    void setRankNum();
+    @Select("select rank_no from (select id,@rank:=@rank + 1 AS rank_no from stock_record where stockNum = #{stockNum})t " +
+            "where id = (select id from stock_record where highPrice = " +
+            "(select max(highPrice) as highprice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum});")
+    int getHeightPriceRecordDay(@Param("stockNum")String stockNum);
+    @Select("select rank_no from (select id,@rank:=@rank + 1 AS rank_no from stock_record where stockNum = #{stockNum})t " +
+            "where id = (select id from stock_record where lowPrice = " +
+            "(select min(lowPrice) as lowPrice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum});")
+    int getLowPriceRecordDay(@Param("stockNum")String stockNum);
 
 }

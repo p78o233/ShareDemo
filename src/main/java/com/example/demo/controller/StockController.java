@@ -92,4 +92,10 @@ public class StockController {
     public R getHistoryPrice(@RequestParam String stockNum){
         return new R(true,200,stockService.getHistoryPrice(stockNum),"");
     }
+    @RequestMapping(value = "/testForm",method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("测试接口，接收from表单")
+    public R postForm(Stock stock){
+        return new R(true,200,stock,"");
+    }
 }

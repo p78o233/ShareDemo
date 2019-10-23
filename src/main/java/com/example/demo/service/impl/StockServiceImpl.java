@@ -289,21 +289,23 @@ public class StockServiceImpl implements StockService {
                 stockPriceVo.setRate(p+"%");
                 stockPriceVo.setNowPrice(Float.valueOf(result[3]));
                 if(stockMapper.getLowestRecord(stockNum)!=null) {
-                    stockPriceVo.setLowDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getLowestRecord(stockNum).getRecordTime(), new Date()));
-                    stockPriceVo.setHeighDays((int) ToolsUtils.differentDaysByMillisecond(stockMapper.getHighestRecord(stockNum).getRecordTime(), new Date()));
+                    stockMapper.setRankNum();
+                    stockPriceVo.setLowDays(stockPriceVo.getDayNums()-stockMapper.getLowPriceRecordDay(stockNum));
+                    stockMapper.setRankNum();
+                    stockPriceVo.setHeighDays(stockPriceVo.getDayNums()-stockMapper.getHeightPriceRecordDay(stockNum));
                 }
                 if (stockPriceVo.getDayNums() > 20) {
 //                取20天最小值,最大值
-                    stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, new Date(new Date().getTime() - (long) 26 * 24 * 60 * 60 * 1000), new Date()));
-                    stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, new Date(new Date().getTime() - (long) 26 * 24 * 60 * 60 * 1000), new Date()));
+                    stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums()-20,20));
+                    stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums()-20,20));
                 } else {
                     stockPriceVo.setLastestTwenHeight(null);
                     stockPriceVo.setLastestTwenLow(null);
                 }
                 if (stockPriceVo.getDayNums() > 10) {
 //                取10天最小值，最大值
-                    stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), new Date()));
-                    stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), new Date()));
+                    stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums()-10,10));
+                    stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums()-10,10));
                 } else {
                     stockPriceVo.setLastestTenHeight(null);
                     stockPriceVo.setLastestTenLow(null);
