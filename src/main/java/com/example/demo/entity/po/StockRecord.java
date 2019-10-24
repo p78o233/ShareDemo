@@ -16,7 +16,8 @@ public class StockRecord {
     private int category;
     private String stockNum;
     private Date recordTime;
-
+//    涨跌标志位 -1跌 0 平 1涨
+    private int flag;
     public StockRecord() {
     }
 
@@ -93,7 +94,24 @@ public class StockRecord {
         this.recordTime = recordTime;
     }
 
-    public StockRecord(Integer id, float beginPrice, float endPrice, float highPrice, float lowPrice, Integer stockId, String stockName, int category, String stockNum, Date recordTime) {
+    public String getStockNum() {
+
+        return stockNum;
+    }
+
+    public void setStockNum(String stockNum) {
+        this.stockNum = stockNum;
+    }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public StockRecord(Integer id, float beginPrice, float endPrice, float highPrice, float lowPrice, Integer stockId, String stockName, int category, String stockNum, Date recordTime, int flag) {
         this.id = id;
         this.beginPrice = beginPrice;
         this.endPrice = endPrice;
@@ -104,14 +122,6 @@ public class StockRecord {
         this.category = category;
         this.stockNum = stockNum;
         this.recordTime = recordTime;
-    }
-
-    public String getStockNum() {
-
-        return stockNum;
-    }
-
-    public void setStockNum(String stockNum) {
-        this.stockNum = stockNum;
+        this.flag = flag;
     }
 }

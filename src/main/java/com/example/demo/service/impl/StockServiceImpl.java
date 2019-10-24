@@ -62,6 +62,12 @@ public class StockServiceImpl implements StockService {
             sr.setStockName(stock.getStockName());
             sr.setStockNum(stock.getStockNum());
             sr.setCategory(stock.getCategory());
+            if (Float.valueOf(result[1]) > Float.valueOf(result[3]))
+                sr.setFlag(-1);
+            else if (Float.valueOf(result[1]) == Float.valueOf(result[3]))
+                sr.setFlag(0);
+            else
+                sr.setFlag(1);
             SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd"); //加上时间
             //必须捕获异常
             try {
@@ -259,7 +265,8 @@ public class StockServiceImpl implements StockService {
         }
         return stockMapper.getAllNowBuySellRecord(nowDate);
     }
-//    单个查询
+
+    //    单个查询
     public String[] getStockNowPrice(String stockNum) {
         HashMap<String, String> params = new HashMap<>();
         params.put("list", stockNum);
@@ -267,19 +274,21 @@ public class StockServiceImpl implements StockService {
         String result[] = resultStr.split(",");
         return result;
     }
-//    批量查询
-    public String [] getStocksAllNowPrice(List<Stock> stocks){
+
+    //    批量查询
+    public String[] getStocksAllNowPrice(List<Stock> stocks) {
         HashMap<String, String> params = new HashMap<>();
         String stockNumStr = "";
-        for(Stock stock:stocks){
-            stockNumStr+=stock.getStockNum()+",";
+        for (Stock stock : stocks) {
+            stockNumStr += stock.getStockNum() + ",";
         }
-        stockNumStr = stockNumStr.substring(0,stockNumStr.length()-1);
+        stockNumStr = stockNumStr.substring(0, stockNumStr.length() - 1);
         params.put("list", stockNumStr);
         String resultStr = HttpUtils.get("http://hq.sinajs.cn", params);
         String result[] = resultStr.split(";");
         return result;
     }
+
     @Override
     public List<StockPriceVo> checkNowPrice(List<String> stockNums) {
         List<StockPriceVo> stockPriceVoList = new ArrayList<StockPriceVo>();
@@ -290,52 +299,52 @@ public class StockServiceImpl implements StockService {
             StockPriceVo stockPriceVo = new StockPriceVo();
             stockPriceVo = stockMapper.getMaxHisHighLowPrice(stockNum);
 //            try {
-                if(stockPriceVo==null){
-                    stockPriceVo = new StockPriceVo();
-                }
+            if (stockPriceVo == null) {
+                stockPriceVo = new StockPriceVo();
+            }
 //                昨天的记录
-                StockRecord yesterdayRecord = stockMapper.getYesterdayRecord(stockNum);
-                String result[] = getStockNowPrice(stockNum);
-                DecimalFormat decimalFormat=new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                String p= decimalFormat.format(((Float.valueOf(result[3])/Float.valueOf(yesterdayRecord.getEndPrice()))-1)*100);//format 返回的是字符串
-                stockPriceVo.setRate(p+"%");
-                stockPriceVo.setNowPrice(Float.valueOf(result[3]));
-                if(stockMapper.getLowestRecord(stockNum)!=null) {
-                    stockMapper.setRankNum();
-                    stockPriceVo.setLowDays(stockPriceVo.getDayNums()-stockMapper.getLowPriceRecordDay(stockNum));
-                    stockMapper.setRankNum();
-                    stockPriceVo.setHeighDays(stockPriceVo.getDayNums()-stockMapper.getHeightPriceRecordDay(stockNum));
-                }
-                if (stockPriceVo.getDayNums() > 20) {
+            StockRecord yesterdayRecord = stockMapper.getYesterdayRecord(stockNum);
+            String result[] = getStockNowPrice(stockNum);
+            DecimalFormat decimalFormat = new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+            String p = decimalFormat.format(((Float.valueOf(result[3]) / Float.valueOf(yesterdayRecord.getEndPrice())) - 1) * 100);//format 返回的是字符串
+            stockPriceVo.setRate(p + "%");
+            stockPriceVo.setNowPrice(Float.valueOf(result[3]));
+            if (stockMapper.getLowestRecord(stockNum) != null) {
+                stockMapper.setRankNum();
+                stockPriceVo.setLowDays(stockPriceVo.getDayNums() - stockMapper.getLowPriceRecordDay(stockNum));
+                stockMapper.setRankNum();
+                stockPriceVo.setHeighDays(stockPriceVo.getDayNums() - stockMapper.getHeightPriceRecordDay(stockNum));
+            }
+            if (stockPriceVo.getDayNums() > 20) {
 //                取20天最小值,最大值
-                    stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums()-20,20));
-                    stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums()-20,20));
-                } else {
-                    stockPriceVo.setLastestTwenHeight(null);
-                    stockPriceVo.setLastestTwenLow(null);
-                }
-                if (stockPriceVo.getDayNums() > 10) {
+                stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums() - 20, 20));
+                stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums() - 20, 20));
+            } else {
+                stockPriceVo.setLastestTwenHeight(null);
+                stockPriceVo.setLastestTwenLow(null);
+            }
+            if (stockPriceVo.getDayNums() > 10) {
 //                取10天最小值，最大值
-                    stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums()-10,10));
-                    stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums()-10,10));
-                } else {
-                    stockPriceVo.setLastestTenHeight(null);
-                    stockPriceVo.setLastestTenLow(null);
-                }
+                stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums() - 10, 10));
+                stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums() - 10, 10));
+            } else {
+                stockPriceVo.setLastestTenHeight(null);
+                stockPriceVo.setLastestTenLow(null);
+            }
 
-                if(yesterdayRecord!=null){
-                    stockPriceVo.setYesterdayPrice(yesterdayRecord.getEndPrice());
-                    if(yesterdayRecord.getBeginPrice()>yesterdayRecord.getEndPrice())
-                        stockPriceVo.setStauts("跌");
-                    else if(yesterdayRecord.getBeginPrice()<yesterdayRecord.getEndPrice())
-                        stockPriceVo.setStauts("涨");
-                    else
-                        stockPriceVo.setStauts("平");
-                }else{
-                    stockPriceVo.setYesterdayPrice(0.0f);
-                    stockPriceVo.setStauts("未知");
-                }
-                stockPriceVoList.add(stockPriceVo);
+            if (yesterdayRecord != null) {
+                stockPriceVo.setYesterdayPrice(yesterdayRecord.getEndPrice());
+                if (yesterdayRecord.getBeginPrice() > yesterdayRecord.getEndPrice())
+                    stockPriceVo.setStauts("跌");
+                else if (yesterdayRecord.getBeginPrice() < yesterdayRecord.getEndPrice())
+                    stockPriceVo.setStauts("涨");
+                else
+                    stockPriceVo.setStauts("平");
+            } else {
+                stockPriceVo.setYesterdayPrice(0.0f);
+                stockPriceVo.setStauts("未知");
+            }
+            stockPriceVoList.add(stockPriceVo);
 //            } catch (Exception e) {
 //                System.out.println(stockNum);
 //            }
@@ -359,25 +368,25 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public void reminder() {
-         List<Stock> stocks= new ArrayList<>();
+        List<Stock> stocks = new ArrayList<>();
         stocks = stockMapper.getAllStock();
-        String [] result = getStocksAllNowPrice(stocks);
+        String[] result = getStocksAllNowPrice(stocks);
         List<String> mailContent = new ArrayList<String>();
-        for(String resultItemStr : result){
-            if(!resultItemStr.equals("\n")) {
+        for (String resultItemStr : result) {
+            if (!resultItemStr.equals("\n")) {
                 String[] resultItem = resultItemStr.split(",");
                 if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 > 0.05)) {
 //                升超过5%
-                    mailContent.add(resultItem[0] + "升幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                    mailContent.add(resultItem[0] + "升幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
                 } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 < -0.05)) {
 //                跌超过5%
-                    mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                    mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
                 } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 > 0.03)) {
 //                升超过3%
-                    mailContent.add(resultItem[0] + "升幅超过3%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                    mailContent.add(resultItem[0] + "升幅超过3%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
                 } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 < -0.03)) {
 //                跌超过3%
-                    mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                    mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
                 }
             }
         }
@@ -386,11 +395,11 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public void lookShangData() {
-        String result [] = getStockNowPrice("s_sh000001");
-        if(Float.valueOf(result[3])>0.1){
+        String result[] = getStockNowPrice("s_sh000001");
+        if (Float.valueOf(result[3]) > 0.1) {
 //            银行类的降权重
             stockMapper.changeBankStockWeight(-100);
-        }else{
+        } else {
 //            银行类的升权重
             stockMapper.changeBankStockWeight(100);
         }
