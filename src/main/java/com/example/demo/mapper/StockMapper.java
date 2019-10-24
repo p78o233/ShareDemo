@@ -106,4 +106,6 @@ public interface StockMapper {
             "(select min(lowPrice) as lowPrice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum} order by id desc limit 0,1);")
     int getLowPriceRecordDay(@Param("stockNum")String stockNum);
 
+    @Update("update stock set weight = #{weight} where stockName like '%银行%' and category = 1")
+    int changeBankStockWeight(@Param("weight")int weight);
 }

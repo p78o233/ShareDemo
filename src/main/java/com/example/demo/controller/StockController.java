@@ -92,6 +92,20 @@ public class StockController {
     public R getHistoryPrice(@RequestParam String stockNum){
         return new R(true,200,stockService.getHistoryPrice(stockNum),"");
     }
+    @RequestMapping(value = "/reminder", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("观察涨跌幅巨大的数据")
+    @Scheduled(cron = "0 0,20,40 9,10,11,13,14 * * ? ")
+    public void reminder() {
+        stockService.reminder();
+    }
+    @RequestMapping(value = "/lookShangData", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("升降银行权限")
+    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
+    public void lookShangData() {
+        stockService.lookShangData();
+    }
     @RequestMapping(value = "/testForm",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("测试接口，接收from表单")

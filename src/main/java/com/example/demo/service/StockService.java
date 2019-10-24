@@ -41,4 +41,9 @@ public interface StockService {
 //    历史数据图
     public JSONObject getHistoryPrice(String stockNum);
 
+//    观察数据涨跌超过5%邮件提醒
+    public void reminder();
+
+//    观察上证指数,提高或者降低银行的权重
+    public void lookShangData();
 }

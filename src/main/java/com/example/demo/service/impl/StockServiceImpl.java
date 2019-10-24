@@ -259,7 +259,7 @@ public class StockServiceImpl implements StockService {
         }
         return stockMapper.getAllNowBuySellRecord(nowDate);
     }
-
+//    单个查询
     public String[] getStockNowPrice(String stockNum) {
         HashMap<String, String> params = new HashMap<>();
         params.put("list", stockNum);
@@ -267,7 +267,19 @@ public class StockServiceImpl implements StockService {
         String result[] = resultStr.split(",");
         return result;
     }
-
+//    批量查询
+    public String [] getStocksAllNowPrice(List<Stock> stocks){
+        HashMap<String, String> params = new HashMap<>();
+        String stockNumStr = "";
+        for(Stock stock:stocks){
+            stockNumStr+=stock.getStockNum()+",";
+        }
+        stockNumStr = stockNumStr.substring(stockNumStr.length()-1,1);
+        params.put("list", stockNumStr);
+        String resultStr = HttpUtils.get("http://hq.sinajs.cn", params);
+        String result[] = resultStr.split(";");
+        return result;
+    }
     @Override
     public List<StockPriceVo> checkNowPrice(List<String> stockNums) {
         List<StockPriceVo> stockPriceVoList = new ArrayList<StockPriceVo>();
@@ -343,5 +355,42 @@ public class StockServiceImpl implements StockService {
         jsonObject.put("historyHighPrice", stockPriceVo.getHeightPriceHis());
         jsonObject.put("historyLowPrice", stockPriceVo.getLowPriceHis());
         return jsonObject;
+    }
+
+    @Override
+    public void reminder() {
+         List<Stock> stocks= new ArrayList<>();
+        stocks = stockMapper.getAllStock();
+        String [] result = getStocksAllNowPrice(stocks);
+        List<String> mailContent = new ArrayList<String>();
+        for(String resultItemStr : result){
+            String [] resultItem = resultItemStr.split(",");
+            if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 > 0.05)){
+//                升超过5%
+                mailContent.add(resultItem[0]+"升幅超过5%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
+            }else if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 < -0.05)){
+//                跌超过5%
+                mailContent.add(resultItem[0]+"跌幅超过5%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
+            }else  if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 > 0.03)){
+//                升超过3%
+                mailContent.add(resultItem[0]+"升幅超过3%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
+            }else if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 < -0.03)){
+//                跌超过3%
+                mailContent.add(resultItem[0]+"跌幅超过5%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
+            }
+        }
+        MailUtils.sendSimpleMail(sender, "953712390@qq.com", "涨跌幅", mailContent.toString());
+    }
+
+    @Override
+    public void lookShangData() {
+        String result [] = getStockNowPrice("s_sh000001");
+        if(Float.valueOf(result[3])>0.1){
+//            银行类的降权重
+            stockMapper.changeBankStockWeight(-100);
+        }else{
+//            银行类的升权重
+            stockMapper.changeBankStockWeight(100);
+        }
     }
 }
