@@ -106,6 +106,14 @@ public class StockController {
     public void lookShangData() {
         stockService.lookShangData();
     }
+
+    @RequestMapping(value = "/getAllStock", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("前端获取全部观察数据")
+    public R getAllStock() {
+        return new R(true,200,stockService.getAllStock(),"");
+    }
+
     @RequestMapping(value = "/testForm",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("测试接口")

@@ -47,6 +47,8 @@ public interface StockService {
 //    观察上证指数,提高或者降低银行的权重
     public void lookShangData();
 
+//    获取全部观察记录
+    public List<Stock> getAllStock();
 //    临时接口随时更改
     public void test();
 }

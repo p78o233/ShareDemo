@@ -430,4 +430,9 @@ public class StockServiceImpl implements StockService {
         stockMapper.updateFlag(0,equles);
         stockMapper.updateFlag(-1,drop);
     }
+
+    @Override
+    public List<Stock> getAllStock() {
+        return stockMapper.getAllStock();
+    }
 }
