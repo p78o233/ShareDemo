@@ -274,7 +274,7 @@ public class StockServiceImpl implements StockService {
         for(Stock stock:stocks){
             stockNumStr+=stock.getStockNum()+",";
         }
-        stockNumStr = stockNumStr.substring(stockNumStr.length()-1,1);
+        stockNumStr = stockNumStr.substring(0,stockNumStr.length()-1);
         params.put("list", stockNumStr);
         String resultStr = HttpUtils.get("http://hq.sinajs.cn", params);
         String result[] = resultStr.split(";");
@@ -364,19 +364,21 @@ public class StockServiceImpl implements StockService {
         String [] result = getStocksAllNowPrice(stocks);
         List<String> mailContent = new ArrayList<String>();
         for(String resultItemStr : result){
-            String [] resultItem = resultItemStr.split(",");
-            if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 > 0.05)){
+            if(!resultItemStr.equals("\n")) {
+                String[] resultItem = resultItemStr.split(",");
+                if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 > 0.05)) {
 //                升超过5%
-                mailContent.add(resultItem[0]+"升幅超过5%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
-            }else if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 < -0.05)){
+                    mailContent.add(resultItem[0] + "升幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 < -0.05)) {
 //                跌超过5%
-                mailContent.add(resultItem[0]+"跌幅超过5%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
-            }else  if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 > 0.03)){
+                    mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 > 0.03)) {
 //                升超过3%
-                mailContent.add(resultItem[0]+"升幅超过3%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
-            }else if((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1 < -0.03)){
+                    mailContent.add(resultItem[0] + "升幅超过3%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 < -0.03)) {
 //                跌超过3%
-                mailContent.add(resultItem[0]+"跌幅超过5%，当前为："+String.valueOf((Float.valueOf(resultItem[1])-Float.valueOf(resultItem[3])-1)));
+                    mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1))+"\n");
+                }
             }
         }
         MailUtils.sendSimpleMail(sender, "953712390@qq.com", "涨跌幅", mailContent.toString());
