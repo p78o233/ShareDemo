@@ -108,4 +108,13 @@ public interface StockMapper {
 
     @Update("update stock set weight = #{weight} where stockName like '%银行%' and category = 1")
     int changeBankStockWeight(@Param("weight")int weight);
+
+    @Select("select * from stock_record")
+    List<StockRecord> getAllStockRecord();
+    @Update("<script>"+"update stock_record set flag = #{flag} where id in "
+            + "<foreach item='item' index='index' collection='idList' open='(' separator=',' close=')'>"
+                + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    int updateFlag(@Param("flag")int flag,@Param("idList")List<Integer>idList);
 }

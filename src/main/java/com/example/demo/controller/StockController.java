@@ -108,8 +108,8 @@ public class StockController {
     }
     @RequestMapping(value = "/testForm",method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation("测试接口，接收from表单")
-    public R postForm(Stock stock){
-        return new R(true,200,stock,"");
+    @ApiOperation("测试接口")
+    public void postForm(){
+       stockService.test();
     }
 }

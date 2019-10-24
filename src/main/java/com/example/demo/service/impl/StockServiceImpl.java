@@ -380,7 +380,10 @@ public class StockServiceImpl implements StockService {
                     mailContent.add(resultItem[0] + "升幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
                 } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 < -0.05)) {
 //                跌超过5%
-                    mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
+                    if((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1!=-1.0)) {
+//                        停牌的不看
+                        mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
+                    }
                 } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 > 0.03)) {
 //                升超过3%
                     mailContent.add(resultItem[0] + "升幅超过3%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
@@ -390,7 +393,9 @@ public class StockServiceImpl implements StockService {
                 }
             }
         }
-        MailUtils.sendSimpleMail(sender, "953712390@qq.com", "涨跌幅", mailContent.toString());
+        if(mailContent.size()>0) {
+            MailUtils.sendSimpleMail(sender, "953712390@qq.com", "涨跌幅", mailContent.toString());
+        }
     }
 
     @Override
@@ -403,5 +408,26 @@ public class StockServiceImpl implements StockService {
 //            银行类的升权重
             stockMapper.changeBankStockWeight(100);
         }
+    }
+
+    @Override
+    public void test() {
+        List<StockRecord> records = new ArrayList<>();
+        records = stockMapper.getAllStockRecord();
+        List<Integer> raise = new ArrayList<>();
+        List<Integer> equles = new ArrayList<>();
+        List<Integer> drop = new ArrayList<>();
+        for(StockRecord record : records){
+            if(record.getBeginPrice()>record.getEndPrice()){
+                drop.add(record.getId());
+            }else if(record.getBeginPrice()==record.getEndPrice())
+                equles.add(record.getId());
+            else{
+                raise.add(record.getId());
+            }
+        }
+        stockMapper.updateFlag(1,raise);
+        stockMapper.updateFlag(0,equles);
+        stockMapper.updateFlag(-1,drop);
     }
 }
