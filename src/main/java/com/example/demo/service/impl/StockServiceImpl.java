@@ -44,7 +44,11 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public boolean insertStock(List<Stock> stocks) {
-        return false;
+        for(Stock stock:stocks){
+            stock.setCreateTime(new Date());
+            stockMapper.insertStock(stock);
+        }
+        return true;
     }
 
     @Override

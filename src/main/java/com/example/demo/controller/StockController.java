@@ -59,8 +59,8 @@ public class StockController {
     @RequestMapping(value = "/insertStock",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("新增观察的数据")
-    public void insertStock(@RequestBody List<Stock> stocks){
-        stockService.insertStock(stocks);
+    public R insertStock(@RequestBody List<Stock> stocks){
+        return  new R (true,200,stockService.insertStock(stocks),"插入成功");
     }
     @RequestMapping(value = "/insertBuyRecord",method = RequestMethod.POST)
     @ResponseBody
