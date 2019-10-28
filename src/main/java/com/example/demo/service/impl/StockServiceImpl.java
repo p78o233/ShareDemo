@@ -44,7 +44,7 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public boolean insertStock(List<Stock> stocks) {
-        for(Stock stock:stocks){
+        for (Stock stock : stocks) {
             stock.setCreateTime(new Date());
             stockMapper.insertStock(stock);
         }
@@ -309,9 +309,11 @@ public class StockServiceImpl implements StockService {
 //                昨天的记录
             StockRecord yesterdayRecord = stockMapper.getYesterdayRecord(stockNum);
             String result[] = getStockNowPrice(stockNum);
-            DecimalFormat decimalFormat = new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            String p = decimalFormat.format(((Float.valueOf(result[3]) / Float.valueOf(yesterdayRecord.getEndPrice())) - 1) * 100);//format 返回的是字符串
-            stockPriceVo.setRate(p + "%");
+            if (yesterdayRecord != null) {
+                DecimalFormat decimalFormat = new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                String p = decimalFormat.format(((Float.valueOf(result[3]) / Float.valueOf(yesterdayRecord.getEndPrice())) - 1) * 100);//format 返回的是字符串
+                stockPriceVo.setRate(p + "%");
+            }
             stockPriceVo.setNowPrice(Float.valueOf(result[3]));
             if (stockMapper.getLowestRecord(stockNum) != null) {
                 stockMapper.setRankNum();
@@ -348,6 +350,8 @@ public class StockServiceImpl implements StockService {
                 stockPriceVo.setYesterdayPrice(0.0f);
                 stockPriceVo.setStauts("未知");
             }
+//                        获取平均值
+            stockPriceVo = getAvg(stockPriceVo);
             stockPriceVoList.add(stockPriceVo);
 //            } catch (Exception e) {
 //                System.out.println(stockNum);
@@ -384,7 +388,7 @@ public class StockServiceImpl implements StockService {
                     mailContent.add(resultItem[0] + "升幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
                 } else if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 < -0.05)) {
 //                跌超过5%
-                    if((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1!=-1.0)) {
+                    if ((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1 != -1.0)) {
 //                        停牌的不看
                         mailContent.add(resultItem[0] + "跌幅超过5%，当前为：" + String.valueOf((Float.valueOf(resultItem[1]) / Float.valueOf(resultItem[3]) - 1)) + "\n");
                     }
@@ -397,7 +401,7 @@ public class StockServiceImpl implements StockService {
                 }
             }
         }
-        if(mailContent.size()>0) {
+        if (mailContent.size() > 0) {
             MailUtils.sendSimpleMail(sender, "953712390@qq.com", "涨跌幅", mailContent.toString());
         }
     }
@@ -421,22 +425,119 @@ public class StockServiceImpl implements StockService {
         List<Integer> raise = new ArrayList<>();
         List<Integer> equles = new ArrayList<>();
         List<Integer> drop = new ArrayList<>();
-        for(StockRecord record : records){
-            if(record.getBeginPrice()>record.getEndPrice()){
+        for (StockRecord record : records) {
+            if (record.getBeginPrice() > record.getEndPrice()) {
                 drop.add(record.getId());
-            }else if(record.getBeginPrice()==record.getEndPrice())
+            } else if (record.getBeginPrice() == record.getEndPrice())
                 equles.add(record.getId());
-            else{
+            else {
                 raise.add(record.getId());
             }
         }
-        stockMapper.updateFlag(1,raise);
-        stockMapper.updateFlag(0,equles);
-        stockMapper.updateFlag(-1,drop);
+        stockMapper.updateFlag(1, raise);
+        stockMapper.updateFlag(0, equles);
+        stockMapper.updateFlag(-1, drop);
     }
 
     @Override
     public List<Stock> getAllStock() {
         return stockMapper.getAllStock();
+    }
+
+    public StockPriceVo getAvg(StockPriceVo stockPriceVo) {
+        List<StockRecord> stockRecords = new ArrayList<>();
+        stockRecords = stockMapper.getHistoryPrice(stockPriceVo.getStockNum());
+//        连续升当前id
+        int raiseId = -1;
+        List<Integer> raiseList = new ArrayList<>();
+        List<Integer> raiseDays = new ArrayList<>();
+//        连续跌当前id
+        int dropId = -1;
+        List<Integer> dropList = new ArrayList<>();
+        List<Integer> dropDays = new ArrayList<>();
+//        连续的天数
+        int continuity = 0;
+//        上一个是什么
+        int flag = 0;
+        for (int i = 0; i < stockRecords.size(); i++) {
+            if (stockRecords.get(i).getFlag() == 1) {
+                if (flag == 1) {
+                    raiseId = i;
+                    continuity++;
+                } else {
+                    if (continuity > 1) {
+                        if (dropId != -1) {
+                            dropList.add(dropId);
+                        }
+                    }
+                    raiseId = i;
+                    dropDays.add(continuity);
+                    continuity = 1;
+                }
+                flag = 1;
+            } else if (stockRecords.get(i).getFlag() == -1) {
+                if (flag == -1) {
+                    dropId = i;
+                    continuity++;
+                } else {
+                    if (continuity > 1) {
+                        if (raiseId > -1) {
+                            raiseList.add(raiseId);
+                        }
+                    }
+                    dropId = i;
+                    raiseDays.add(continuity);
+                    continuity = 1;
+                }
+                flag = -1;
+            }
+        }
+        if (flag == 1 && continuity > 1) {
+            raiseList.add(raiseId);
+            raiseDays.add(continuity);
+        } else if (flag == -1 && continuity > 1) {
+            dropList.add(dropId);
+            dropDays.add(continuity);
+        }
+//        遍历涨跌平均间隔天数
+        if (raiseList.size() > 1) {
+            float raiseSum = 0.0f;
+            for (int i = 1; i < raiseList.size(); i++) {
+                raiseSum += raiseList.get(i) - raiseList.get(i - 1);
+            }
+            stockPriceVo.setAvgRaiseCycle(raiseSum / (raiseList.size() - 1));
+        } else {
+            stockPriceVo.setAvgRaiseCycle(null);
+        }
+        if (dropList.size() > 1) {
+            float dropSum = 0.0f;
+            for (int i = 1; i < dropList.size(); i++) {
+                dropSum += dropList.get(i) - dropList.get(i - 1);
+            }
+            stockPriceVo.setAvgDropCycle(dropSum / (dropList.size() - 1));
+        } else {
+            stockPriceVo.setAvgDropCycle(null);
+        }
+//        遍历涨跌平均连续天数
+        if (raiseDays.size() > 0) {
+            float raiseDaySum = 0.0f;
+            for (int i = 0; i < raiseDays.size(); i++) {
+                raiseDaySum += raiseDays.get(i);
+            }
+            stockPriceVo.setAvgRaise(raiseDaySum / raiseDays.size());
+        } else {
+            stockPriceVo.setAvgRaise(null);
+        }
+        if (dropDays.size() > 0) {
+            float dropDaySum = 0.0f;
+            for (int i = 0; i < dropDays.size(); i++) {
+                dropDaySum += dropDays.get(i);
+            }
+            stockPriceVo.setAvgDrop(dropDaySum / raiseDays.size());
+        } else {
+            stockPriceVo.setAvgDrop(null);
+        }
+        stockPriceVo.setLastDays(continuity);
+        return stockPriceVo;
     }
 }

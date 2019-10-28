@@ -117,4 +117,5 @@ public interface StockMapper {
             + "</foreach>"
             + "</script>")
     int updateFlag(@Param("flag")int flag,@Param("idList")List<Integer>idList);
+    
 }

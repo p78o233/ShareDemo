@@ -29,6 +29,16 @@ public class StockPriceVo {
     private int lowDays;
 //    当前涨跌幅度
     private String rate;
+//    平均涨周期
+    private Float avgRaiseCycle;
+//    平均跌周期
+    private Float avgDropCycle;
+    //    连续涨天数平均值
+    private Float avgRaise;
+    //    连续跌天数平均值
+    private Float avgDrop;
+//    已经持续当前状况多少天了，看stauts得出当前状况
+    private int lastDays;
     public StockPriceVo() {
     }
 
@@ -153,7 +163,47 @@ public class StockPriceVo {
         this.rate = rate;
     }
 
-    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, Float yesterdayPrice, String stauts, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays, String rate) {
+    public Float getAvgRaiseCycle() {
+        return avgRaiseCycle;
+    }
+
+    public void setAvgRaiseCycle(Float avgRaiseCycle) {
+        this.avgRaiseCycle = avgRaiseCycle;
+    }
+
+    public Float getAvgDropCycle() {
+        return avgDropCycle;
+    }
+
+    public void setAvgDropCycle(Float avgDropCycle) {
+        this.avgDropCycle = avgDropCycle;
+    }
+
+    public Float getAvgRaise() {
+        return avgRaise;
+    }
+
+    public void setAvgRaise(Float avgRaise) {
+        this.avgRaise = avgRaise;
+    }
+
+    public Float getAvgDrop() {
+        return avgDrop;
+    }
+
+    public void setAvgDrop(Float avgDrop) {
+        this.avgDrop = avgDrop;
+    }
+
+    public int getLastDays() {
+        return lastDays;
+    }
+
+    public void setLastDays(int lastDays) {
+        this.lastDays = lastDays;
+    }
+
+    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, Float yesterdayPrice, String stauts, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays, String rate, Float avgRaiseCycle, Float avgDropCycle, Float avgRaise, Float avgDrop, int lastDays) {
         this.stockName = stockName;
         this.stockNum = stockNum;
         this.heightPriceHis = heightPriceHis;
@@ -169,5 +219,10 @@ public class StockPriceVo {
         this.heighDays = heighDays;
         this.lowDays = lowDays;
         this.rate = rate;
+        this.avgRaiseCycle = avgRaiseCycle;
+        this.avgDropCycle = avgDropCycle;
+        this.avgRaise = avgRaise;
+        this.avgDrop = avgDrop;
+        this.lastDays = lastDays;
     }
 }
