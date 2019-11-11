@@ -95,7 +95,7 @@ public class StockController {
     @RequestMapping(value = "/reminder", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("观察涨跌幅巨大的数据")
-    @Scheduled(cron = "0 0,20,40 9,10,11,13,14 * * ? ")
+//    @Scheduled(cron = "0 0,20,40 9,10,11,13,14 * * ? ")
     public void reminder() {
         stockService.reminder();
     }
