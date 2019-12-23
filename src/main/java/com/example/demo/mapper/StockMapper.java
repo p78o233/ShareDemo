@@ -86,10 +86,16 @@ public interface StockMapper {
     @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
     List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);
 
-    @Select("select max(highPrice) from (select highPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t ")
+//    @Select("select max(highPrice) from (select highPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t ")
+//    Float getStockLastestHigh(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
+//
+//    @Select("select min(lowPrice) from (select lowPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t")
+//    Float getStockLastestlow(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
+
+    @Select("select max(highPrice) from (select highPrice from stock_record where stockNum = #{stockNum} order by id desc limit #{begin},#{end} )t ")
     Float getStockLastestHigh(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
 
-    @Select("select min(lowPrice) from (select lowPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t")
+    @Select("select min(lowPrice) from (select lowPrice from stock_record where stockNum = #{stockNum} order by id desc limit #{begin},#{end} )t")
     Float getStockLastestlow(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
 
     @Select("select * from stock_record where stockNum = #{stockNum} order by id desc limit 0,1")

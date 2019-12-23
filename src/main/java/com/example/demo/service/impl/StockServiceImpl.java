@@ -323,16 +323,20 @@ public class StockServiceImpl implements StockService {
             }
             if (stockPriceVo.getDayNums() > 20) {
 //                取20天最小值,最大值
-                stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums() - 20, 20));
-                stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums() - 20, 20));
+//                stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums() - 20, 20));
+//                stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums() - 20, 20));
+                stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, 0, 20));
+                stockPriceVo.setLastestTwenLow(stockMapper.getStockLastestlow(stockNum, 0, 20));
             } else {
                 stockPriceVo.setLastestTwenHeight(null);
                 stockPriceVo.setLastestTwenLow(null);
             }
             if (stockPriceVo.getDayNums() > 10) {
 //                取10天最小值，最大值
-                stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums() - 10, 10));
-                stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums() - 10, 10));
+//                stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums() - 10, 10));
+//                stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, stockPriceVo.getDayNums() - 10, 10));
+                stockPriceVo.setLastestTenHeight(stockMapper.getStockLastestHigh(stockNum, 0, 10));
+                stockPriceVo.setLastestTenLow(stockMapper.getStockLastestlow(stockNum, 0, 10));
             } else {
                 stockPriceVo.setLastestTenHeight(null);
                 stockPriceVo.setLastestTenLow(null);
