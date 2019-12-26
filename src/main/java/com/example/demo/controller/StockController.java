@@ -11,11 +11,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,8 +55,9 @@ public class StockController {
     @RequestMapping(value = "/noticeSell", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("卖")
-    public void noticeSell() {
-        stockService.noticeSell();
+    public void noticeSell(HttpServletRequest request) {
+        int userId = Integer.valueOf(request.getHeader("userId"));
+        stockService.noticeSell(userId);
     }
     @RequestMapping(value = "/insertStock",method = RequestMethod.POST)
     @ResponseBody
@@ -77,14 +80,16 @@ public class StockController {
     @RequestMapping(value = "/getAllBuyRecord", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("获取当前已经买到的")
-    public void getAllBuyRecord() {
-        stockService.getAllBuyRecord();
+    public void getAllBuyRecord(HttpServletRequest request) {
+        int userId = Integer.valueOf(request.getHeader("userId"));
+        stockService.getAllBuyRecord(userId);
     }
     @RequestMapping(value = "/getNowPrice", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("查询当前价格")
-    public R getNowPrice(@RequestBody List<String>stockNums){
-        return new R(true,200,stockService.checkNowPrice(stockNums),"");
+    public R getNowPrice(HttpServletRequest request,@RequestBody List<String>stockNums){
+        int userId = Integer.valueOf(request.getHeader("userId"));
+        return new R(true,200,stockService.checkNowPrice(userId,stockNums),"");
     }
     @RequestMapping(value = "/getHistoryPrice",method = RequestMethod.GET)
     @ResponseBody
@@ -110,8 +115,9 @@ public class StockController {
     @RequestMapping(value = "/getAllStock", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("前端获取全部观察数据")
-    public R getAllStock() {
-        return new R(true,200,stockService.getAllStock(),"");
+    public R getAllStock(HttpServletRequest request) {
+        int userId = Integer.valueOf(request.getHeader("userId"));
+        return new R(true,200,stockService.getAllStock(userId),"");
     }
 
     @RequestMapping(value = "/testForm",method = RequestMethod.POST)

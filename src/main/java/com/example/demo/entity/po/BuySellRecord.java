@@ -19,6 +19,7 @@ public class BuySellRecord {
     private boolean isfinish;
     private int buyNum;
     private short sendTimes;
+    private int userId;
 
     public BuySellRecord() {
     }
@@ -128,7 +129,11 @@ public class BuySellRecord {
         this.sendTimes = sendTimes;
     }
 
-    public BuySellRecord(Integer id, float buyPrice, Date buyTime, float sellPrice, Date sellTime, float profitOrLoss, Integer stockId, String stockName, int category, String stockNum, boolean isfinish, int buyNum, short sendTimes) {
+    public int getUserId() {
+        return userId;
+    }
+
+    public BuySellRecord(Integer id, float buyPrice, Date buyTime, float sellPrice, Date sellTime, float profitOrLoss, Integer stockId, String stockName, int category, String stockNum, boolean isfinish, int buyNum, short sendTimes, int userId) {
         this.id = id;
         this.buyPrice = buyPrice;
         this.buyTime = buyTime;
@@ -142,5 +147,10 @@ public class BuySellRecord {
         this.isfinish = isfinish;
         this.buyNum = buyNum;
         this.sendTimes = sendTimes;
+        this.userId = userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

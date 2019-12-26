@@ -19,6 +19,7 @@ public class LowRecord {
     private short trend;
     private float lowHis;
     private int dayBefore;
+    private int userId;
 
     public LowRecord() {
     }
@@ -127,7 +128,7 @@ public class LowRecord {
         this.dayBefore = dayBefore;
     }
 
-    public LowRecord(Integer id, int stockId, String stockNum, String stockName, int category, int recordDay, float minPrice, float recordPrice, Date recordTime, boolean isSend, short trend, float lowHis, int dayBefore) {
+    public LowRecord(Integer id, int stockId, String stockNum, String stockName, int category, int recordDay, float minPrice, float recordPrice, Date recordTime, boolean isSend, short trend, float lowHis, int dayBefore, int userId) {
         this.id = id;
         this.stockId = stockId;
         this.stockNum = stockNum;
@@ -141,5 +142,14 @@ public class LowRecord {
         this.trend = trend;
         this.lowHis = lowHis;
         this.dayBefore = dayBefore;
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

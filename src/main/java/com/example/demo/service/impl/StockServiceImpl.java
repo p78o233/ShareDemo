@@ -66,6 +66,7 @@ public class StockServiceImpl implements StockService {
             sr.setStockName(stock.getStockName());
             sr.setStockNum(stock.getStockNum());
             sr.setCategory(stock.getCategory());
+            sr.setUserId(stock.getUserId());
             if (Float.valueOf(result[1]) > Float.valueOf(result[3]))
                 sr.setFlag(-1);
             else if (Float.valueOf(result[1]) == Float.valueOf(result[3]))
@@ -105,7 +106,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public void noticeSell() {
+    public void noticeSell(int userId) {
         List<BuySellRecord> buyRecords = new ArrayList<BuySellRecord>();
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date nowDate = new Date();
@@ -114,7 +115,7 @@ public class StockServiceImpl implements StockService {
         } catch (ParseException px) {
             px.printStackTrace();
         }
-        buyRecords = stockMapper.getAllNowBuySellRecord(nowDate);
+        buyRecords = stockMapper.getAllNowBuySellRecord(nowDate,userId);
         List<String> mailContent = new ArrayList<String>();
 //        发邮件的id
         List<Integer> sendMailIds = new ArrayList<Integer>();
@@ -259,7 +260,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public List<BuySellRecord> getAllBuyRecord() {
+    public List<BuySellRecord> getAllBuyRecord(int userId) {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date nowDate = new Date();
         try {
@@ -267,7 +268,7 @@ public class StockServiceImpl implements StockService {
         } catch (ParseException px) {
             px.printStackTrace();
         }
-        return stockMapper.getAllNowBuySellRecord(nowDate);
+        return stockMapper.getAllNowBuySellRecord(nowDate,userId);
     }
 
     //    单个查询
@@ -294,10 +295,10 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public List<StockPriceVo> checkNowPrice(List<String> stockNums) {
+    public List<StockPriceVo> checkNowPrice(int userId,List<String> stockNums) {
         List<StockPriceVo> stockPriceVoList = new ArrayList<StockPriceVo>();
         if (stockNums.size() == 0) {
-            stockNums = stockMapper.getAllStockNums();
+            stockNums = stockMapper.getAllStockNums(userId);
         }
         for (String stockNum : stockNums) {
             StockPriceVo stockPriceVo = new StockPriceVo();
@@ -444,7 +445,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public List<Stock> getAllStock() {
+    public List<Stock> getAllStock(int userId) {
         return stockMapper.getAllStock();
     }
 

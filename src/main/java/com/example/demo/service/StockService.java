@@ -27,16 +27,16 @@ public interface StockService {
     public boolean updateSellRecord(BuySellRecord buySellRecord);
 
 //    提示卖(定时任务)
-    public void noticeSell();
+    public void noticeSell(int userId);
 
 //    提示买(定时任务)
     public void noticeBuy();
 
 //    获取当前已经买了的
-    public List<BuySellRecord> getAllBuyRecord();
+    public List<BuySellRecord> getAllBuyRecord(int userId);
 
 //    查询当前价格,以及记录最低价和记录最高价
-    public List<StockPriceVo> checkNowPrice(List<String> stockNums);
+    public List<StockPriceVo> checkNowPrice(int userId,List<String> stockNums);
 
 //    历史数据图
     public JSONObject getHistoryPrice(String stockNum);
@@ -48,7 +48,7 @@ public interface StockService {
     public void lookShangData();
 
 //    获取全部观察记录
-    public List<Stock> getAllStock();
+    public List<Stock> getAllStock(int userId);
 //    临时接口随时更改
     public void test();
 }

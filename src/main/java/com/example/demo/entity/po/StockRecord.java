@@ -18,6 +18,16 @@ public class StockRecord {
     private Date recordTime;
 //    涨跌标志位 -1跌 0 平 1涨
     private int flag;
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public StockRecord() {
     }
 
@@ -111,7 +121,7 @@ public class StockRecord {
         this.flag = flag;
     }
 
-    public StockRecord(Integer id, float beginPrice, float endPrice, float highPrice, float lowPrice, Integer stockId, String stockName, int category, String stockNum, Date recordTime, int flag) {
+    public StockRecord(Integer id, float beginPrice, float endPrice, float highPrice, float lowPrice, Integer stockId, String stockName, int category, String stockNum, Date recordTime, int flag, int userId) {
         this.id = id;
         this.beginPrice = beginPrice;
         this.endPrice = endPrice;
@@ -123,5 +133,6 @@ public class StockRecord {
         this.stockNum = stockNum;
         this.recordTime = recordTime;
         this.flag = flag;
+        this.userId = userId;
     }
 }

@@ -12,6 +12,7 @@ public class Stock {
     private Date createTime;
     private int category;
     private int weight;
+    private int userId;
 
     public Stock() {
     }
@@ -24,13 +25,22 @@ public class Stock {
         this.weight = weight;
     }
 
-    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category, int weight) {
+    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category, int weight, int userId) {
         this.id = id;
         this.stockNum = stockNum;
         this.stockName = stockName;
         this.createTime = createTime;
         this.category = category;
         this.weight = weight;
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Integer getId() {

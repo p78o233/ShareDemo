@@ -24,18 +24,18 @@ public interface StockMapper {
     @Select("select * from stock order by weight desc")
     List<Stock> getAllStock();
 
-    @Select("select stockNum from stock order by weight desc")
-    List<String> getAllStockNums();
+    @Select("select stockNum from stock where userId = #{userId} order by weight desc")
+    List<String> getAllStockNums(@Param("userId")int userId);
 
-    @Insert("insert into stock (stockNum,stockName,createTime,category) values (#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category})")
+    @Insert("insert into stock (stockNum,stockName,createTime,category,userId) values (#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category},#{s.userId})")
     int insertStock(@Param("s")Stock stock);
 
-    @Insert("insert into stock_record (beginPrice,endPrice,highPrice,lowPrice,stockId,stockNum,stockName,category,recordTime,flag) values " +
-            "(#{s.beginPrice},#{s.endPrice},#{s.highPrice},#{s.lowPrice},#{s.stockId},#{s.stockNum},#{s.stockName},#{s.category},#{s.recordTime},#{s.flag})")
+    @Insert("insert into stock_record (beginPrice,endPrice,highPrice,lowPrice,stockId,stockNum,stockName,category,recordTime,flag,userId) values " +
+            "(#{s.beginPrice},#{s.endPrice},#{s.highPrice},#{s.lowPrice},#{s.stockId},#{s.stockNum},#{s.stockName},#{s.category},#{s.recordTime},#{s.flag},#{s.userId})")
     int daylyRecord(@Param("s")StockRecord stockRecord);
 
-    @Insert("insert into buy_sell_record (buyPrice,buyTime,stockNum,stockName,category,stockId,buyNum) values (#{b.buyPrice},#{b.buyTime}" +
-            ",#{b.stockNum},#{b.stockName},#{b.category},#{b.stockId},#{b.buyNum})")
+    @Insert("insert into buy_sell_record (buyPrice,buyTime,stockNum,stockName,category,stockId,buyNum,userId) values (#{b.buyPrice},#{b.buyTime}" +
+            ",#{b.stockNum},#{b.stockName},#{b.category},#{b.stockId},#{b.buyNum},#{b.userId})")
     int insertBuyRecord(@Param("b")BuySellRecord buySellRecord);
 
     @Update("update buy_sell_record set sellPrice = #{b.sellPrice},sellTime = #{b.sellTime},profitOrLoss = #{b.profitOrLoss},isFinish = 1 where id = #{b.id}")
@@ -44,8 +44,8 @@ public interface StockMapper {
     @Select("select * from buy_sell_record where id = #{id}")
     BuySellRecord getOneBuySellRecord(@Param("id")int id);
 
-    @Select("select * from buy_sell_record where isFinish = 0 and buyTime < #{buyTime} and sendTimes < 1 order by buyTime desc")
-    List<BuySellRecord> getAllNowBuySellRecord(@Param("buyTime")Date buyTime);
+    @Select("select * from buy_sell_record where userId = #{userId} and isFinish = 0 and buyTime < #{buyTime} and sendTimes < 1 order by buyTime desc")
+    List<BuySellRecord> getAllNowBuySellRecord(@Param("buyTime")Date buyTime,@Param("userId")int userId);
 
     @Update("<script>" +
             "update buy_sell_record set sendTimes = sendTimes + 1 where id in"+
