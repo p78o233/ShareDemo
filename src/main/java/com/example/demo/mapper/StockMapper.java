@@ -58,11 +58,19 @@ public interface StockMapper {
     @Select("select stockNum,stockId,stockName,category from (select count(1) as num_count,stockNum,stockId,stockName,category from stock_record GROUP BY stockId) t where num_count >= #{dayNum} ")
     List<StockRecordVo> getStockNums(@Param("dayNum")int dayNum);
 
-    @Select("select min(lowPrice) from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
-    Float getLatestLowestPrice(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
+//    @Select("select min(lowPrice) from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
+//    Float getLatestLowestPrice(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
+    @Select("select  min(lowPrice) from (select * from stock_record where stockNum = #{stockNum} order by recordTime desc limit 0,#{limitDay} )t;")
+    Float getLatestLowestPrice(@Param("stockNum")String stockNum,@Param("limitDay")int limitDay);
 
-    @Select("select * from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
-    List<StockRecord> getLatestRate(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
+    @Select("select  max(highPrice) from (select * from stock_record where stockNum = #{stockNum} order by recordTime desc limit 0,#{limitDay} )t;")
+    Float getLatestHightPrice(@Param("stockNum")String stockNum,@Param("limitDay")int limitDay);
+
+//    @Select("select * from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
+//    List<StockRecord> getLatestRate(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
+    @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime desc limit #{start},#{end}")
+    List<StockRecord> getLatestRate(@Param("stockNum")String stockNum,@Param("start")int start,@Param("end")int end);
+
 
     @Insert("insert into low_record (stockId,stockNum,stockName,category,recordDay,minPrice,recordPrice,recordTime,trend,lowHis,dayBefore) values " +
             "(#{l.stockId},#{l.stockNum},#{l.stockName},#{l.category},#{l.recordDay},#{l.minPrice},#{l.recordPrice},#{l.recordTime},#{l.trend},#{l.lowHis},#{l.dayBefore})")

@@ -20,6 +20,9 @@ public class LowRecord {
     private float lowHis;
     private int dayBefore;
     private int userId;
+    private float highHis;
+    private float dayBeforeH;
+    private float maxPrice;
 
     public LowRecord() {
     }
@@ -128,7 +131,39 @@ public class LowRecord {
         this.dayBefore = dayBefore;
     }
 
-    public LowRecord(Integer id, int stockId, String stockNum, String stockName, int category, int recordDay, float minPrice, float recordPrice, Date recordTime, boolean isSend, short trend, float lowHis, int dayBefore, int userId) {
+    public float getHighHis() {
+        return highHis;
+    }
+
+    public void setHighHis(float highHis) {
+        this.highHis = highHis;
+    }
+
+    public float getDayBeforeH() {
+        return dayBeforeH;
+    }
+
+    public void setDayBeforeH(float dayBeforeH) {
+        this.dayBeforeH = dayBeforeH;
+    }
+
+    public float getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(float maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public LowRecord(Integer id, int stockId, String stockNum, String stockName, int category, int recordDay, float minPrice, float recordPrice, Date recordTime, boolean isSend, short trend, float lowHis, int dayBefore, int userId, float highHis, float dayBeforeH, float maxPrice) {
         this.id = id;
         this.stockId = stockId;
         this.stockNum = stockNum;
@@ -143,13 +178,8 @@ public class LowRecord {
         this.lowHis = lowHis;
         this.dayBefore = dayBefore;
         this.userId = userId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+        this.highHis = highHis;
+        this.dayBeforeH = dayBeforeH;
+        this.maxPrice = maxPrice;
     }
 }
