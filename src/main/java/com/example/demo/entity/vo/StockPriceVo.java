@@ -39,6 +39,8 @@ public class StockPriceVo {
     private Float avgDrop;
 //    已经持续当前状况多少天了，看stauts得出当前状况
     private int lastDays;
+//    当前价格在近段时间内处于什么位置 1、极低  2、偏低 3、较低 4、中 5、较高 6、偏高 7、极高
+    private String nowStatus;
     public StockPriceVo() {
     }
 
@@ -203,7 +205,15 @@ public class StockPriceVo {
         this.lastDays = lastDays;
     }
 
-    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, Float yesterdayPrice, String stauts, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays, String rate, Float avgRaiseCycle, Float avgDropCycle, Float avgRaise, Float avgDrop, int lastDays) {
+    public String getNowStatus() {
+        return nowStatus;
+    }
+
+    public void setNowStatus(String nowStatus) {
+        this.nowStatus = nowStatus;
+    }
+
+    public StockPriceVo(String stockName, String stockNum, float heightPriceHis, Float lastestTwenHeight, Float lastestTenHeight, Float yesterdayPrice, String stauts, float nowPrice, Float lastestTenLow, Float lastestTwenLow, float lowPriceHis, int dayNums, int heighDays, int lowDays, String rate, Float avgRaiseCycle, Float avgDropCycle, Float avgRaise, Float avgDrop, int lastDays, String nowStatus) {
         this.stockName = stockName;
         this.stockNum = stockNum;
         this.heightPriceHis = heightPriceHis;
@@ -224,5 +234,6 @@ public class StockPriceVo {
         this.avgRaise = avgRaise;
         this.avgDrop = avgDrop;
         this.lastDays = lastDays;
+        this.nowStatus = nowStatus;
     }
 }

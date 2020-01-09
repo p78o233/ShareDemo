@@ -320,6 +320,7 @@ public class StockServiceImpl implements StockService {
                 stockMapper.setRankNum();
                 stockPriceVo.setHeighDays(stockPriceVo.getDayNums() - stockMapper.getHeightPriceRecordDay(stockNum));
             }
+//            获取近10天以及20的最大最小值
             if (stockPriceVo.getDayNums() > 20) {
 //                取20天最小值,最大值
 //                stockPriceVo.setLastestTwenHeight(stockMapper.getStockLastestHigh(stockNum, stockPriceVo.getDayNums() - 20, 20));
@@ -341,6 +342,17 @@ public class StockServiceImpl implements StockService {
                 stockPriceVo.setLastestTenLow(null);
             }
 
+//            获取当前价格在近段时间内处于什么位置 1、极低  2、偏低 3、较低 4、中 5、较高 6、偏高 7、极高
+            if(stockPriceVo.getDayNums()>20){
+                stockPriceVo.setNowStatus(getNowStatus(stockPriceVo.getLastestTwenHeight(),stockPriceVo.getLastestTwenLow(),stockPriceVo.getNowPrice()));
+            }else if(stockPriceVo.getDayNums()>10){
+                stockPriceVo.setNowStatus(getNowStatus(stockPriceVo.getLastestTenHeight(),stockPriceVo.getLastestTenLow(),stockPriceVo.getNowPrice()));
+            }else{
+                Float stockMinPrice = stockMapper.getLatestLowestPrice(stockPriceVo.getStockNum(),10);
+                Float stockMaxPrice = stockMapper.getLatestHightPrice(stockPriceVo.getStockNum(),10);
+                stockPriceVo.setNowStatus(getNowStatus(stockMaxPrice,stockMinPrice,stockPriceVo.getNowPrice()));
+            }
+
             if (yesterdayRecord != null) {
                 stockPriceVo.setYesterdayPrice(yesterdayRecord.getEndPrice());
                 if (yesterdayRecord.getBeginPrice() > yesterdayRecord.getEndPrice())
@@ -353,6 +365,8 @@ public class StockServiceImpl implements StockService {
                 stockPriceVo.setYesterdayPrice(0.0f);
                 stockPriceVo.setStauts("未知");
             }
+
+
 //                        获取平均值
             stockPriceVo = getAvg(stockPriceVo);
             stockPriceVoList.add(stockPriceVo);
@@ -542,5 +556,25 @@ public class StockServiceImpl implements StockService {
         }
         stockPriceVo.setLastDays(continuity);
         return stockPriceVo;
+    }
+//    返回当前价格状态
+    public String getNowStatus(float hisHigh,float hisLow,float nowPrice){
+        String result = "";
+        if(nowPrice<hisLow)
+            result = "极低";
+        else if(nowPrice>hisHigh)
+            result = "极高";
+        else if((nowPrice/hisLow)-1>0.8){
+            result = "偏高";
+        } else if((nowPrice/hisLow)-1>0.6){
+            result = "较高";
+        }else if((nowPrice/hisLow)-1>0.45){
+            result = "中";
+        }else if((nowPrice/hisLow)-1>0.25){
+            result = "较低";
+        }else if((nowPrice/hisLow)-1>0){
+            result = "偏低";
+        }
+        return result;
     }
 }
