@@ -72,8 +72,9 @@ public interface StockMapper {
     List<StockRecord> getLatestRate(@Param("stockNum")String stockNum,@Param("start")int start,@Param("end")int end);
 
 
-    @Insert("insert into low_record (stockId,stockNum,stockName,category,recordDay,minPrice,recordPrice,recordTime,trend,lowHis,dayBefore) values " +
-            "(#{l.stockId},#{l.stockNum},#{l.stockName},#{l.category},#{l.recordDay},#{l.minPrice},#{l.recordPrice},#{l.recordTime},#{l.trend},#{l.lowHis},#{l.dayBefore})")
+    @Insert("insert into low_record (stockId,stockNum,stockName,category,recordDay,minPrice,recordPrice,recordTime,trend,lowHis,dayBefore,highHis,dayBeforeH,maxPrice) values " +
+            "(#{l.stockId},#{l.stockNum},#{l.stockName},#{l.category},#{l.recordDay},#{l.minPrice},#{l.recordPrice},#{l.recordTime},#{l.trend},#{l.lowHis},#{l.dayBefore}," +
+            "#{l.highHis},#{l.dayBeforeH},#{l.maxPrice})")
     int insertLowRecord(@Param("l")LowRecord lowRecord);
 
     @Select("select * from low_record where isSend = 0")

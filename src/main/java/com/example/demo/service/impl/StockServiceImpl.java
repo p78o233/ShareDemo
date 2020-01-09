@@ -173,6 +173,7 @@ public class StockServiceImpl implements StockService {
                             lowRecord.setCategory(stockRecordVo.getCategory());
                             lowRecord.setRecordDay(dayList.get(i));
                             lowRecord.setMinPrice(stockMinPrice);
+                            lowRecord.setMaxPrice(stockMaxPrice);
                             lowRecord.setRecordPrice(Float.valueOf(result[3]));
                             lowRecord.setRecordTime(new Date());
                             lowRecord.setLowHis(stockMapper.getLowestRecord(stockRecordVo.getStockNum()).getLowPrice());
