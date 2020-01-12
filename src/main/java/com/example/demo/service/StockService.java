@@ -51,4 +51,9 @@ public interface StockService {
     public List<Stock> getAllStock(int userId);
 //    临时接口随时更改
     public void test();
+
+//    定时任务提示在目标价格买入
+    public void tagBuy();
+//    定时任务提示在目标价格卖出
+    public void tagSell();
 }

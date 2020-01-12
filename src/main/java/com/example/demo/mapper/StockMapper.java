@@ -3,10 +3,7 @@ package com.example.demo.mapper;/*
  * @date 2019/8/27
  */
 
-import com.example.demo.entity.po.BuySellRecord;
-import com.example.demo.entity.po.LowRecord;
-import com.example.demo.entity.po.Stock;
-import com.example.demo.entity.po.StockRecord;
+import com.example.demo.entity.po.*;
 import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.entity.vo.StockRecordVo;
 import org.apache.ibatis.annotations.Insert;
@@ -132,5 +129,8 @@ public interface StockMapper {
             + "</foreach>"
             + "</script>")
     int updateFlag(@Param("flag")int flag,@Param("idList")List<Integer>idList);
+
+    @Select("select * from tag_buy_sell where isSend = 0 and flag = #{flag}")
+    List<TagBuySell> getTagBuySellList(@Param("flag")boolean flag);
     
 }

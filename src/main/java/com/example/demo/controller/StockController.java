@@ -120,6 +120,15 @@ public class StockController {
         return new R(true,200,stockService.getAllStock(userId),"");
     }
 
+    @RequestMapping(value = "/tagBuySell", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("0 0/5 9,10,11,12,13,14,15 * * ?")
+    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
+    public void tagBuySell() {
+        stockService.tagBuy();
+        stockService.tagSell();
+    }
+
     @RequestMapping(value = "/testForm",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("测试接口")

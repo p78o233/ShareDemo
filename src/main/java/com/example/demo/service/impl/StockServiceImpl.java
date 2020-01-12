@@ -5,10 +5,7 @@ package com.example.demo.service.impl;/*
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.entity.po.BuySellRecord;
-import com.example.demo.entity.po.LowRecord;
-import com.example.demo.entity.po.Stock;
-import com.example.demo.entity.po.StockRecord;
+import com.example.demo.entity.po.*;
 import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.entity.vo.StockRecordVo;
 import com.example.demo.mapper.StockMapper;
@@ -459,6 +456,36 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<Stock> getAllStock(int userId) {
         return stockMapper.getAllStock();
+    }
+
+    @Override
+    public void tagBuy() {
+        List<TagBuySell> list = stockMapper.getTagBuySellList(false);
+        List<String> mailContent = new ArrayList<String>();
+        for(TagBuySell tagBuySell : list){
+            String result[] = getStockNowPrice(tagBuySell.getStockNum());
+            if(Float.valueOf(result[3])<tagBuySell.getTagPrice()){
+                mailContent.add("编号："+tagBuySell.getStockNum()+"，名称："+tagBuySell.getStockName()+"，当前价格："+Float.valueOf(result[3])+"，目标价格："+tagBuySell.getTagPrice()+"\n");
+            }
+        }
+        if (mailContent.size() > 0) {
+            MailUtils.sendSimpleMail(sender, "953712390@qq.com", "目标买", mailContent.toString());
+        }
+    }
+
+    @Override
+    public void tagSell() {
+        List<TagBuySell> list = stockMapper.getTagBuySellList(true);
+        List<String> mailContent = new ArrayList<String>();
+        for(TagBuySell tagBuySell : list){
+            String result[] = getStockNowPrice(tagBuySell.getStockNum());
+            if(Float.valueOf(result[3])>tagBuySell.getTagPrice()){
+                mailContent.add("编号："+tagBuySell.getStockNum()+"，名称："+tagBuySell.getStockName()+"，当前价格："+Float.valueOf(result[3])+"，目标价格："+tagBuySell.getTagPrice()+"\n");
+            }
+        }
+        if (mailContent.size() > 0) {
+            MailUtils.sendSimpleMail(sender, "953712390@qq.com", "目标卖", mailContent.toString());
+        }
     }
 
     public StockPriceVo getAvg(StockPriceVo stockPriceVo) {
