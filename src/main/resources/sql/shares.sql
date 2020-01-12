@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : 本机
-Source Server Version : 50717
-Source Host           : 127.0.0.1:3306
+Source Server Version : 50553
+Source Host           : localhost:3306
 Source Database       : shares
 
 Target Server Type    : MYSQL
-Target Server Version : 50717
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2020-01-12 10:01:58
+Date: 2020-01-12 22:56:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -972,7 +972,7 @@ CREATE TABLE `stock` (
   `weight` int(11) DEFAULT '0' COMMENT '权重',
   `userId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of stock
@@ -991,6 +991,26 @@ INSERT INTO `stock` VALUES ('12', 'sh601398', '工商银行', '2019-10-11', '1',
 INSERT INTO `stock` VALUES ('13', 'sh601818', '光大银行', '2019-10-11', '1', '100', '1');
 INSERT INTO `stock` VALUES ('14', 'sh601288', '农业银行', '2019-10-11', '1', '100', '1');
 INSERT INTO `stock` VALUES ('15', 'sh601988', '中国银行', '2019-10-28', '1', '100', '1');
+INSERT INTO `stock` VALUES ('16', 'sh601228', '广州港', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('17', 'sh601018', '宁波港', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('18', 'sh601008', '连云港', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('19', 'sh600609', '金杯汽车', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('20', 'sh600090', '同济堂', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('21', 'sh600249', '两面针', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('22', 'sh600151', '航天机电', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('23', 'sh601985', '中国核电', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('24', 'sh600418', '江淮汽车', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('25', 'sh600028', '中国石化', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('26', 'sh601989', '中国重工', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('27', 'sh600050', '中国联通', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('28', 'sh600098', '广州发展', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('29', 'sh601949', '中国出版', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('30', 'sh600029', '南方航空', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('31', 'sh600326', '西藏天路', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('32', 'sh601319', '中国人保', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('33', 'sh600810', '神马股份', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('34', 'sh600677', '航天通信', '2020-01-12', '1', '0', '1');
+INSERT INTO `stock` VALUES ('35', 'sh600255', '梦舟股份', '2020-01-12', '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for `stock_record`
@@ -2260,7 +2280,7 @@ CREATE TABLE `tag_buy_sell` (
   `isSend` bit(1) DEFAULT b'0' COMMENT '0 未发送  1已发送',
   `tagPrice` float DEFAULT NULL COMMENT '目标价格',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of tag_buy_sell
@@ -2270,6 +2290,12 @@ INSERT INTO `tag_buy_sell` VALUES ('2', 'sh600497', '驰宏锌锗', '1', '', '',
 INSERT INTO `tag_buy_sell` VALUES ('3', 'sh600698', '*ST天雁', '1', '', '', '2.93');
 INSERT INTO `tag_buy_sell` VALUES ('4', 'sh600698', '*ST天雁', '1', '', '', '2.9');
 INSERT INTO `tag_buy_sell` VALUES ('5', 'sh600698', '*ST天雁', '1', '', '', '2.98');
+INSERT INTO `tag_buy_sell` VALUES ('6', 'sh600614', '*ST鹏起', '1', '', '', '1.1');
+INSERT INTO `tag_buy_sell` VALUES ('7', 'sh600614', '*ST鹏起', '1', '', '', '1.3');
+INSERT INTO `tag_buy_sell` VALUES ('8', 'sh600740', '山西焦化', '1', '', '', '7.1');
+INSERT INTO `tag_buy_sell` VALUES ('9', 'sh600740', '山西焦化', '1', '', '', '6.8');
+INSERT INTO `tag_buy_sell` VALUES ('10', 'sh600879', '航天电子', '1', '', '', '5.9');
+INSERT INTO `tag_buy_sell` VALUES ('11', 'sh600879', '航天电子', '1', '', '', '5.7');
 
 -- ----------------------------
 -- Table structure for `user`

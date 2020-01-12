@@ -132,5 +132,7 @@ public interface StockMapper {
 
     @Select("select * from tag_buy_sell where isSend = 0 and flag = #{flag}")
     List<TagBuySell> getTagBuySellList(@Param("flag")boolean flag);
+    @Update("update tag_buy_sell set isSend = 1 where id = #{id}")
+    int updateIsSendBuySellTag(@Param("id")int id);
     
 }

@@ -466,6 +466,7 @@ public class StockServiceImpl implements StockService {
             String result[] = getStockNowPrice(tagBuySell.getStockNum());
             if(Float.valueOf(result[3])<tagBuySell.getTagPrice()){
                 mailContent.add("编号："+tagBuySell.getStockNum()+"，名称："+tagBuySell.getStockName()+"，当前价格："+Float.valueOf(result[3])+"，目标价格："+tagBuySell.getTagPrice()+"\n");
+                stockMapper.updateIsSendBuySellTag(tagBuySell.getId());
             }
         }
         if (mailContent.size() > 0) {
@@ -481,6 +482,7 @@ public class StockServiceImpl implements StockService {
             String result[] = getStockNowPrice(tagBuySell.getStockNum());
             if(Float.valueOf(result[3])>tagBuySell.getTagPrice()){
                 mailContent.add("编号："+tagBuySell.getStockNum()+"，名称："+tagBuySell.getStockName()+"，当前价格："+Float.valueOf(result[3])+"，目标价格："+tagBuySell.getTagPrice()+"\n");
+                stockMapper.updateIsSendBuySellTag(tagBuySell.getId());
             }
         }
         if (mailContent.size() > 0) {
