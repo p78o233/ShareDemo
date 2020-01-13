@@ -36,7 +36,7 @@ public interface StockService {
     public List<BuySellRecord> getAllBuyRecord(int userId);
 
 //    查询当前价格,以及记录最低价和记录最高价
-    public List<StockPriceVo> checkNowPrice(int userId,List<String> stockNums);
+    public List<StockPriceVo> checkNowPrice(int userId,int isWeitht,List<String> stockNums);
 
 //    历史数据图
     public JSONObject getHistoryPrice(String stockNum);

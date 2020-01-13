@@ -84,12 +84,15 @@ public class StockController {
         int userId = Integer.valueOf(request.getHeader("userId"));
         stockService.getAllBuyRecord(userId);
     }
-    @RequestMapping(value = "/getNowPrice", method = RequestMethod.POST)
+    @RequestMapping(value = "/getNowPrice/{isWeight}", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("查询当前价格")
-    public R getNowPrice(HttpServletRequest request,@RequestBody List<String>stockNums){
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "是否只显示权重不为零的数据,0查权重包含0的（即全部），1只查询权重不为0的",paramType = "path")
+    })
+    public R getNowPrice(HttpServletRequest request,@PathVariable int isWeight,@RequestBody List<String>stockNums){
         int userId = Integer.valueOf(request.getHeader("userId"));
-        return new R(true,200,stockService.checkNowPrice(userId,stockNums),"");
+        return new R(true,200,stockService.checkNowPrice(userId,isWeight,stockNums),"");
     }
     @RequestMapping(value = "/getHistoryPrice",method = RequestMethod.GET)
     @ResponseBody

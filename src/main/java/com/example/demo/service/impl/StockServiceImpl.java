@@ -290,10 +290,14 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public List<StockPriceVo> checkNowPrice(int userId,List<String> stockNums) {
+    public List<StockPriceVo> checkNowPrice(int userId,int isWeitht,List<String> stockNums) {
         List<StockPriceVo> stockPriceVoList = new ArrayList<StockPriceVo>();
         if (stockNums.size() == 0) {
-            stockNums = stockMapper.getAllStockNums(userId);
+            if(isWeitht ==0) {
+                stockNums = stockMapper.getAllStockNums(userId);
+            }else{
+                stockNums = stockMapper.getAllStockNumsByWeight(userId);
+            }
         }
         for (String stockNum : stockNums) {
             StockPriceVo stockPriceVo = new StockPriceVo();
@@ -587,22 +591,24 @@ public class StockServiceImpl implements StockService {
         return stockPriceVo;
     }
 //    返回当前价格状态
-    public String getNowStatus(float hisHigh,float hisLow,float nowPrice){
+    public String getNowStatus(Float hisHigh,Float hisLow,float nowPrice){
         String result = "";
-        if(nowPrice<hisLow)
-            result = "极低";
-        else if(nowPrice>hisHigh)
-            result = "极高";
-        else if((nowPrice/hisLow)-1>0.8){
-            result = "偏高";
-        } else if((nowPrice/hisLow)-1>0.6){
-            result = "较高";
-        }else if((nowPrice/hisLow)-1>0.45){
-            result = "中";
-        }else if((nowPrice/hisLow)-1>0.25){
-            result = "较低";
-        }else if((nowPrice/hisLow)-1>0){
-            result = "偏低";
+        if(hisHigh!=null&&hisLow!=null) {
+            if (nowPrice < hisLow)
+                result = "极低";
+            else if (nowPrice > hisHigh)
+                result = "极高";
+            else if ((nowPrice / hisLow) - 1 > 0.8) {
+                result = "偏高";
+            } else if ((nowPrice / hisLow) - 1 > 0.6) {
+                result = "较高";
+            } else if ((nowPrice / hisLow) - 1 > 0.45) {
+                result = "中";
+            } else if ((nowPrice / hisLow) - 1 > 0.25) {
+                result = "较低";
+            } else if ((nowPrice / hisLow) - 1 > 0) {
+                result = "偏低";
+            }
         }
         return result;
     }

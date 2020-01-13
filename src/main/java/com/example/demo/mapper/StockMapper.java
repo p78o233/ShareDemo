@@ -23,6 +23,8 @@ public interface StockMapper {
 
     @Select("select stockNum from stock where userId = #{userId} order by weight desc")
     List<String> getAllStockNums(@Param("userId")int userId);
+    @Select("select stockNum from stock where userId = #{userId} and weight != 0 order by weight desc")
+    List<String> getAllStockNumsByWeight(@Param("userId")int userId);
 
     @Insert("insert into stock (stockNum,stockName,createTime,category,userId) values (#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category},#{s.userId})")
     int insertStock(@Param("s")Stock stock);
