@@ -11,6 +11,7 @@ public class TagBuySell {
     private boolean flag;
     private boolean isSend;
     private float tagPrice;
+    private float rate;
 
     public TagBuySell() {
     }
@@ -71,7 +72,15 @@ public class TagBuySell {
         this.tagPrice = tagPrice;
     }
 
-    public TagBuySell(Integer id, String stockNum, String stockName, int category, boolean flag, boolean isSend, float tagPrice) {
+    public float getRate() {
+        return rate;
+    }
+
+    public void setRate(float rate) {
+        this.rate = rate;
+    }
+
+    public TagBuySell(Integer id, String stockNum, String stockName, int category, boolean flag, boolean isSend, float tagPrice, float rate) {
         this.id = id;
         this.stockNum = stockNum;
         this.stockName = stockName;
@@ -79,5 +88,6 @@ public class TagBuySell {
         this.flag = flag;
         this.isSend = isSend;
         this.tagPrice = tagPrice;
+        this.rate = rate;
     }
 }
