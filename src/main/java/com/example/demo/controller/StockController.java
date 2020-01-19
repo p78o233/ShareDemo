@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -132,12 +133,17 @@ public class StockController {
         stockService.tagSell();
     }
 
-    @RequestMapping(value = "/testForm",method = RequestMethod.POST)
+    @RequestMapping(value = "/testForm",method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("测试接口")
-    public void postForm(@RequestParam int fromId){
-        System.out.println(fromId);
-//        stockService.test();
+    public void postForm(){
+        Long begin = new Date().getTime();
+        Long sum = 0L;
+        for(int i=1;i<=100000000;i++){
+            sum += i;
+        }
+        Long end = new Date().getTime();
+        System.out.println(end-begin);
     }
 
 }
