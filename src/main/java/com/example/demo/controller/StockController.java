@@ -48,11 +48,20 @@ public class StockController {
 
     @RequestMapping(value = "/noticeBuy", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation("买")
-    @Scheduled(cron = "0 0,30 11,14 * * ? ")
+    @ApiOperation("定时任务提醒买入，10点30分，以及14点30分")
+    @Scheduled(cron = "0 30 10,14 * * ? ")
     public void noticeBuy() {
         stockService.noticeBuy();
     }
+
+    @RequestMapping(value = "/noticeBuyClock", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("定时任务提醒买入，11点，以及14点")
+    @Scheduled(cron = "0 0 10,14 * * ? ")
+    public void noticeBuyClock() {
+        stockService.noticeBuy();
+    }
+
     @RequestMapping(value = "/noticeSell", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("卖")
