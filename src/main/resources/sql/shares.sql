@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : 本机
-Source Server Version : 50553
-Source Host           : localhost:3306
+Source Server Version : 50717
+Source Host           : 127.0.0.1:3306
 Source Database       : shares
 
 Target Server Type    : MYSQL
-Target Server Version : 50553
+Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2020-03-19 21:46:10
+Date: 2020-03-20 15:47:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -74,7 +74,7 @@ CREATE TABLE `low_record` (
   `dayBeforeH` int(11) DEFAULT NULL COMMENT '历史最高价距离今天多少天前',
   `maxPrice` float DEFAULT NULL COMMENT '近recordDay最高价',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2271 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2273 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of low_record
@@ -2349,6 +2349,8 @@ INSERT INTO `low_record` VALUES ('2267', '11', 'sh601998', '中信银行', '1', 
 INSERT INTO `low_record` VALUES ('2268', '30', 'sh600029', '南方航空', '1', '20', '5.43', '5.4', '2020-03-18 14:30:07', '', '0', '5.34', '43', null, '7.49', '64', '6.46');
 INSERT INTO `low_record` VALUES ('2269', '6', 'sh600614', '*ST鹏起', '1', '50', '1.27', '1.25', '2020-03-18 14:30:08', '', '0', '0.81', '120', null, '2.12', '69', '2.12');
 INSERT INTO `low_record` VALUES ('2270', '11', 'sh601998', '中信银行', '1', '50', '5.24', '5.23', '2020-03-18 14:30:08', '', '-1', '5.24', '1', null, '6.49', '134', '6.27');
+INSERT INTO `low_record` VALUES ('2271', '34', 'sh600677', '航天通信', '1', '5', '4.79', '4.76', '2020-03-20 14:00:01', '', '-1', '0', '59', null, '9.6', '66', '6.03');
+INSERT INTO `low_record` VALUES ('2272', '34', 'sh600677', '航天通信', '1', '10', '4.78', '4.76', '2020-03-20 14:00:02', '', '0', '0', '59', null, '9.6', '66', '6.03');
 
 -- ----------------------------
 -- Table structure for `stock`
@@ -2377,11 +2379,11 @@ INSERT INTO `stock` VALUES ('7', 'sh603077', '和邦生物', '2019-08-27', '1', 
 INSERT INTO `stock` VALUES ('8', 'sh600740', '山西焦化', '2019-08-27', '1', '3', '1');
 INSERT INTO `stock` VALUES ('9', 'sh601558', 'ST锐电', '2019-08-27', '1', '0', '1');
 INSERT INTO `stock` VALUES ('10', 'sh600240', '*ST华业', '2019-08-27', '1', '0', '1');
-INSERT INTO `stock` VALUES ('11', 'sh601998', '中信银行', '2019-10-11', '1', '100', '1');
-INSERT INTO `stock` VALUES ('12', 'sh601398', '工商银行', '2019-10-11', '1', '100', '1');
-INSERT INTO `stock` VALUES ('13', 'sh601818', '光大银行', '2019-10-11', '1', '100', '1');
-INSERT INTO `stock` VALUES ('14', 'sh601288', '农业银行', '2019-10-11', '1', '100', '1');
-INSERT INTO `stock` VALUES ('15', 'sh601988', '中国银行', '2019-10-28', '1', '100', '1');
+INSERT INTO `stock` VALUES ('11', 'sh601998', '中信银行', '2019-10-11', '1', '-100', '1');
+INSERT INTO `stock` VALUES ('12', 'sh601398', '工商银行', '2019-10-11', '1', '-100', '1');
+INSERT INTO `stock` VALUES ('13', 'sh601818', '光大银行', '2019-10-11', '1', '-100', '1');
+INSERT INTO `stock` VALUES ('14', 'sh601288', '农业银行', '2019-10-11', '1', '-100', '1');
+INSERT INTO `stock` VALUES ('15', 'sh601988', '中国银行', '2019-10-28', '1', '-100', '1');
 INSERT INTO `stock` VALUES ('16', 'sh601228', '广州港', '2020-01-12', '1', '0', '1');
 INSERT INTO `stock` VALUES ('17', 'sh601018', '宁波港', '2020-01-12', '1', '0', '1');
 INSERT INTO `stock` VALUES ('18', 'sh601008', '连云港', '2020-01-12', '1', '0', '1');
@@ -2421,7 +2423,7 @@ CREATE TABLE `stock_record` (
   `flag` int(11) DEFAULT NULL COMMENT '涨跌标志位 -1跌 0 平 1涨',
   `userId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2632 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2666 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of stock_record
@@ -5051,6 +5053,40 @@ INSERT INTO `stock_record` VALUES ('2628', '4.04', '4.04', '4.06', '3.98', '20',
 INSERT INTO `stock_record` VALUES ('2629', '4.41', '4.27', '4.46', '4.2', '21', 'sh600249', '两面针', '1', '2020-03-19', '-1', '1');
 INSERT INTO `stock_record` VALUES ('2630', '4.27', '4.36', '4.36', '4.05', '22', 'sh600151', '航天机电', '1', '2020-03-19', '1', '1');
 INSERT INTO `stock_record` VALUES ('2631', '1.24', '1.23', '1.24', '1.2', '35', 'sh600255', '梦舟股份', '1', '2020-03-19', '-1', '1');
+INSERT INTO `stock_record` VALUES ('2632', '6.77', '6.75', '6.8', '6.56', '3', 'sh600879', '航天电子', '1', '2020-03-20', '-1', '1');
+INSERT INTO `stock_record` VALUES ('2633', '3.43', '3.44', '3.44', '3.38', '4', 'sh600497', '驰宏锌锗', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2634', '1.25', '1.25', '1.26', '1.24', '1', 'sh600022', '山东钢铁', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2635', '2.52', '2.54', '2.55', '2.49', '2', 'sh600698', '*ST天雁', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2636', '1.13', '1.24', '1.24', '1.13', '6', 'sh600614', '*ST鹏起', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2637', '5.39', '5.47', '5.5', '5.32', '8', 'sh600740', '山西焦化', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2638', '1.46', '1.47', '1.48', '1.45', '7', 'sh603077', '和邦生物', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2639', '0.95', '0.96', '0.96', '0.93', '9', 'sh601558', 'ST锐电', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2640', '0', '0.41', '0', '0', '10', 'sh600240', '*ST华业', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2641', '6.39', '6.57', '6.68', '6.36', '31', 'sh600326', '西藏天路', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2642', '6.3', '6.35', '6.35', '6.22', '32', 'sh601319', '中国人保', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2643', '7.7', '8.16', '8.25', '7.62', '33', 'sh600810', '神马股份', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2644', '4.85', '4.85', '4.86', '4.7', '34', 'sh600677', '航天通信', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2645', '1.24', '1.23', '1.24', '1.22', '35', 'sh600255', '梦舟股份', '1', '2020-03-20', '-1', '1');
+INSERT INTO `stock_record` VALUES ('2646', '3.23', '3.21', '3.23', '3.17', '16', 'sh601228', '广州港', '1', '2020-03-20', '-1', '1');
+INSERT INTO `stock_record` VALUES ('2647', '3.18', '3.21', '3.22', '3.14', '17', 'sh601018', '宁波港', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2648', '3.53', '3.55', '3.57', '3.49', '18', 'sh601008', '连云港', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2649', '4.13', '4.13', '4.16', '4.03', '19', 'sh600609', '金杯汽车', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2650', '4.05', '4.11', '4.14', '4.05', '20', 'sh600090', '同济堂', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2651', '4.26', '4.45', '4.55', '4.2', '21', 'sh600249', '两面针', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2652', '4.35', '4.4', '4.4', '4.29', '22', 'sh600151', '航天机电', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2653', '4.45', '4.44', '4.48', '4.4', '23', 'sh601985', '中国核电', '1', '2020-03-20', '-1', '1');
+INSERT INTO `stock_record` VALUES ('2654', '5.18', '5.18', '5.22', '5.11', '24', 'sh600418', '江淮汽车', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2655', '4.5', '4.51', '4.53', '4.45', '25', 'sh600028', '中国石化', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2656', '4.15', '4.2', '4.21', '4.13', '26', 'sh601989', '中国重工', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2657', '5.25', '5.29', '5.33', '5.16', '27', 'sh600050', '中国联通', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2658', '5.94', '5.94', '5.95', '5.9', '28', 'sh600098', '广州发展', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2659', '5.28', '5.35', '5.39', '5.22', '29', 'sh601949', '中国出版', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2660', '5.19', '5.27', '5.3', '5.14', '30', 'sh600029', '南方航空', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2661', '5.21', '5.23', '5.24', '5.12', '11', 'sh601998', '中信银行', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2662', '5.02', '5.08', '5.11', '5', '12', 'sh601398', '工商银行', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2663', '3.53', '3.57', '3.61', '3.51', '13', 'sh601818', '光大银行', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2664', '3.33', '3.34', '3.37', '3.31', '14', 'sh601288', '农业银行', '1', '2020-03-20', '1', '1');
+INSERT INTO `stock_record` VALUES ('2665', '3.48', '3.5', '3.53', '3.45', '15', 'sh601988', '中国银行', '1', '2020-03-20', '1', '1');
 
 -- ----------------------------
 -- Table structure for `tag_buy_sell`
