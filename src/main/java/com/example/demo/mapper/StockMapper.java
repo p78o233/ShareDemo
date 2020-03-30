@@ -6,10 +6,7 @@ package com.example.demo.mapper;/*
 import com.example.demo.entity.po.*;
 import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.entity.vo.StockRecordVo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +15,28 @@ import java.util.List;
 
 @Repository
 public interface StockMapper {
+    @Select("<script>"+
+                "select count(*) from stock where isdel = 0 and userId = #{userId}"+
+            "<if test='stockNum!=null'>"
+            + "stockNum like '%${stockNum}%'"
+            + "</if>"+
+            "<if test='stockName!=null'>"
+            + "stockName like '%${stockName}%'"
+            + "</if>"+
+            "</script>")
+    int getAllStockCount(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName);
+    @Select("<script>"+
+            "select * from stock where isdel = 0 and userId = #{userId}"+
+            "<if test='stockNum!=null'>"
+            + "stockNum like '%${stockNum}%'"
+            + "</if>"+
+            "<if test='stockName!=null'>"
+            + "stockName like '%${stockName}%'"
+            + "</if>"+
+            " order by weight desc limit #{start},#{pageSize}"+
+            "</script>")
+    List<Stock> getAllStockPage(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName,@Param("start")int start,@Param("pageSize")int pageSize);
+
     @Select("select * from stock order by weight desc")
     List<Stock> getAllStock();
 
@@ -136,5 +155,23 @@ public interface StockMapper {
     List<TagBuySell> getTagBuySellList(@Param("flag")boolean flag);
     @Update("update tag_buy_sell set isSend = 1 where id = #{id}")
     int updateIsSendBuySellTag(@Param("id")int id);
-    
+
+    @Select("select count(*) from user where account = #{account}  and isdel = 0")
+    int isExistAccount(@Param("account")String account);
+
+    @Select("select * from user where account = #{account} and pwd = #{pwd} and isdel = 0")
+    User login(@Param("account")String account,@Param("pwd")String pwd);
+
+    @Insert("insert into stock (stockNum,stockName,createTime,category,weight,userId) values " +
+            "(#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category},#{s.weight},#{s.userId})")
+    int insertStockN(@Param("s")Stock stock);
+    @Update("update stock set stockNum = #{s.stockNum},stockName = #{s.stockName},category = #{s.category},weight = #{s.weight} where id = #{s.id}")
+    int editStockN(@Param("s")Stock stock);
+    @Update("update stock set isdel = 0 where id = #{id}")
+    int deleteStockN(@Param("id")int id);
+    @Select("select count(*) from stock where stockNum = #{stockNum} and userId = #{userId}")
+    int countInsertStock(@Param("stockNum")String stockNum,@Param("userId")int userId);
+    @Select("select count(*) from stock where stockNum = #{stockNum} and userId = #{userId} and id != #{id}")
+    int countEditStock(@Param("stockNum")String stockNum,@Param("userId")int userId,@Param("id")int id);
+
 }

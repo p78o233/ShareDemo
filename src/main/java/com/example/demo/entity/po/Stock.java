@@ -13,6 +13,7 @@ public class Stock {
     private int category;
     private int weight;
     private int userId;
+    private int isdel;
 
     public Stock() {
     }
@@ -25,7 +26,29 @@ public class Stock {
         this.weight = weight;
     }
 
-    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category, int weight, int userId) {
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "id=" + id +
+                ", stockNum='" + stockNum + '\'' +
+                ", stockName='" + stockName + '\'' +
+                ", createTime=" + createTime +
+                ", category=" + category +
+                ", weight=" + weight +
+                ", userId=" + userId +
+                ", isdel=" + isdel +
+                '}';
+    }
+
+    public int getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(int isdel) {
+        this.isdel = isdel;
+    }
+
+    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category, int weight, int userId, int isdel) {
         this.id = id;
         this.stockNum = stockNum;
         this.stockName = stockName;
@@ -33,6 +56,7 @@ public class Stock {
         this.category = category;
         this.weight = weight;
         this.userId = userId;
+        this.isdel = isdel;
     }
 
     public int getUserId() {
@@ -83,4 +107,6 @@ public class Stock {
     public void setCategory(int category) {
         this.category = category;
     }
+
+
 }

@@ -4,6 +4,8 @@ package com.example.demo.service;/*
  */
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.callback.PageInfo;
+import com.example.demo.callback.R;
 import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.vo.StockPriceVo;
@@ -47,8 +49,8 @@ public interface StockService {
 //    观察上证指数,提高或者降低银行的权重
     public void lookShangData();
 
-//    获取全部观察记录
-    public List<Stock> getAllStock(int userId);
+//    根据用户id,股票代码分页获取全部观察记录
+    public PageInfo<Stock> getAllStock(int userId, String stockNum, String stockName,int page, int pageSize);
 //    临时接口随时更改
     public void test();
 
@@ -56,4 +58,13 @@ public interface StockService {
     public void tagBuy();
 //    定时任务提示在目标价格卖出
     public void tagSell();
+
+//    系统登陆接口
+    public R login(String account,String pwd);
+
+//    新增或者保存观察数据
+    public int ioeStock(Stock stock);
+
+//    删除观察数据
+    public int deleteStock(int id);
 }

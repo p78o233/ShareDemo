@@ -5,6 +5,8 @@ package com.example.demo.service.impl;/*
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.callback.PageInfo;
+import com.example.demo.callback.R;
 import com.example.demo.entity.po.*;
 import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.entity.vo.StockRecordVo;
@@ -458,8 +460,19 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public List<Stock> getAllStock(int userId) {
-        return stockMapper.getAllStock();
+    public PageInfo<Stock> getAllStock(int userId, String stockNum,String stockName, int page, int pageSize) {
+        int start = (page-1)*pageSize;
+        if("".equals(stockNum))
+            stockNum = null;
+        if("".equals(stockName))
+            stockName = null;
+        int count = stockMapper.getAllStockCount(userId,stockNum,stockName);
+        List<Stock> list = new ArrayList<>();
+        list = stockMapper.getAllStockPage(userId,stockNum,stockName,start,pageSize);
+        PageInfo<Stock> pageInfo = new PageInfo<>();
+        pageInfo.setCount(count);
+        pageInfo.setList(list);
+        return pageInfo;
     }
 
     @Override
@@ -613,5 +626,49 @@ public class StockServiceImpl implements StockService {
             }
         }
         return result;
+    }
+
+    @Override
+    public R login(String account, String pwd) {
+        if(stockMapper.isExistAccount(account)>0){
+            User loginUser = new User();
+            loginUser = stockMapper.login(account,ToolsUtils.stringToMD5(pwd));
+            if(loginUser != null){
+                return new R(true,200,loginUser,"登陆成功");
+            }else{
+                return new R(false,301,"","密码错误");
+            }
+        }else{
+            return new R(false,500,"","账号不存在");
+        }
+    }
+
+    @Override
+    public int ioeStock(Stock stock) {
+        if(stock.getId()==null){
+//            新增
+            stock.setCreateTime(new Date());
+            if(stockMapper.countInsertStock(stock.getStockNum(),stock.getUserId())>0)
+                return 2;
+            if(stockMapper.insertStockN(stock)>0)
+                return 1;
+            else
+                return 0;
+        }else{
+//            修改
+            if(stockMapper.countEditStock(stock.getStockNum(),stock.getUserId(),stock.getId())>0)
+                return 2;
+            if(stockMapper.editStockN(stock)>0)
+                return 1;
+            else
+                return 0;
+        }
+    }
+
+    @Override
+    public int deleteStock(int id) {
+        if(stockMapper.deleteStockN(id)>0)
+            return 1;
+        return 0;
     }
 }

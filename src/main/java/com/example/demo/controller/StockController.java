@@ -6,6 +6,7 @@ package com.example.demo.controller;/*
 import com.example.demo.callback.R;
 import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.Stock;
+import com.example.demo.entity.po.User;
 import com.example.demo.service.StockService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin
 @Controller
 @RequestMapping("/shares/stock")
 @Api(description = "后台模块")
@@ -127,10 +129,9 @@ public class StockController {
 
     @RequestMapping(value = "/getAllStock", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation("前端获取全部观察数据")
-    public R getAllStock(HttpServletRequest request) {
-        int userId = Integer.valueOf(request.getHeader("userId"));
-        return new R(true,200,stockService.getAllStock(userId),"");
+    @ApiOperation("前端根据用户id获取全部观察数据")
+    public R getAllStock(HttpServletRequest request,@RequestParam int userId,@RequestParam(defaultValue = "")String stockNum,@RequestParam (defaultValue = "")String stockName,@RequestParam int pageNum,@RequestParam int pageSize) {
+        return new R(true,200,stockService.getAllStock(userId,stockNum,stockName,pageNum,pageSize),"");
     }
 
     @RequestMapping(value = "/tagBuySell", method = RequestMethod.GET)
@@ -155,4 +156,42 @@ public class StockController {
         System.out.println(end-begin);
     }
 
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("登陆接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "User对象，用于登陆",name = "user",paramType = "body")
+    })
+    public R login(@RequestBody User user){
+        return stockService.login(user.getAccount(),user.getPwd());
+    }
+
+    @PostMapping(value = "/ioeStock")
+    @ResponseBody
+    @ApiOperation("新增或修改观察数据")
+    public R ioeStock(@RequestBody Stock stock){
+        int result = stockService.ioeStock(stock);
+        if(result == 2){
+            return new R (false,302,result,"已有相同编号的股票");
+        }else if(result == 1){
+            return new R (true,200,result,"操作成功");
+        }else if(result == 0){
+            return new R (false,303,result,"操作失败");
+        }
+        else
+            return null;
+    }
+    @PostMapping(value = "/deleteStock")
+    @ResponseBody
+    @ApiOperation("删除观察数据")
+    public R deleteStock(@RequestParam int id){
+        int result = stockService.deleteStock(id);
+        if(result == 1){
+            return new R (true,200,result,"操作成功");
+        }else if(result == 0){
+            return new R (false,303,result,"操作失败");
+        }
+        else
+            return null;
+    }
 }
