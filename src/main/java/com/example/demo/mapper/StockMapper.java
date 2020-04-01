@@ -15,27 +15,6 @@ import java.util.List;
 
 @Repository
 public interface StockMapper {
-    @Select("<script>"+
-                "select count(*) from stock where isdel = 0 and userId = #{userId}"+
-            "<if test='stockNum!=null'>"
-            + "stockNum like '%${stockNum}%'"
-            + "</if>"+
-            "<if test='stockName!=null'>"
-            + "stockName like '%${stockName}%'"
-            + "</if>"+
-            "</script>")
-    int getAllStockCount(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName);
-    @Select("<script>"+
-            "select * from stock where isdel = 0 and userId = #{userId}"+
-            "<if test='stockNum!=null'>"
-            + "stockNum like '%${stockNum}%'"
-            + "</if>"+
-            "<if test='stockName!=null'>"
-            + "stockName like '%${stockName}%'"
-            + "</if>"+
-            " order by weight desc limit #{start},#{pageSize}"+
-            "</script>")
-    List<Stock> getAllStockPage(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName,@Param("start")int start,@Param("pageSize")int pageSize);
 
     @Select("select * from stock order by weight desc")
     List<Stock> getAllStock();
@@ -156,22 +135,63 @@ public interface StockMapper {
     @Update("update tag_buy_sell set isSend = 1 where id = #{id}")
     int updateIsSendBuySellTag(@Param("id")int id);
 
+
+
+//    =====================================================================================================================================
+    @Insert("insert into stock_user (userId,stockId,createTime,weight) values (#{s.userId},#{s.stockId},#{s.createTime},#{s.weight})")
+    int test(@Param("s")StockUser stockUser);
+
     @Select("select count(*) from user where account = #{account}  and isdel = 0")
     int isExistAccount(@Param("account")String account);
 
     @Select("select * from user where account = #{account} and pwd = #{pwd} and isdel = 0")
     User login(@Param("account")String account,@Param("pwd")String pwd);
 
-    @Insert("insert into stock (stockNum,stockName,createTime,category,weight,userId) values " +
-            "(#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category},#{s.weight},#{s.userId})")
+    @Insert("insert into stock (stockNum,stockName,createTime,category) values " +
+            "(#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category})")
     int insertStockN(@Param("s")Stock stock);
-    @Update("update stock set stockNum = #{s.stockNum},stockName = #{s.stockName},category = #{s.category},weight = #{s.weight} where id = #{s.id}")
-    int editStockN(@Param("s")Stock stock);
+    @Update("update stock_user set weight = #{weight} where stockId = #{stockId} and userId = #{userId}")
+    int editStockUser(@Param("weight")int weight,@Param("stockId")int stockId,@Param("userId")int userId);
     @Update("update stock set isdel = 0 where id = #{id}")
     int deleteStockN(@Param("id")int id);
-    @Select("select count(*) from stock where stockNum = #{stockNum} and userId = #{userId}")
-    int countInsertStock(@Param("stockNum")String stockNum,@Param("userId")int userId);
-    @Select("select count(*) from stock where stockNum = #{stockNum} and userId = #{userId} and id != #{id}")
-    int countEditStock(@Param("stockNum")String stockNum,@Param("userId")int userId,@Param("id")int id);
+    @Select("select count(*) from stock_user where stockId = #{stockId} and userId = #{userId}")
+    int countInsertStock(@Param("stockId")int stockId,@Param("userId")int userId);
 
+    @Select("<script>"+
+            "select count(*) from stock_user where isdel = 0 and userId = #{userId}"+
+            "<if test='stockNum!=null'>"
+            + "and stockNum like '%${stockNum}%'"
+            + "</if>"+
+            "<if test='stockName!=null'>"
+            + " and stockName like '%${stockName}%'"
+            + "</if>"+
+            "</script>")
+    int getAllStockCount(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName);
+    @Select("<script>"+
+            "select * from stock_user where isdel = 0 and userId = #{userId}"+
+            "<if test='stockNum!=null'>"
+            + "stockNum like '%${stockNum}%'"
+            + "</if>"+
+            "<if test='stockName!=null'>"
+            + " and stockName like '%${stockName}%'"
+            + "</if>"+
+            " order by weight desc limit #{start},#{pageSize}"+
+            "</script>")
+    List<StockUser> getAllStockPage(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName,@Param("start")int start,@Param("pageSize")int pageSize);
+
+    @Select("select * from stock where id = #{id}")
+    Stock getStockById(@Param("id")int id);
+    @Select("select * from stock where stockNum = #{stockNum}")
+    Stock getStockByStockNum(@Param("stockNum")String stockNum);
+
+    @Select("select count(*) from stock where stockNum = #{stockNum} and isdel = 0")
+    int getStockByNumCount(@Param("stockNum")String stockNum);
+
+    @Insert("insert into stock_user(userId,stockId,createTime,weight) values (#{s.userId},#{s.stockId},#{s.createTime},#{s.weight})")
+    int insertStockUser(@Param("s")StockUser stockUser);
+
+    @Select("select id from stock where stockNum = ''%${stockNum}% and isdel = 0")
+    List<Integer> getStockIdByStockNum(@Param("stockNum")String stockNum);
+    @Select("select id from stock where stockName = '%${stockName}' and isdel = 0")
+    List<Integer> getStockIdByStockName(@Param("stockName")String stockName);
 }

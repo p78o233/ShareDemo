@@ -43,7 +43,7 @@ public class StockController {
     @RequestMapping(value = "/daylyRecord", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("每天记录关注的")
-    @Scheduled(cron = "0 5 15 * * ? ")
+//    @Scheduled(cron = "0 5 15 * * ? ")
     public void daylyRecord()throws IOException {
         stockService.daylyRecord();
     }
@@ -51,7 +51,7 @@ public class StockController {
     @RequestMapping(value = "/noticeBuy", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒买入，10点30分，以及14点30分")
-    @Scheduled(cron = "0 30 10,14 * * ? ")
+//    @Scheduled(cron = "0 30 10,14 * * ? ")
     public void noticeBuy() {
         stockService.noticeBuy();
     }
@@ -59,7 +59,7 @@ public class StockController {
     @RequestMapping(value = "/noticeBuyClock", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒买入，11点，以及14点")
-    @Scheduled(cron = "0 0 10,14 * * ? ")
+//    @Scheduled(cron = "0 0 10,14 * * ? ")
     public void noticeBuyClock() {
         stockService.noticeBuy();
     }
@@ -122,7 +122,7 @@ public class StockController {
     @RequestMapping(value = "/lookShangData", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("升降银行权限")
-    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
+//    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
     public void lookShangData() {
         stockService.lookShangData();
     }
@@ -137,7 +137,7 @@ public class StockController {
     @RequestMapping(value = "/tagBuySell", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("0 0/5 9,10,11,12,13,14,15 * * ?")
-    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
+//    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
     public void tagBuySell() {
         stockService.tagBuy();
         stockService.tagSell();
@@ -147,13 +147,7 @@ public class StockController {
     @ResponseBody
     @ApiOperation("测试接口")
     public void postForm(){
-        Long begin = new Date().getTime();
-        Long sum = 0L;
-        for(int i=1;i<=100000000;i++){
-            sum += i;
-        }
-        Long end = new Date().getTime();
-        System.out.println(end-begin);
+        stockService.test();
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
@@ -193,5 +187,13 @@ public class StockController {
         }
         else
             return null;
+    }
+
+    @GetMapping(value = "/getStockNameByStockNum")
+    @ResponseBody
+    @ApiOperation("根据编号获取名称")
+    public R getStockNameByStockNum(@RequestParam String stockNum){
+        String result = stockService.getStockNameByStockNum(stockNum);
+        return new R (true,200,result,"查询成功");
     }
 }

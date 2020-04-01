@@ -440,40 +440,19 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public void test() {
-        List<StockRecord> records = new ArrayList<>();
-        records = stockMapper.getAllStockRecord();
-        List<Integer> raise = new ArrayList<>();
-        List<Integer> equles = new ArrayList<>();
-        List<Integer> drop = new ArrayList<>();
-        for (StockRecord record : records) {
-            if (record.getBeginPrice() > record.getEndPrice()) {
-                drop.add(record.getId());
-            } else if (record.getBeginPrice() == record.getEndPrice())
-                equles.add(record.getId());
-            else {
-                raise.add(record.getId());
-            }
+        List<Stock> getAllStock = new ArrayList<>();
+        getAllStock = stockMapper.getAllStock();
+        for(Stock stock : getAllStock){
+            StockUser su = new StockUser();
+            su.setUserId(stock.getUserId());
+            su.setStockId(stock.getId());
+            su.setCreateTime(new Date());
+            su.setWeight(stock.getWeight());
+            stockMapper.test(su);
         }
-        stockMapper.updateFlag(1, raise);
-        stockMapper.updateFlag(0, equles);
-        stockMapper.updateFlag(-1, drop);
     }
 
-    @Override
-    public PageInfo<Stock> getAllStock(int userId, String stockNum,String stockName, int page, int pageSize) {
-        int start = (page-1)*pageSize;
-        if("".equals(stockNum))
-            stockNum = null;
-        if("".equals(stockName))
-            stockName = null;
-        int count = stockMapper.getAllStockCount(userId,stockNum,stockName);
-        List<Stock> list = new ArrayList<>();
-        list = stockMapper.getAllStockPage(userId,stockNum,stockName,start,pageSize);
-        PageInfo<Stock> pageInfo = new PageInfo<>();
-        pageInfo.setCount(count);
-        pageInfo.setList(list);
-        return pageInfo;
-    }
+
 
     @Override
     public void tagBuy() {
@@ -628,6 +607,7 @@ public class StockServiceImpl implements StockService {
         return result;
     }
 
+//======================================================================================================================
     @Override
     public R login(String account, String pwd) {
         if(stockMapper.isExistAccount(account)>0){
@@ -646,19 +626,28 @@ public class StockServiceImpl implements StockService {
     @Override
     public int ioeStock(Stock stock) {
         if(stock.getId()==null){
-//            新增
+            //            新增
+            //            获取stock是否有数据
             stock.setCreateTime(new Date());
-            if(stockMapper.countInsertStock(stock.getStockNum(),stock.getUserId())>0)
+            int countStockNum = stockMapper.getStockByNumCount(stock.getStockNum());
+            if(countStockNum == 0){
+//                如果stock表已经没有记录了,新增stock记录
+                stockMapper.insertStockN(stock);
+            }
+            StockUser stockUser = new StockUser();
+            stockUser.setUserId(stock.getUserId());
+            stockUser.setStockId(stockMapper.getStockByStockNum(stock.getStockNum()).getId());
+            stockUser.setCreateTime(new Date());
+            stockUser.setWeight(stock.getWeight());
+            if(stockMapper.countInsertStock(stockMapper.getStockByStockNum(stock.getStockNum()).getId(),stock.getUserId())>0)
                 return 2;
-            if(stockMapper.insertStockN(stock)>0)
+            if(stockMapper.insertStockUser(stockUser)>0)
                 return 1;
             else
                 return 0;
         }else{
 //            修改
-            if(stockMapper.countEditStock(stock.getStockNum(),stock.getUserId(),stock.getId())>0)
-                return 2;
-            if(stockMapper.editStockN(stock)>0)
+            if(stockMapper.editStockUser(stock.getWeight(),stock.getId(),stock.getUserId())>0)
                 return 1;
             else
                 return 0;
@@ -670,5 +659,54 @@ public class StockServiceImpl implements StockService {
         if(stockMapper.deleteStockN(id)>0)
             return 1;
         return 0;
+    }
+
+    @Override
+    public PageInfo<Stock> getAllStock(int userId, String stockNum,String stockName, int page, int pageSize) {
+        int start = (page-1)*pageSize;
+        if("".equals(stockNum))
+            stockNum = null;
+        if("".equals(stockName))
+            stockName = null;
+//        如果上面两个两个参数不为空
+        List<Integer> selectIdList = new ArrayList<>();
+        if(stockNum != null){
+            List<Integer> stockNunIdList = new ArrayList<>();
+            stockNunIdList = stockMapper.getStockIdByStockNum(stockNum);
+            selectIdList.addAll(stockNunIdList);
+        }
+        if(stockName != null){
+            List<Integer> stockNameList = new ArrayList<>();
+            stockNameList = stockMapper.getStockIdByStockName(stockName);
+            selectIdList.addAll(stockNameList);
+        }
+        // TODO: 2020/4/1  更改查询条件换成stockId 
+        int count = stockMapper.getAllStockCount(userId,stockNum,stockName);
+        List<StockUser> listStockUser = new ArrayList<>();
+        listStockUser = stockMapper.getAllStockPage(userId,stockNum,stockName,start,pageSize);
+        List<Stock> list = new ArrayList<>();
+        for(StockUser su : listStockUser){
+            Stock stock = new Stock();
+            stock = stockMapper.getStockById(su.getStockId());
+            list.add(stock);
+        }
+        for(int i = 0;i < list.size();i++){
+            for(int j = 0;j<listStockUser.size();j++){
+                if(list.get(i).getId()==listStockUser.get(j).getStockId()){
+                    list.get(i).setWeight(listStockUser.get(i).getWeight());
+                    list.get(i).setCreateTime(listStockUser.get(j).getCreateTime());
+                }
+            }
+        }
+        PageInfo<Stock> pageInfo = new PageInfo<>();
+        pageInfo.setCount(count);
+        pageInfo.setList(list);
+        return pageInfo;
+    }
+
+    @Override
+    public String getStockNameByStockNum(String stockNum) {
+        String [] result = getStockNowPrice(stockNum);
+        return result[0].split("=")[1];
     }
 }

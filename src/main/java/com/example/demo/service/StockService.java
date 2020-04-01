@@ -49,8 +49,6 @@ public interface StockService {
 //    观察上证指数,提高或者降低银行的权重
     public void lookShangData();
 
-//    根据用户id,股票代码分页获取全部观察记录
-    public PageInfo<Stock> getAllStock(int userId, String stockNum, String stockName,int page, int pageSize);
 //    临时接口随时更改
     public void test();
 
@@ -59,12 +57,20 @@ public interface StockService {
 //    定时任务提示在目标价格卖出
     public void tagSell();
 
+//    ===================================================================================================================
+
 //    系统登陆接口
     public R login(String account,String pwd);
+
+    //    根据用户id,股票代码分页获取全部观察记录
+    public PageInfo<Stock> getAllStock(int userId, String stockNum, String stockName,int page, int pageSize);
 
 //    新增或者保存观察数据
     public int ioeStock(Stock stock);
 
 //    删除观察数据
     public int deleteStock(int id);
+
+//    根据编号获取名称
+    public String getStockNameByStockNum(String stockNum);
 }

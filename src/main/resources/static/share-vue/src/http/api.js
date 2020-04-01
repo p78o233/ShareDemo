@@ -16,9 +16,9 @@ axios.interceptors.response.use(function (response) {
 // const BASE_URL = 'http://192.168.50.229/mingya-backend/public/api/admin';
 // const COMMON_URL = 'http://192.168.50.229/mingya-backend/public';
 // 测试机
-const BASE_URL = 'http://127.0.0.1:8200/shares';
+const BASE_URL = 'http://127.0.0.1:8201/shares';
 // const BASE_URL = 'http://10.1.161.102:20884';
-const COMMON_URL = 'http://127.0.0.1:8200/shares';
+const COMMON_URL = 'http://127.0.0.1:8201/shares';
 // 生产
 // const BASE_URL = 'http://192.168.48.194:9090';
 // const COMMON_URL = 'http://192.168.48.194:9090';
@@ -163,12 +163,12 @@ export const login = params =>{
 export const getAllStock = params => {
     return myGet('/stock/getAllStock', params)
 };
-// 保存定时任务
-export const ioeTimeTask = params =>{
-    return myPost("/task/ioeTimeTask",params)
+// 保存stock数据
+export const ioeStock = params =>{
+    return myPost("/stock/ioeStock",params)
 }
-// 删除定时任务
-export const deleteTimeTask = params =>{
-    return myPost("/task/deleteTimeTask",params)
+// 根据股票编号获取股票名称
+export const getStockNameByStockNum = params =>{
+    return myGet("/stock/getStockNameByStockNum",params)
 }
 //ee3f38cf88acecc5021c8eeab703caa5
