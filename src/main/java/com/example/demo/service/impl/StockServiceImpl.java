@@ -655,8 +655,8 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public int deleteStock(int id) {
-        if(stockMapper.deleteStockN(id)>0)
+    public int deleteStock(int userId,int stockId) {
+        if(stockMapper.deleteStockN(userId,stockId)>0)
             return 1;
         return 0;
     }
@@ -680,10 +680,9 @@ public class StockServiceImpl implements StockService {
             stockNameList = stockMapper.getStockIdByStockName(stockName);
             selectIdList.addAll(stockNameList);
         }
-        // TODO: 2020/4/1  更改查询条件换成stockId 
-        int count = stockMapper.getAllStockCount(userId,stockNum,stockName);
+        int count = stockMapper.getAllStockCount(userId,selectIdList);
         List<StockUser> listStockUser = new ArrayList<>();
-        listStockUser = stockMapper.getAllStockPage(userId,stockNum,stockName,start,pageSize);
+        listStockUser = stockMapper.getAllStockPage(userId,selectIdList,start,pageSize);
         List<Stock> list = new ArrayList<>();
         for(StockUser su : listStockUser){
             Stock stock = new Stock();
@@ -707,6 +706,69 @@ public class StockServiceImpl implements StockService {
     @Override
     public String getStockNameByStockNum(String stockNum) {
         String [] result = getStockNowPrice(stockNum);
-        return result[0].split("=")[1];
+        return result[0].split("=")[1].substring(1);
+    }
+
+    @Override
+    public PageInfo<BuySellRecord> getBuySellerRecordByUserId(int userId,int category,int page,int pageSize) {
+        int start = (page-1)*pageSize;
+        int count = stockMapper.getBuySellRecordCount(userId,category);
+        List<BuySellRecord> list = stockMapper.getBuySellRecordPage(userId,category,page,pageSize);
+        PageInfo<BuySellRecord> pageInfo = new PageInfo<>();
+        pageInfo.setCount(count);
+        pageInfo.setList(list);
+        return pageInfo;
+    }
+
+    @Override
+    public int ioeBuySellRecord(BuySellRecord buySellRecord) {
+        if(buySellRecord.getId() == null){
+            buySellRecord.setBuyTime(new Date());
+            if(stockMapper.insertBuySellRecord(buySellRecord)>0)
+                return 1;
+            return 0;
+        }else{
+            if(stockMapper.updateBuySellRecord(buySellRecord)>0)
+                return 1;
+            return 0;
+        }
+    }
+
+    @Override
+    public int deleteBuySellRecord(int id) {
+        if(stockMapper.deleteBuySellRecord(id)>0)
+            return 1;
+        return 0;
+    }
+
+    @Override
+    public PageInfo<SellRecord> getSellRecordById(int buySellId, int page, int pageSize) {
+        int start = (page-1)*pageSize;
+        int count = stockMapper.getSellRecordCount(buySellId);
+        List<SellRecord> list = new ArrayList<>();
+        PageInfo<SellRecord> pageInfo = new PageInfo<>();
+        pageInfo.setCount(count);
+        pageInfo.setList(list);
+        return pageInfo;
+    }
+
+    @Override
+    public int ioeSellRecord(SellRecord sellRecord) {
+        if(sellRecord.getId() ==null){
+            if(stockMapper.insertSellRecord(sellRecord)>0)
+                return 1;
+            return 0;
+        }else{
+            if(stockMapper.updateSellRecord(sellRecord)>0)
+                return 1;
+            return 0;
+        }
+    }
+
+    @Override
+    public int deleteSellRecord(int id) {
+        if(stockMapper.deleteSellRecord(id)>0)
+            return 1;
+        return 0;
     }
 }

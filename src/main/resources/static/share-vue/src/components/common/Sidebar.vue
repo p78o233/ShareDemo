@@ -158,6 +158,10 @@ export default {
                         {
                             index: 'stockList',
                             title: '基础信息列表'
+                        },
+                        {
+                            index: 'buySellRecordList',
+                            title: '记录列表'
                         }
                     ]
                 },

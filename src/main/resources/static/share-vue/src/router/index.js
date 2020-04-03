@@ -105,7 +105,12 @@ export default new Router({
                 {
                     path: '/stockList',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/StockList.vue'),
-                    meta: { title: '基础信息' }
+                    meta: { title: '基础信息列表' }
+                },
+                {
+                    path: '/buySellRecordList',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BuySellRecordList.vue'),
+                    meta: { title: '记录列表' }
                 },
             ]
         },

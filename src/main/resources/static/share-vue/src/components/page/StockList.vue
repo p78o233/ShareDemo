@@ -54,9 +54,8 @@
             <el-table-column label="操作" width="180" align="center">
                 <template slot-scope="scope">
                     <el-button type="text" icon="el-icon-edit" @click="editStock(scope.row)">修改</el-button>
-                    <el-button type="text" icon="el-icon-view" @click="lookTimeTask(scope.row.id)">查看购买记录</el-button>
                     <el-button type="text" icon="el-icon-view" @click="editTimeTask(scope.row.id)">查看最近走势</el-button>
-                    <el-button type="text" icon="el-icon-delete" class="red" @click="deleteTimeTask(scope.row.id)">删除
+                    <el-button type="text" icon="el-icon-delete" class="red" @click="deleteStock(scope.row)">删除
                     </el-button>
                 </template>
             </el-table-column>
@@ -204,8 +203,27 @@
                 let sendData = {
                     "stockNum":this.ioeStockData.stockNum
                 }
-                this.api.getStockNameByStockNum(this.ioeStockData).then(res => {
+                this.api.getStockNameByStockNum(sendData).then(res => {
                    this.ioeStockData.stockName = res.data;
+                });
+            },
+            deleteStock(row){
+                // 删除观察数据
+                let sendData = {
+                    "userId":localStorage.getItem("stockUserId"),
+                    "stockId":row.id
+                }
+                // sendData = JSON.stringify()
+                this.api.deleteStock(sendData).then(res => {
+                    if (res.ret == true) {
+                        this.ioeStockhandleClose();
+                        this.getStockList();
+                    } else {
+                        this.$message({
+                            message: res.message,
+                            type: 'warning'
+                        });
+                    }
                 });
             },
         },

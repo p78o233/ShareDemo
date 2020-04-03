@@ -20,6 +20,7 @@ public class BuySellRecord {
     private int buyNum;
     private short sendTimes;
     private int userId;
+    private int isdel;
 
     public BuySellRecord() {
     }
@@ -133,7 +134,36 @@ public class BuySellRecord {
         return userId;
     }
 
-    public BuySellRecord(Integer id, float buyPrice, Date buyTime, float sellPrice, Date sellTime, float profitOrLoss, Integer stockId, String stockName, int category, String stockNum, boolean isfinish, int buyNum, short sendTimes, int userId) {
+    @Override
+    public String toString() {
+        return "BuySellRecord{" +
+                "id=" + id +
+                ", buyPrice=" + buyPrice +
+                ", buyTime=" + buyTime +
+                ", sellPrice=" + sellPrice +
+                ", sellTime=" + sellTime +
+                ", profitOrLoss=" + profitOrLoss +
+                ", stockId=" + stockId +
+                ", stockName='" + stockName + '\'' +
+                ", category=" + category +
+                ", stockNum='" + stockNum + '\'' +
+                ", isfinish=" + isfinish +
+                ", buyNum=" + buyNum +
+                ", sendTimes=" + sendTimes +
+                ", userId=" + userId +
+                ", isdel=" + isdel +
+                '}';
+    }
+
+    public int getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(int isdel) {
+        this.isdel = isdel;
+    }
+
+    public BuySellRecord(Integer id, float buyPrice, Date buyTime, float sellPrice, Date sellTime, float profitOrLoss, Integer stockId, String stockName, int category, String stockNum, boolean isfinish, int buyNum, short sendTimes, int userId, int isdel) {
         this.id = id;
         this.buyPrice = buyPrice;
         this.buyTime = buyTime;
@@ -148,6 +178,7 @@ public class BuySellRecord {
         this.buyNum = buyNum;
         this.sendTimes = sendTimes;
         this.userId = userId;
+        this.isdel = isdel;
     }
 
     public void setUserId(int userId) {

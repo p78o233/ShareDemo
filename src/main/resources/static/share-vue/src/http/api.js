@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import router from '../router';
+import Qs from 'qs'
 
 axios.defaults.withCredentials = true;
 axios.interceptors.response.use(function (response) {
@@ -117,7 +118,7 @@ function myPost(url, params) {
 function myFormDataPost(url, formdata) {
     return new Promise((resolve, reject) => {
         url = BASE_URL + url;
-        axios.post(url, formdata)
+        axios.post(url,  Qs.stringify(formdata))
             .then(res => {
                 let data = checkData(res);
                 if (data !== false) {
@@ -170,5 +171,9 @@ export const ioeStock = params =>{
 // 根据股票编号获取股票名称
 export const getStockNameByStockNum = params =>{
     return myGet("/stock/getStockNameByStockNum",params)
+}
+// 删除观察的数据
+export const deleteStock = params =>{
+    return myFormDataPost("/stock/deleteStock",params)
 }
 //ee3f38cf88acecc5021c8eeab703caa5

@@ -5,6 +5,7 @@ package com.example.demo.controller;/*
 
 import com.example.demo.callback.R;
 import com.example.demo.entity.po.BuySellRecord;
+import com.example.demo.entity.po.SellRecord;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.User;
 import com.example.demo.service.StockService;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -178,8 +180,8 @@ public class StockController {
     @PostMapping(value = "/deleteStock")
     @ResponseBody
     @ApiOperation("删除观察数据")
-    public R deleteStock(@RequestParam int id){
-        int result = stockService.deleteStock(id);
+    public R deleteStock(@RequestParam int userId,@RequestParam int stockId){
+        int result = stockService.deleteStock(userId,stockId);
         if(result == 1){
             return new R (true,200,result,"操作成功");
         }else if(result == 0){
@@ -195,5 +197,65 @@ public class StockController {
     public R getStockNameByStockNum(@RequestParam String stockNum){
         String result = stockService.getStockNameByStockNum(stockNum);
         return new R (true,200,result,"查询成功");
+    }
+
+    @GetMapping(value = "/getBuySellerRecordByUserId")
+    @ResponseBody
+    @ApiOperation("获取所有的买入记录")
+    public R getBuySellerRecordByUserId(@RequestParam int userId,@RequestParam int category,@RequestParam int page,@RequestParam int pageSize){
+        return new R(true,200,stockService.getBuySellerRecordByUserId(userId,category,page,pageSize),"查询成功");
+    }
+    @PostMapping(value = "/ioeBuySellRecord")
+    @ResponseBody
+    @ApiOperation("新增修改买入记录")
+    public R ioeBuySellRecord(@RequestBody BuySellRecord buySellRecord){
+        int result = stockService.ioeBuySellRecord(buySellRecord);
+        if(result == 1){
+            return new R (true,200,result,"操作成功");
+        }else{
+            return new R(false,303,result,"操作失败");
+        }
+    }
+    @PostMapping(value = "/deleteBuySellRecord")
+    @ResponseBody
+    @ApiOperation("删除购买记录")
+    public R deleteBuySellRecord(@RequestParam int id){
+        int result = stockService.deleteBuySellRecord(id);
+        if(result == 1){
+            return new R (true,200,result,"操作成功");
+        }else{
+            return new R(false,303,result,"操作失败");
+        }
+    }
+
+    @GetMapping(value = "/getSellRecordById")
+    @ResponseBody
+    @ApiOperation("获取购买的的卖出记录")
+    public R getSellRecordById(@Param("buySellId")int buySellId,@Param("page")int page,@Param("pageSize")int pageSize){
+        return new R(true,200,stockService.getSellRecordById(buySellId,page,pageSize),"查询成功");
+    }
+
+    @PostMapping(value = "/ioeSellRecord")
+    @ResponseBody
+    @ApiOperation("新增或者修改买入的卖出记录")
+    public R ioeSellRecord(@RequestBody SellRecord sellRecord){
+        int result = stockService.ioeSellRecord(sellRecord);
+        if(result == 1){
+            return new R (true,200,result,"操作成功");
+        }else{
+            return new R(false,303,result,"操作失败");
+        }
+    }
+
+    @PostMapping(value = "/deleteSellRecord")
+    @ResponseBody
+    @ApiOperation("删除买入的卖出记录")
+    public R deleteSellRecord(@RequestParam int id){
+        int result = stockService.deleteSellRecord(id);
+        if(result == 1){
+            return new R (true,200,result,"操作成功");
+        }else{
+            return new R(false,303,result,"操作失败");
+        }
     }
 }

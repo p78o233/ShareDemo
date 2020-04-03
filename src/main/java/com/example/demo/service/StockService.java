@@ -7,8 +7,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.callback.PageInfo;
 import com.example.demo.callback.R;
 import com.example.demo.entity.po.BuySellRecord;
+import com.example.demo.entity.po.SellRecord;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.vo.StockPriceVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.io.IOException;
 import java.util.List;
@@ -69,8 +71,22 @@ public interface StockService {
     public int ioeStock(Stock stock);
 
 //    删除观察数据
-    public int deleteStock(int id);
+    public int deleteStock(int userId,int stockId);
 
 //    根据编号获取名称
     public String getStockNameByStockNum(String stockNum);
+
+//    查看购买记录
+    public PageInfo<BuySellRecord> getBuySellerRecordByUserId(int userId,int category,int page,int pageSize);
+
+    public int ioeBuySellRecord(BuySellRecord buySellRecord);
+
+    public int deleteBuySellRecord(int id);
+
+//    根据购买记录查询出售记录
+    public PageInfo<SellRecord> getSellRecordById(int buySellId,int page,int pageSize);
+
+    public int ioeSellRecord(SellRecord sellRecord);
+
+    public int deleteSellRecord(int id);
 }

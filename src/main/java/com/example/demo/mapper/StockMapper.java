@@ -9,6 +9,7 @@ import com.example.demo.entity.vo.StockRecordVo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Date;
 import java.util.List;
@@ -152,32 +153,28 @@ public interface StockMapper {
     int insertStockN(@Param("s")Stock stock);
     @Update("update stock_user set weight = #{weight} where stockId = #{stockId} and userId = #{userId}")
     int editStockUser(@Param("weight")int weight,@Param("stockId")int stockId,@Param("userId")int userId);
-    @Update("update stock set isdel = 0 where id = #{id}")
-    int deleteStockN(@Param("id")int id);
+    @Update("update stock_user set isdel = 1 where userId = #{userId} and stockId = #{stockId}")
+    int deleteStockN(@Param("userId")int userId,@Param("stockId")int stockId);
     @Select("select count(*) from stock_user where stockId = #{stockId} and userId = #{userId}")
     int countInsertStock(@Param("stockId")int stockId,@Param("userId")int userId);
 
     @Select("<script>"+
             "select count(*) from stock_user where isdel = 0 and userId = #{userId}"+
-            "<if test='stockNum!=null'>"
-            + "and stockNum like '%${stockNum}%'"
-            + "</if>"+
-            "<if test='stockName!=null'>"
-            + " and stockName like '%${stockName}%'"
-            + "</if>"+
+            "<if test='stockIds.size() > 0'>"+
+            " and stockId in "+
+            "<foreach item='item' index='index' collection='stockIds' open='(' separator=',' close=')'> #{item} </foreach> "+
+            "</if>"+
             "</script>")
-    int getAllStockCount(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName);
+    int getAllStockCount(@Param("userId")int userId,@Param("stockIds")List<Integer> stockIds);
     @Select("<script>"+
             "select * from stock_user where isdel = 0 and userId = #{userId}"+
-            "<if test='stockNum!=null'>"
-            + "stockNum like '%${stockNum}%'"
-            + "</if>"+
-            "<if test='stockName!=null'>"
-            + " and stockName like '%${stockName}%'"
-            + "</if>"+
+            "<if test='stockIds.size() > 0'>"+
+            " and stockId in "+
+            "<foreach item='item' index='index' collection='stockIds' open='(' separator=',' close=')'> #{item} </foreach> "+
+            "</if>"+
             " order by weight desc limit #{start},#{pageSize}"+
             "</script>")
-    List<StockUser> getAllStockPage(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("stockName")String stockName,@Param("start")int start,@Param("pageSize")int pageSize);
+    List<StockUser> getAllStockPage(@Param("userId")int userId,@Param("stockIds")List<Integer> stockIds,@Param("start")int start,@Param("pageSize")int pageSize);
 
     @Select("select * from stock where id = #{id}")
     Stock getStockById(@Param("id")int id);
@@ -190,8 +187,42 @@ public interface StockMapper {
     @Insert("insert into stock_user(userId,stockId,createTime,weight) values (#{s.userId},#{s.stockId},#{s.createTime},#{s.weight})")
     int insertStockUser(@Param("s")StockUser stockUser);
 
-    @Select("select id from stock where stockNum = ''%${stockNum}% and isdel = 0")
+    @Select("select id from stock where stockNum like '%${stockNum}%' and isdel = 0")
     List<Integer> getStockIdByStockNum(@Param("stockNum")String stockNum);
-    @Select("select id from stock where stockName = '%${stockName}' and isdel = 0")
+    @Select("select id from stock where stockName like '%${stockName}%' and isdel = 0")
     List<Integer> getStockIdByStockName(@Param("stockName")String stockName);
+
+    @Select("<script>"+"select count(*) from buy_sell_record where userId = #{userId}"+
+            "<if test='category != 0'>"+
+            " and category  = #{category} "+
+            "</if>"+
+            "</script>")
+    int getBuySellRecordCount(@Param("userId")int userId,@Param("category")int category);
+    @Select("<script>"+"select count(*) from buy_sell_record where userId = #{userId}"+
+            "<if test='category != 0'>"+
+            " and category  = #{category} "+
+            "</if>"+
+            "order by id desc limit #{start},#{pageSize}"+
+            "</script>")
+    List<BuySellRecord> getBuySellRecordPage(@Param("userId")int userId,@Param("category")int category,@Param("start")int start,@Param("pageSize")int pageSize);
+    @Insert("insert into buy_sell_record (buyPrice,buyTime,stockNum,stockName,category,buyNum,userId) values (#{b.buyPrice}," +
+            "#{b.buyTime},#{b.stockNum},#{b.stockName},#{b.category},#{b.buyNum},#{b.userId})")
+    int insertBuySellRecord(@Param("b")BuySellRecord buySellRecord);
+    @Update("update buy_sell_record set buyPrice = #{b.buyPrice},stockNum = #{b.stockNum},stockName = #{b.stockName},category = #{b.category}," +
+            "buyNum = #{b.buyNum} where id = #{b.id}")
+    int updateBuySellRecord(@Param("b")BuySellRecord buySellRecord);
+    @Update("update buy_sell_record set isdel = 1  where id = #{id}")
+    int deleteBuySellRecord(@Param("id")int id);
+
+    @Select("select count(*) from sell_record where buySellId = #{buySellId} and isdel = 0")
+    int getSellRecordCount(@Param("buySellId")int buySellId);
+    @Select("select * from sell_record where buySellId = #{buySellId} and isdel = 0 order by id desc limit #{start},#{pageSize}")
+    List<SellRecord> getSellRecordPage(@Param("buySellId")int buySellId,@Param("start")int start,@Param("pageSize")int pageSize);
+    @Insert("insert into sell_record (sellPrice,sellTime,stockNum,stockName,category,stockId,sellNum,userId,buySellId) values" +
+            "(#{s.sellPrice},#{s.sellTime},#{s.stockNum},#{s.stockName},#{s.category},#{s.stockId},#{s.sellNum},#{s.userId},#{s.buySellId})")
+    int insertSellRecord(@Param("s")SellRecord sellRecord);
+    @Update("update sell_record set sellPrice = #{s.sellPrice},sellTime = #{s.sellTime},sellNum = #{s.sellNum} where id = #{s.id}")
+    int updateSellRecord(@Param("s")SellRecord sellRecord);
+    @Update("update sell_record set isdel = 1 where id = #{id}")
+    int deleteSellRecord(@Param("id")int id);
 }
