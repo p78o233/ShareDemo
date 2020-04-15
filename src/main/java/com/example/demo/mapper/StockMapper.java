@@ -222,7 +222,7 @@ public interface StockMapper {
             "(#{s.sellPrice},#{s.sellTime},#{s.stockNum},#{s.stockName},#{s.category},#{s.stockId},#{s.sellNum},#{s.userId},#{s.buySellId})")
     int insertSellRecord(@Param("s")SellRecord sellRecord);
     @Update("update sell_record set sellPrice = #{s.sellPrice},sellTime = #{s.sellTime},sellNum = #{s.sellNum} where id = #{s.id}")
-    int updateSellRecord(@Param("s")SellRecord sellRecord);
+    int updateSellRecordN(@Param("s")SellRecord sellRecord);
     @Update("update sell_record set isdel = 1 where id = #{id}")
     int deleteSellRecord(@Param("id")int id);
 }

@@ -759,7 +759,7 @@ public class StockServiceImpl implements StockService {
                 return 1;
             return 0;
         }else{
-            if(stockMapper.updateSellRecord(sellRecord)>0)
+            if(stockMapper.updateSellRecordN(sellRecord)>0)
                 return 1;
             return 0;
         }
