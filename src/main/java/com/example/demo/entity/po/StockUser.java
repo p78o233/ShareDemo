@@ -4,12 +4,13 @@ package com.example.demo.entity.po;/*
  */
 
 import java.util.Date;
-
+//股票用户关联表
 public class StockUser {
     private Integer id;
     private int userId;
     private int stockId;
     private Date createTime;
+    private boolean isdel;
 
     public int getWeight() {
         return weight;
@@ -19,20 +20,8 @@ public class StockUser {
         this.weight = weight;
     }
 
-    private int isdel;
     private int weight;
 
-    @Override
-    public String toString() {
-        return "StockUser{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", stockId=" + stockId +
-                ", createTime=" + createTime +
-                ", isdel=" + isdel +
-                ", weight=" + weight +
-                '}';
-    }
 
     public StockUser() {
     }
@@ -69,15 +58,27 @@ public class StockUser {
         this.createTime = createTime;
     }
 
-    public int getIsdel() {
+    @Override
+    public String toString() {
+        return "StockUser{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", stockId=" + stockId +
+                ", createTime=" + createTime +
+                ", isdel=" + isdel +
+                ", weight=" + weight +
+                '}';
+    }
+
+    public boolean isIsdel() {
         return isdel;
     }
 
-    public void setIsdel(int isdel) {
+    public void setIsdel(boolean isdel) {
         this.isdel = isdel;
     }
 
-    public StockUser(Integer id, int userId, int stockId, Date createTime, int isdel, int weight) {
+    public StockUser(Integer id, int userId, int stockId, Date createTime, boolean isdel, int weight) {
         this.id = id;
         this.userId = userId;
         this.stockId = stockId;

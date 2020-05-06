@@ -129,16 +129,10 @@ public class StockController {
         stockService.lookShangData();
     }
 
-    @RequestMapping(value = "/getAllStock", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation("前端根据用户id获取全部观察数据")
-    public R getAllStock(HttpServletRequest request,@RequestParam int userId,@RequestParam(defaultValue = "")String stockNum,@RequestParam (defaultValue = "")String stockName,@RequestParam int pageNum,@RequestParam int pageSize) {
-        return new R(true,200,stockService.getAllStock(userId,stockNum,stockName,pageNum,pageSize),"");
-    }
 
     @RequestMapping(value = "/tagBuySell", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation("0 0/5 9,10,11,12,13,14,15 * * ?")
+//    @ApiOperation("0 0/5 9,10,11,12,13,14,15 * * ?")
 //    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
     public void tagBuySell() {
         stockService.tagBuy();
@@ -152,6 +146,9 @@ public class StockController {
         stockService.test();
     }
 
+
+
+//    页面接口
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("登陆接口")
@@ -160,6 +157,13 @@ public class StockController {
     })
     public R login(@RequestBody User user){
         return stockService.login(user.getAccount(),user.getPwd());
+    }
+
+    @RequestMapping(value = "/getAllStock", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("前端根据用户id获取全部观察数据")
+    public R getAllStock(HttpServletRequest request,@RequestParam int userId,@RequestParam(defaultValue = "")String stockNum,@RequestParam (defaultValue = "")String stockName,@RequestParam int pageNum,@RequestParam int pageSize) {
+        return new R(true,200,stockService.getAllStock(userId,stockNum,stockName,pageNum,pageSize),"");
     }
 
     @PostMapping(value = "/ioeStock")
