@@ -16,7 +16,7 @@ public class config {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(kevinTokenFilter());
         registration.addUrlPatterns("/shares/stock/*");
-        registration.addInitParameter("exclusions","/shares/stock/login,");
+//        registration.addInitParameter("exclusions","/shares/stock/login,");
 //    	registration.addInitParameter("", "");
         registration.setName("tokenFilter");
 
