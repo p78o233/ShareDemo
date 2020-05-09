@@ -50,4 +50,14 @@ public class R {
         this.data = data;
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "R{" +
+                "ret=" + ret +
+                ", state=" + state +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }
