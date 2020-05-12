@@ -9,6 +9,7 @@ import com.example.demo.callback.R;
 import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.SellRecord;
 import com.example.demo.entity.po.Stock;
+import com.example.demo.entity.po.StockRecord;
 import com.example.demo.entity.vo.StockPriceVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -82,6 +83,9 @@ public interface StockService {
     public int ioeBuySellRecord(BuySellRecord buySellRecord);
 
     public int deleteBuySellRecord(int id);
+
+//    查看观察数据最近走势
+    public List<StockRecord> getStockRecordList(String stockNum,int size);
 
 //    根据购买记录查询出售记录
     public PageInfo<SellRecord> getSellRecordById(int buySellId,int page,int pageSize);

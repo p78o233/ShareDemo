@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2020-05-10 11:24:53
+Date: 2020-05-12 15:28:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -3736,14 +3736,15 @@ CREATE TABLE `stock_user` (
   `isdel` bit(1) DEFAULT b'0' COMMENT '是否删除 0正常  1删除',
   `weight` int(11) DEFAULT NULL COMMENT '权重',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of stock_user
 -- ----------------------------
-INSERT INTO `stock_user` VALUES ('1', '1', '1', '2020-05-06 10:52:24', '', null);
-INSERT INTO `stock_user` VALUES ('2', '1', '2', '2020-05-06 10:52:27', '', null);
-INSERT INTO `stock_user` VALUES ('3', '1', '3', '2020-05-06 10:52:30', '', null);
+INSERT INTO `stock_user` VALUES ('1', '1', '1', '2020-05-06 10:52:24', '', '0');
+INSERT INTO `stock_user` VALUES ('2', '1', '2', '2020-05-06 10:52:27', '', '0');
+INSERT INTO `stock_user` VALUES ('3', '1', '3', '2020-05-06 10:52:30', '', '0');
+INSERT INTO `stock_user` VALUES ('4', '1', '37', '2020-05-11 11:25:16', '', '0');
 
 -- ----------------------------
 -- Table structure for `user`

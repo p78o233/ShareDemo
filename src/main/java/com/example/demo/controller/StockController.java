@@ -232,6 +232,15 @@ public class StockController {
         }
     }
 
+    @GetMapping(value = "/getStockRecordList")
+    @ResponseBody
+    @ApiOperation("获取某个股票的走势")
+    public R getStockRecordList(@RequestParam String stockNum,@RequestParam int size){
+        return new R(true,200,stockService.getStockRecordList(stockNum,size),"查询成功");
+    }
+
+
+
     @GetMapping(value = "/getSellRecordById")
     @ResponseBody
     @ApiOperation("获取购买的的卖出记录")

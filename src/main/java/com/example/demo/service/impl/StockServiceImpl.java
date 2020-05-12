@@ -662,6 +662,16 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    public List<StockRecord> getStockRecordList(String stockNum, int size) {
+        if(size == 0){
+            return stockMapper.getAllStockRecord(stockNum);
+        }else{
+            return stockMapper.getSizeStockRecord(stockNum,size);
+        }
+
+    }
+
+    @Override
     public PageInfo<Stock> getAllStock(int userId, String stockNum,String stockName, int page, int pageSize) {
         int start = (page-1)*pageSize;
         if("".equals(stockNum))
@@ -706,7 +716,11 @@ public class StockServiceImpl implements StockService {
     @Override
     public String getStockNameByStockNum(String stockNum) {
         String [] result = getStockNowPrice(stockNum);
-        return result[0].split("=")[1].substring(1);
+        String stockName = result[0].split("=")[1].substring(1);
+        if("\";\n".equals(stockName)){
+            stockName = "查无此股票,请核实股票编号";
+        }
+        return stockName;
     }
 
     @Override
