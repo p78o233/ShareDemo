@@ -228,8 +228,8 @@ public interface StockMapper {
 
 
 //    根据股票号码获取最近走势
-    @Select("select * from stock_record where stockNum = #{stockNum} order id asc")
-    List<StockRecord> getAllStockRecord(@Param("stockNum")String stockNum);
-    @Select("select * from stock_record where stockNum = #{stockNum} order id asc limit 0,#{size}")
-    List<StockRecord> getSizeStockRecord(@Param("stockNum")String stockNum,@Param("size")int size);
+    @Select("select * from stock_record where stockNum = #{stockNum} and beginPrice != 0 order by id asc")
+    List<StockRecord> getAllStockRecordByStockNum(@Param("stockNum")String stockNum);
+    @Select("select * from stock_record where stockNum = #{stockNum} and beginPrice != 0 order by id asc limit 0,#{size}")
+    List<StockRecord> getSizeStockRecordByStockNum(@Param("stockNum")String stockNum,@Param("size")int size);
 }

@@ -664,9 +664,9 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<StockRecord> getStockRecordList(String stockNum, int size) {
         if(size == 0){
-            return stockMapper.getAllStockRecord(stockNum);
+            return stockMapper.getAllStockRecordByStockNum(stockNum);
         }else{
-            return stockMapper.getSizeStockRecord(stockNum,size);
+            return stockMapper.getSizeStockRecordByStockNum(stockNum,size);
         }
 
     }
