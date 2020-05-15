@@ -192,40 +192,6 @@ public interface StockMapper {
     @Select("select id from stock where stockName like '%${stockName}%' and isdel = 0")
     List<Integer> getStockIdByStockName(@Param("stockName")String stockName);
 
-    @Select("<script>"+"select count(*) from buy_sell_record where userId = #{userId}"+
-            "<if test='category != 0'>"+
-            " and category  = #{category} "+
-            "</if>"+
-            "</script>")
-    int getBuySellRecordCount(@Param("userId")int userId,@Param("category")int category);
-    @Select("<script>"+"select count(*) from buy_sell_record where userId = #{userId}"+
-            "<if test='category != 0'>"+
-            " and category  = #{category} "+
-            "</if>"+
-            "order by id desc limit #{start},#{pageSize}"+
-            "</script>")
-    List<BuySellRecord> getBuySellRecordPage(@Param("userId")int userId,@Param("category")int category,@Param("start")int start,@Param("pageSize")int pageSize);
-    @Insert("insert into buy_sell_record (buyPrice,buyTime,stockNum,stockName,category,buyNum,userId) values (#{b.buyPrice}," +
-            "#{b.buyTime},#{b.stockNum},#{b.stockName},#{b.category},#{b.buyNum},#{b.userId})")
-    int insertBuySellRecord(@Param("b")BuySellRecord buySellRecord);
-    @Update("update buy_sell_record set buyPrice = #{b.buyPrice},stockNum = #{b.stockNum},stockName = #{b.stockName},category = #{b.category}," +
-            "buyNum = #{b.buyNum} where id = #{b.id}")
-    int updateBuySellRecord(@Param("b")BuySellRecord buySellRecord);
-    @Update("update buy_sell_record set isdel = 1  where id = #{id}")
-    int deleteBuySellRecord(@Param("id")int id);
-
-    @Select("select count(*) from sell_record where buySellId = #{buySellId} and isdel = 0")
-    int getSellRecordCount(@Param("buySellId")int buySellId);
-    @Select("select * from sell_record where buySellId = #{buySellId} and isdel = 0 order by id desc limit #{start},#{pageSize}")
-    List<SellRecord> getSellRecordPage(@Param("buySellId")int buySellId,@Param("start")int start,@Param("pageSize")int pageSize);
-    @Insert("insert into sell_record (sellPrice,sellTime,stockNum,stockName,category,stockId,sellNum,userId,buySellId) values" +
-            "(#{s.sellPrice},#{s.sellTime},#{s.stockNum},#{s.stockName},#{s.category},#{s.stockId},#{s.sellNum},#{s.userId},#{s.buySellId})")
-    int insertSellRecord(@Param("s")SellRecord sellRecord);
-    @Update("update sell_record set sellPrice = #{s.sellPrice},sellTime = #{s.sellTime},sellNum = #{s.sellNum} where id = #{s.id}")
-    int updateSellRecordN(@Param("s")SellRecord sellRecord);
-    @Update("update sell_record set isdel = 1 where id = #{id}")
-    int deleteSellRecord(@Param("id")int id);
-
 
 //    根据股票号码获取最近走势
     @Select("select * from stock_record where stockNum = #{stockNum} and beginPrice != 0 order by id asc")

@@ -1,37 +1,34 @@
 package com.example.demo.entity.po;/*
  * @author p78o2
- * @date 2020/4/2
+ * @date 2020/5/15
  */
 
 import java.util.Date;
-//卖出记录
-public class SellRecord {
+
+//买入记录表
+public class BuyRecord {
     private Integer id;
-    private int buyId;
-    private float sellPrice;
-    private float profitAndLoss;
-    private Date sellTime;
+    private float buyPrice;
+    private Date buyTime;
     private String stockNum;
     private String stockName;
     private int category;
     private int stockId;
-    private int sellNum;
+    private int buyNum;
     private int userId;
     private int isdel;
 
     @Override
     public String toString() {
-        return "SellRecord{" +
+        return "BuyRecord{" +
                 "id=" + id +
-                ", buyId=" + buyId +
-                ", sellPrice=" + sellPrice +
-                ", profitAndLoss=" + profitAndLoss +
-                ", sellTime=" + sellTime +
+                ", buyPrice=" + buyPrice +
+                ", buyTime=" + buyTime +
                 ", stockNum='" + stockNum + '\'' +
                 ", stockName='" + stockName + '\'' +
                 ", category=" + category +
                 ", stockId=" + stockId +
-                ", sellNum=" + sellNum +
+                ", buyNum=" + buyNum +
                 ", userId=" + userId +
                 ", isdel=" + isdel +
                 '}';
@@ -45,36 +42,20 @@ public class SellRecord {
         this.id = id;
     }
 
-    public int getBuyId() {
-        return buyId;
+    public float getBuyPrice() {
+        return buyPrice;
     }
 
-    public void setBuyId(int buyId) {
-        this.buyId = buyId;
+    public void setBuyPrice(float buyPrice) {
+        this.buyPrice = buyPrice;
     }
 
-    public float getSellPrice() {
-        return sellPrice;
+    public Date getBuyTime() {
+        return buyTime;
     }
 
-    public void setSellPrice(float sellPrice) {
-        this.sellPrice = sellPrice;
-    }
-
-    public float getProfitAndLoss() {
-        return profitAndLoss;
-    }
-
-    public void setProfitAndLoss(float profitAndLoss) {
-        this.profitAndLoss = profitAndLoss;
-    }
-
-    public Date getSellTime() {
-        return sellTime;
-    }
-
-    public void setSellTime(Date sellTime) {
-        this.sellTime = sellTime;
+    public void setBuyTime(Date buyTime) {
+        this.buyTime = buyTime;
     }
 
     public String getStockNum() {
@@ -109,12 +90,12 @@ public class SellRecord {
         this.stockId = stockId;
     }
 
-    public int getSellNum() {
-        return sellNum;
+    public int getBuyNum() {
+        return buyNum;
     }
 
-    public void setSellNum(int sellNum) {
-        this.sellNum = sellNum;
+    public void setBuyNum(int buyNum) {
+        this.buyNum = buyNum;
     }
 
     public int getUserId() {
@@ -133,20 +114,18 @@ public class SellRecord {
         this.isdel = isdel;
     }
 
-    public SellRecord() {
+    public BuyRecord() {
     }
 
-    public SellRecord(Integer id, int buyId, float sellPrice, float profitAndLoss, Date sellTime, String stockNum, String stockName, int category, int stockId, int sellNum, int userId, int isdel) {
+    public BuyRecord(Integer id, float buyPrice, Date buyTime, String stockNum, String stockName, int category, int stockId, int buyNum, int userId, int isdel) {
         this.id = id;
-        this.buyId = buyId;
-        this.sellPrice = sellPrice;
-        this.profitAndLoss = profitAndLoss;
-        this.sellTime = sellTime;
+        this.buyPrice = buyPrice;
+        this.buyTime = buyTime;
         this.stockNum = stockNum;
         this.stockName = stockName;
         this.category = category;
         this.stockId = stockId;
-        this.sellNum = sellNum;
+        this.buyNum = buyNum;
         this.userId = userId;
         this.isdel = isdel;
     }

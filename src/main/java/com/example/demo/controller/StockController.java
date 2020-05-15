@@ -203,35 +203,6 @@ public class StockController {
         return new R (true,200,result,"查询成功");
     }
 
-    @GetMapping(value = "/getBuySellerRecordByUserId")
-    @ResponseBody
-    @ApiOperation("获取所有的买入记录")
-    public R getBuySellerRecordByUserId(@RequestParam int userId,@RequestParam int category,@RequestParam int page,@RequestParam int pageSize){
-        return new R(true,200,stockService.getBuySellerRecordByUserId(userId,category,page,pageSize),"查询成功");
-    }
-    @PostMapping(value = "/ioeBuySellRecord")
-    @ResponseBody
-    @ApiOperation("新增修改买入记录")
-    public R ioeBuySellRecord(@RequestBody BuySellRecord buySellRecord){
-        int result = stockService.ioeBuySellRecord(buySellRecord);
-        if(result == 1){
-            return new R (true,200,result,"操作成功");
-        }else{
-            return new R(false,303,result,"操作失败");
-        }
-    }
-    @PostMapping(value = "/deleteBuySellRecord")
-    @ResponseBody
-    @ApiOperation("删除购买记录")
-    public R deleteBuySellRecord(@RequestParam int id){
-        int result = stockService.deleteBuySellRecord(id);
-        if(result == 1){
-            return new R (true,200,result,"操作成功");
-        }else{
-            return new R(false,303,result,"操作失败");
-        }
-    }
-
     @GetMapping(value = "/getStockRecordList")
     @ResponseBody
     @ApiOperation("获取某个股票的走势")
@@ -239,36 +210,4 @@ public class StockController {
         return new R(true,200,stockService.getStockRecordList(stockNum,size),"查询成功");
     }
 
-
-
-    @GetMapping(value = "/getSellRecordById")
-    @ResponseBody
-    @ApiOperation("获取购买的的卖出记录")
-    public R getSellRecordById(@Param("buySellId")int buySellId,@Param("page")int page,@Param("pageSize")int pageSize){
-        return new R(true,200,stockService.getSellRecordById(buySellId,page,pageSize),"查询成功");
-    }
-
-    @PostMapping(value = "/ioeSellRecord")
-    @ResponseBody
-    @ApiOperation("新增或者修改买入的卖出记录")
-    public R ioeSellRecord(@RequestBody SellRecord sellRecord){
-        int result = stockService.ioeSellRecord(sellRecord);
-        if(result == 1){
-            return new R (true,200,result,"操作成功");
-        }else{
-            return new R(false,303,result,"操作失败");
-        }
-    }
-
-    @PostMapping(value = "/deleteSellRecord")
-    @ResponseBody
-    @ApiOperation("删除买入的卖出记录")
-    public R deleteSellRecord(@RequestParam int id){
-        int result = stockService.deleteSellRecord(id);
-        if(result == 1){
-            return new R (true,200,result,"操作成功");
-        }else{
-            return new R(false,303,result,"操作失败");
-        }
-    }
 }

@@ -2,18 +2,64 @@
 Navicat MySQL Data Transfer
 
 Source Server         : 本机
-Source Server Version : 50553
-Source Host           : localhost:3306
+Source Server Version : 50717
+Source Host           : 127.0.0.1:3306
 Source Database       : stock
 
 Target Server Type    : MYSQL
-Target Server Version : 50553
+Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2020-05-12 15:28:26
+Date: 2020-05-15 15:24:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `buy_record`
+-- ----------------------------
+DROP TABLE IF EXISTS `buy_record`;
+CREATE TABLE `buy_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '所有买入记录表',
+  `buyPrice` float DEFAULT NULL COMMENT '买入单价',
+  `buyTime` date DEFAULT NULL COMMENT '买入时间',
+  `stockNum` varchar(10) DEFAULT NULL COMMENT '编号',
+  `stockName` varchar(10) DEFAULT NULL COMMENT '名称',
+  `category` int(11) DEFAULT NULL COMMENT '1 股票 2基金 3黄金 4期货 5彩票',
+  `stockId` int(11) DEFAULT NULL COMMENT '股票id',
+  `buyNum` int(11) DEFAULT NULL COMMENT '买入数量',
+  `userId` int(11) DEFAULT NULL COMMENT '用户id',
+  `isdel` int(11) DEFAULT '0' COMMENT '是否删除0正常1删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of buy_record
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sell_record`
+-- ----------------------------
+DROP TABLE IF EXISTS `sell_record`;
+CREATE TABLE `sell_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '所有卖出记录表',
+  `buyId` int(11) DEFAULT NULL COMMENT '买入记录id',
+  `sellPrice` float DEFAULT NULL COMMENT '卖出单价',
+  `profitAndLoss` float DEFAULT NULL COMMENT '盈亏金额正数盈利负数亏损',
+  `sellTime` datetime DEFAULT NULL COMMENT '卖出时间',
+  `stockNum` varchar(10) DEFAULT NULL COMMENT '编号',
+  `stockName` varchar(10) DEFAULT NULL COMMENT '名称',
+  `category` int(11) DEFAULT NULL COMMENT '1 股票 2基金 3黄金 4期货 5彩票',
+  `stockId` int(11) DEFAULT NULL COMMENT '股票id',
+  `sellNum` int(11) DEFAULT NULL COMMENT '卖出数量',
+  `userId` int(11) DEFAULT NULL COMMENT '用户id',
+  `isdel` int(11) DEFAULT '0' COMMENT '是否删除0正常1删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of sell_record
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `stock`

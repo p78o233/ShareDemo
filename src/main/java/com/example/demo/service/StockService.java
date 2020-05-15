@@ -77,20 +77,7 @@ public interface StockService {
 //    根据编号获取名称
     public String getStockNameByStockNum(String stockNum);
 
-//    查看购买记录
-    public PageInfo<BuySellRecord> getBuySellerRecordByUserId(int userId,int category,int page,int pageSize);
-
-    public int ioeBuySellRecord(BuySellRecord buySellRecord);
-
-    public int deleteBuySellRecord(int id);
-
 //    查看观察数据最近走势
     public List<StockRecord> getStockRecordList(String stockNum,int size);
 
-//    根据购买记录查询出售记录
-    public PageInfo<SellRecord> getSellRecordById(int buySellId,int page,int pageSize);
-
-    public int ioeSellRecord(SellRecord sellRecord);
-
-    public int deleteSellRecord(int id);
 }
