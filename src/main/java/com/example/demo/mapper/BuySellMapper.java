@@ -44,11 +44,11 @@ public interface BuySellMapper {
             " order by id desc limit #{start},#{pageSize}"+
             "</script>")
     List<BuyRecord> pageBuyRecord(@Param("userId")int userId, @Param("stockNum")String stockNum, @Param("beginTime") Date beginTime, @Param("endTime")Date endTime,@Param("start")int start,@Param("pageSize")int pageSize);
-//    根据id获取买入记录
+//    根据id获取买入记录详细
     @Select("select * from buy_record where id = #{id}")
     BuyRecord getBuyRecordDetailById(@Param("id")int id);
 //    根据买入id获取卖出记录
-    @Select("select * from sell_record where buyId = #{buyId} order by id desc")
+    @Select("select * from sell_record where buyId = #{buyId} and isdel = 0 order by id desc")
     List<SellRecord> getSellRecordList(@Param("buyId")int buyId);
 //    新增购买记录
     @Insert("insert into buy_record (buyPrice,buyTime,stockNum,stockName,category,stockId,buyNum,userId) values " +
@@ -67,4 +67,10 @@ public interface BuySellMapper {
     @Insert("insert into sell_record (buyId,sellPrice,profitAndLoss,sellTime,stockNum,stockName,category,stockId,sellNum,userId) values " +
             "(#{s.buyId},#{s.sellPrice},#{s.profitAndLoss},#{s.sellTime},#{s.stockNum},#{s.stockName},#{s.category},#{s.stockId},#{s.sellNum},#{s.userId})")
     int insertSellRecord(@Param("s")SellRecord sellRecord);
+//    修改卖出记录
+    @Update("update sell_record set sellPrice = #{s.sellPrice},profitAndLoss = #{s.profitAndLoss},sellTime = #{s.sellTime},sellNum = #{s.sellNum} where id = #{s.id}")
+    int updateSellRecord(@Param("s")SellRecord sellRecord);
+//    删除卖出记录
+    @Update("update sell_record set isdel = 1 where id = #{id}")
+    int deleteSellRecord(@Param("id")int id);
 }
