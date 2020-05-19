@@ -23,10 +23,10 @@ public interface BuySellMapper {
             " and stockNum like '%${stockNum}%'"+
             "</if>"+
             "<if test='beginTime != null'>"+
-            " and buyTime < #{beginTime}"+
+            " and buyTime &lt; #{beginTime}"+
             "</if>"+
             "<if test='endTime != null'>"+
-            " and endTime > #{endTime}"+
+            " and endTime &gt; #{endTime}"+
             "</if>"+
             "</script>")
     int countBuyRecord(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("beginTime") Date beginTime,@Param("endTime")Date endTime);
@@ -36,10 +36,10 @@ public interface BuySellMapper {
             " and stockNum like '%${stockNum}%'"+
             "</if>"+
             "<if test='beginTime != null'>"+
-            " and buyTime < #{beginTime}"+
+            " and buyTime &lt; #{beginTime}"+
             "</if>"+
             "<if test='endTime != null'>"+
-            " and endTime > #{endTime}"+
+            " and endTime &gt; #{endTime}"+
             "</if>"+
             " order by id desc limit #{start},#{pageSize}"+
             "</script>")
@@ -50,6 +50,9 @@ public interface BuySellMapper {
 //    根据买入id获取卖出记录
     @Select("select * from sell_record where buyId = #{buyId} and isdel = 0 order by id desc")
     List<SellRecord> getSellRecordList(@Param("buyId")int buyId);
+//    根据买入id获取卖出记录条数
+    @Select("select count(*) from sell_record where buyId = #{buyId} and isdel = 0")
+    int countSellRecord(@Param("buyId")int buyId);
 //    新增购买记录
     @Insert("insert into buy_record (buyPrice,buyTime,stockNum,stockName,category,stockId,buyNum,userId) values " +
             "(#{b.buyPrice},#{b.buyTime},#{b.stockNum},#{b.stockName},#{b.category},#{b.stockId},#{b.buyNum},#{b.userId})")
@@ -57,6 +60,7 @@ public interface BuySellMapper {
 //    更新购买记录
     @Update("update buy_record set buyPrice = #{b.buyPrice},buyTime = #{b.buyTime},buyNum = #{b.buyNum} where id = #{b.id}")
     int updateBuyRecord(@Param("b")BuyRecord buyRecord);
+
 //    删除购买记录
     @Update("update buy_record set isdel = 1 where id = #{id}")
     int deleteBuyRecord(@Param("id")int id);

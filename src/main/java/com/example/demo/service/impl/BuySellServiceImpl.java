@@ -13,6 +13,7 @@ import com.example.demo.mapper.GobalMapper;
 import com.example.demo.service.BuySellService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,20 +25,21 @@ public class BuySellServiceImpl implements BuySellService {
     private BuySellMapper buySellMapper;
     @Autowired
     private GobalMapper gobalMapper;
+
     @Override
     public PageInfo<BuySellRecordVo> getBuySellRecordList(int userId, String stockNum, Date beginTime, Date endTime, int page, int pageSize) {
 //        根据筛选条件获取买入记录
-        stockNum = "".equals(stockNum)?null:stockNum;
-        beginTime = beginTime==null?null:beginTime;
-        endTime = endTime==null?null:endTime;
+        stockNum = "".equals(stockNum) ? null : stockNum;
+        beginTime = beginTime == null ? null : beginTime;
+        endTime = endTime == null ? null : endTime;
         int count = 0;
-        count = buySellMapper.countBuyRecord(userId,stockNum,beginTime,endTime);
-        int start = (page-1)*pageSize;
+        count = buySellMapper.countBuyRecord(userId, stockNum, beginTime, endTime);
+        int start = (page - 1) * pageSize;
         List<BuyRecord> buyRecords = new ArrayList<>();
-        buyRecords = buySellMapper.pageBuyRecord(userId,stockNum,beginTime,endTime,start,pageSize);
+        buyRecords = buySellMapper.pageBuyRecord(userId, stockNum, beginTime, endTime, start, pageSize);
 //        获取买入记录关联的卖出记录
         List<BuySellRecordVo> voList = new ArrayList<>();
-        for(int i = 0;i<buyRecords.size();i++){
+        for (int i = 0; i < buyRecords.size(); i++) {
             List<SellRecord> sellRecordList = new ArrayList<>();
             sellRecordList = buySellMapper.getSellRecordList(buyRecords.get(i).getId());
             BuySellRecordVo vo = new BuySellRecordVo();
@@ -45,7 +47,7 @@ public class BuySellServiceImpl implements BuySellService {
             vo.setSellRecordList(sellRecordList);
             voList.add(vo);
         }
-        PageInfo <BuySellRecordVo> pageInfo = new PageInfo<>();
+        PageInfo<BuySellRecordVo> pageInfo = new PageInfo<>();
         pageInfo.setCount(count);
         pageInfo.setList(voList);
         return pageInfo;
@@ -53,42 +55,79 @@ public class BuySellServiceImpl implements BuySellService {
 
     @Override
     public int ioeBuyRecord(BuyRecord buyRecord) {
-        if(buyRecord.getId() == null){
+        if (buyRecord.getId() == null) {
 //            新增
             Stock stock = new Stock();
             stock = gobalMapper.getStockDetailByStockNum(buyRecord.getStockNum());
-            if(stock == null)
+            if (stock == null)
 //                股票代码错误或需要新增观察数据
                 return 3;
-            else{
+            else {
                 buyRecord.setStockId(stock.getId());
                 buyRecord.setStockName(stock.getStockName());
-                if(buySellMapper.insertBuyRecord(buyRecord)>0){
+                if (buySellMapper.insertBuyRecord(buyRecord) > 0) {
                     return 1;
-                }else{
+                } else {
                     return 0;
                 }
             }
 
-        }else{
+        } else {
 //            修改
-
+            if (buySellMapper.countSellRecord(buyRecord.getId()) > 0) {
+                List<SellRecord> sellRecords = new ArrayList<>();
+                sellRecords = buySellMapper.getSellRecordList(buyRecord.getId());
+                for (SellRecord sellRecord : sellRecords) {
+                    sellRecord.setProfitAndLoss((sellRecord.getSellPrice() - buyRecord.getBuyPrice()) * sellRecord.getSellNum());
+                    buySellMapper.updateSellRecord(sellRecord);
+                }
+            }
+            if (buySellMapper.updateBuyRecord(buyRecord) > 0)
+                return 1;
+            return 0;
         }
-        return 0;
     }
 
     @Override
+    @Transactional
     public int deleteBuyRecord(int id) {
-        return 0;
+        if (buySellMapper.countSellRecord(id) > 0) {
+            if (buySellMapper.deleteBuyRecord(id) > 0 && buySellMapper.deleteSellRecordByBuyId(id) > 0)
+                return 1;
+            return 0;
+        } else {
+            if (buySellMapper.deleteBuyRecord(id) > 0)
+                return 1;
+            return 0;
+        }
     }
 
     @Override
     public int ioeSellRecord(SellRecord sellRecord) {
-        return 0;
+        BuyRecord buyRecord = new BuyRecord();
+        buyRecord = buySellMapper.getBuyRecordDetailById(sellRecord.getBuyId());
+//        计算利润
+        sellRecord.setProfitAndLoss((sellRecord.getSellPrice() - buyRecord.getBuyPrice()) * sellRecord.getSellNum());
+        if (sellRecord.getId() == null) {
+//            新增
+            sellRecord.setStockId(buyRecord.getStockId());
+            sellRecord.setStockName(buyRecord.getStockName());
+            sellRecord.setStockNum(buyRecord.getStockNum());
+            if (buySellMapper.insertSellRecord(sellRecord) > 0)
+                return 1;
+            return 0;
+        } else {
+//            修改
+            if (buySellMapper.updateSellRecord(sellRecord) > 0)
+                return 1;
+            return 0;
+        }
     }
 
     @Override
     public int deleteSellRecord(int id) {
+        if (buySellMapper.deleteSellRecord(id) > 0)
+            return 1;
         return 0;
     }
 }
