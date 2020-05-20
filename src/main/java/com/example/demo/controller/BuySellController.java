@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @CrossOrigin
-@Controller
+@RestController
 @RequestMapping("/shares/buysell")
 @Api(description = "买卖模块")
 public class BuySellController {
@@ -25,8 +25,12 @@ public class BuySellController {
 
     @ApiOperation("分页获取买入卖出记录")
     @GetMapping("/getBuySellRecordList")
-    public R getBuySellRecordList(@RequestParam int userId, String stockNum, Date beginTime,Date endTime,@RequestParam int page,@RequestParam int pageSize){
-        return new R (true,200,buySellService.getBuySellRecordList(userId,stockNum,beginTime,endTime,page,pageSize),"查询成功");
+    public R getBuySellRecordList(@RequestParam int userId, String stockNum, Long beginTime,Long endTime,@RequestParam int page,@RequestParam int pageSize){
+        Date begin = new Date();
+        Date end = new Date();
+        begin = beginTime!=null?new Date(beginTime):null;
+        end = endTime!=null?new Date(endTime):null;
+        return new R (true,200,buySellService.getBuySellRecordList(userId,stockNum,begin,end,page,pageSize),"查询成功");
     }
 
     @ApiOperation("新增或修改买入记录")

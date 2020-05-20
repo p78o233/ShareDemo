@@ -39,12 +39,11 @@ public class BuySellServiceImpl implements BuySellService {
         buyRecords = buySellMapper.pageBuyRecord(userId, stockNum, beginTime, endTime, start, pageSize);
 //        获取买入记录关联的卖出记录
         List<BuySellRecordVo> voList = new ArrayList<>();
-        for (int i = 0; i < buyRecords.size(); i++) {
+        for (BuyRecord buyRecord : buyRecords) {
             List<SellRecord> sellRecordList = new ArrayList<>();
-            sellRecordList = buySellMapper.getSellRecordList(buyRecords.get(i).getId());
-            BuySellRecordVo vo = new BuySellRecordVo();
-            vo.setBuyRecord(buyRecords.get(i));
-            vo.setSellRecordList(sellRecordList);
+            sellRecordList = buySellMapper.getSellRecordList(buyRecord.getId());
+            BuySellRecordVo vo = new BuySellRecordVo(buyRecord.getId(),buyRecord.getBuyPrice(),buyRecord.getBuyTime(),buyRecord.getStockNum(),
+                    buyRecord.getStockName(),buyRecord.getCategory(),buyRecord.getStockId(),buyRecord.getBuyNum(),buyRecord.getUserId(),buyRecord.getIsdel(),sellRecordList);
             voList.add(vo);
         }
         PageInfo<BuySellRecordVo> pageInfo = new PageInfo<>();

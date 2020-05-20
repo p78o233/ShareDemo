@@ -23,10 +23,10 @@ public interface BuySellMapper {
             " and stockNum like '%${stockNum}%'"+
             "</if>"+
             "<if test='beginTime != null'>"+
-            " and buyTime &lt; #{beginTime}"+
+            " and buyTime &gt; #{beginTime}"+
             "</if>"+
             "<if test='endTime != null'>"+
-            " and endTime &gt; #{endTime}"+
+            " and buyTime &lt; #{endTime}"+
             "</if>"+
             "</script>")
     int countBuyRecord(@Param("userId")int userId,@Param("stockNum")String stockNum,@Param("beginTime") Date beginTime,@Param("endTime")Date endTime);
@@ -36,10 +36,10 @@ public interface BuySellMapper {
             " and stockNum like '%${stockNum}%'"+
             "</if>"+
             "<if test='beginTime != null'>"+
-            " and buyTime &lt; #{beginTime}"+
+            " and buyTime &gt; #{beginTime}"+
             "</if>"+
             "<if test='endTime != null'>"+
-            " and endTime &gt; #{endTime}"+
+            " and buyTime &lt; #{endTime}"+
             "</if>"+
             " order by id desc limit #{start},#{pageSize}"+
             "</script>")
