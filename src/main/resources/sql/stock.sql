@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2020-05-19 17:32:09
+Date: 2020-05-20 15:58:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,11 +31,12 @@ CREATE TABLE `buy_record` (
   `userId` int(11) DEFAULT NULL COMMENT '用户id',
   `isdel` int(11) DEFAULT '0' COMMENT '是否删除0正常1删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of buy_record
 -- ----------------------------
+INSERT INTO `buy_record` VALUES ('1', '10', '2020-05-20', 'sh600022', '山东钢铁', '1', '1', '10000', '1', '0');
 
 -- ----------------------------
 -- Table structure for `sell_record`
@@ -55,11 +56,14 @@ CREATE TABLE `sell_record` (
   `userId` int(11) DEFAULT NULL COMMENT '用户id',
   `isdel` int(11) DEFAULT '0' COMMENT '是否删除0正常1删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sell_record
 -- ----------------------------
+INSERT INTO `sell_record` VALUES ('1', '1', '5', '-500', '2020-05-20 13:26:25', 'sh600022', '山东', '1', '1', '100', '1', '0');
+INSERT INTO `sell_record` VALUES ('2', '1', '15', '500', '2020-05-20 13:27:56', 'sh600022', '山东', '1', '1', '100', '1', '0');
+INSERT INTO `sell_record` VALUES ('3', '1', '11', '800', '2020-05-20 13:28:41', 'sh600022', '山东', '1', '1', '800', '1', '0');
 
 -- ----------------------------
 -- Table structure for `stock`
