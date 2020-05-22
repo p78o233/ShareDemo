@@ -11,6 +11,6 @@ public interface GobalMapper {
     @Select("select id from user where token = #{token} and isdel = 0 ")
     int getUserIdByToken(@Param("token")String token);
 //    根据股票编号获取股票详细信息
-    @Select("select * from stock where stockNum = #{stockNum} and isdel")
+    @Select("select * from stock where stockNum = #{stockNum} and isdel = 0")
     Stock getStockDetailByStockNum(@Param("stockNum")String stockNum);
 }

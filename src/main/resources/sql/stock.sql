@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2020-05-20 15:58:04
+Date: 2020-05-22 17:28:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,12 +31,13 @@ CREATE TABLE `buy_record` (
   `userId` int(11) DEFAULT NULL COMMENT '用户id',
   `isdel` int(11) DEFAULT '0' COMMENT '是否删除0正常1删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of buy_record
 -- ----------------------------
-INSERT INTO `buy_record` VALUES ('1', '10', '2020-05-20', 'sh600022', '山东钢铁', '1', '1', '10000', '1', '0');
+INSERT INTO `buy_record` VALUES ('1', '10', '2020-05-20', 'sh600022', '山东钢铁', '1', '1', '1000', '1', '0');
+INSERT INTO `buy_record` VALUES ('2', '50', '2020-05-01', 'sh600022', '山东钢铁', '1', '1', '500', '1', '0');
 
 -- ----------------------------
 -- Table structure for `sell_record`
