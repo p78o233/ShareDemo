@@ -1,9 +1,12 @@
-package com.example.demo.entity.po;/*
+package com.example.demo.entity.vo;
+/*
  * @author p78o2
- * @date 2019/12/26
+ * @date 2020/7/10
  */
 
-public class User {
+import java.util.List;
+
+public class UserMailContentVo {
     private int id;
     private String account;
     private String pwd;
@@ -11,13 +14,14 @@ public class User {
     private String token;
     private int isdel;
     private String emailAddress;
+    private List<String> contentList;
 
-    public User() {
+    public UserMailContentVo() {
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserMailContentVo{" +
                 "id=" + id +
                 ", account='" + account + '\'' +
                 ", pwd='" + pwd + '\'' +
@@ -25,6 +29,7 @@ public class User {
                 ", token='" + token + '\'' +
                 ", isdel=" + isdel +
                 ", emailAddress='" + emailAddress + '\'' +
+                ", contentList=" + contentList +
                 '}';
     }
 
@@ -84,7 +89,15 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public User(int id, String account, String pwd, String userName, String token, int isdel, String emailAddress) {
+    public List<String> getContentList() {
+        return contentList;
+    }
+
+    public void setContentList(List<String> contentList) {
+        this.contentList = contentList;
+    }
+
+    public UserMailContentVo(int id, String account, String pwd, String userName, String token, int isdel, String emailAddress, List<String> contentList) {
         this.id = id;
         this.account = account;
         this.pwd = pwd;
@@ -92,5 +105,6 @@ public class User {
         this.token = token;
         this.isdel = isdel;
         this.emailAddress = emailAddress;
+        this.contentList = contentList;
     }
 }
