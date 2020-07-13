@@ -23,19 +23,35 @@ public class TimmerController {
     private TimmerService timmerService;
 
 
-    @RequestMapping(value = "/noticeBuy", method = RequestMethod.GET)
+    @RequestMapping(value = "/noticeBuyFirst", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation("定时任务提醒买入，10点30分，以及14点30分")
+    @ApiOperation("定时任务提醒低价，10点30分，以及14点30分")
     @Scheduled(cron = "0 30 10,14 * * ? ")
-    public void noticeBuy() {
+    public void noticeBuyFirst() {
         timmerService.noticeBuy();
     }
 
-    @RequestMapping(value = "/noticeBuyClock", method = RequestMethod.GET)
+    @RequestMapping(value = "/noticeBuySecond", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation("定时任务提醒买入，11点，以及14点")
+    @ApiOperation("定时任务提醒低价，11点，以及14点")
     @Scheduled(cron = "0 0 11,14 * * ? ")
-    public void noticeBuyClock() {
+    public void noticeBuySecond() {
         timmerService.noticeBuy();
+    }
+
+    @RequestMapping(value = "/noticeSellFirst", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("定时任务提醒高价，10点30分，以及14点30分")
+    @Scheduled(cron = "0 30 10,14 * * ? ")
+    public void noticeSellFirst() {
+        timmerService.noticeSell();
+    }
+
+    @RequestMapping(value = "/noticeSellSecond", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("定时任务提醒高价，11点，以及14点")
+    @Scheduled(cron = "0 0 11,14 * * ? ")
+    public void noticeSellSecond() {
+        timmerService.noticeSell();
     }
 }
