@@ -98,29 +98,29 @@ public class StockController {
 //        int userId = Integer.valueOf(request.getHeader("userId"));
 //        stockService.getAllBuyRecord(userId);
 //    }
-    @RequestMapping(value = "/getNowPrice/{isWeight}", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation("查询当前价格")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "是否只显示权重不为零的数据,0查权重包含0的（即全部），1只查询权重不为0的",paramType = "path")
-    })
-    public R getNowPrice(HttpServletRequest request,@PathVariable int isWeight,@RequestBody List<String>stockNums){
-        int userId = Integer.valueOf(request.getHeader("userId"));
-        return new R(true,200,stockService.checkNowPrice(userId,isWeight,stockNums),"");
-    }
+//    @RequestMapping(value = "/getNowPrice/{isWeight}", method = RequestMethod.POST)
+//    @ResponseBody
+//    @ApiOperation("查询当前价格")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(value = "是否只显示权重不为零的数据,0查权重包含0的（即全部），1只查询权重不为0的",paramType = "path")
+//    })
+//    public R getNowPrice(HttpServletRequest request,@PathVariable int isWeight,@RequestBody List<String>stockNums){
+//        int userId = Integer.valueOf(request.getHeader("userId"));
+//        return new R(true,200,stockService.checkNowPrice(userId,isWeight,stockNums),"");
+//    }
 //    @RequestMapping(value = "/getHistoryPrice",method = RequestMethod.GET)
 //    @ResponseBody
 //    @ApiOperation("获取某个的历史")
 //    public R getHistoryPrice(@RequestParam String stockNum){
 //        return new R(true,200,stockService.getHistoryPrice(stockNum),"");
 //    }
-    @RequestMapping(value = "/reminder", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation("观察涨跌幅巨大的数据")
-//    @Scheduled(cron = "0 0,20,40 9,10,11,13,14 * * ? ")
-    public void reminder() {
-        stockService.reminder();
-    }
+//    @RequestMapping(value = "/reminder", method = RequestMethod.GET)
+//    @ResponseBody
+//    @ApiOperation("观察涨跌幅巨大的数据")
+////    @Scheduled(cron = "0 0,20,40 9,10,11,13,14 * * ? ")
+//    public void reminder() {
+//        stockService.reminder();
+//    }
 //    @RequestMapping(value = "/lookShangData", method = RequestMethod.GET)
 //    @ResponseBody
 //    @ApiOperation("升降银行权限")

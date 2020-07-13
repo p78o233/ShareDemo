@@ -40,14 +40,13 @@ public interface StockService {
 //    获取当前已经买了的
 //    public List<BuySellRecord> getAllBuyRecord(int userId);
 
-//    查询当前价格,以及记录最低价和记录最高价
-    public List<StockPriceVo> checkNowPrice(int userId,int isWeitht,List<String> stockNums);
+
 
 //    历史数据图
 //    public JSONObject getHistoryPrice(String stockNum);
 
 //    观察数据涨跌超过5%邮件提醒
-    public void reminder();
+//    public void reminder();
 
 //    观察上证指数,提高或者降低银行的权重
 //    public void lookShangData();
