@@ -17,43 +17,43 @@ import java.io.IOException;
 import java.util.List;
 
 public interface StockService {
-    public List<Stock> testList();
+//    public List<Stock> testList();
 
 //    新增观察的数据
-    public boolean insertStock(List<Stock> stocks);
+//    public boolean insertStock(List<Stock> stocks);
 
 //    根据观察记录记录每天情况(定时任务)
-    public boolean daylyRecord()  throws IOException;
+//    public boolean daylyRecord()  throws IOException;
 
 //    记录购买情况
-    public boolean insertBuyRecord(BuySellRecord buySellRecord);
+//    public boolean insertBuyRecord(BuySellRecord buySellRecord);
 
 //    记录卖情况
-    public boolean updateSellRecord(BuySellRecord buySellRecord);
+//    public boolean updateSellRecord(BuySellRecord buySellRecord);
 
 //    提示卖(定时任务)
     public void noticeSell(int userId);
 
 //    提示买(定时任务)
-    public void noticeBuy();
+//    public void noticeBuy();
 
 //    获取当前已经买了的
-    public List<BuySellRecord> getAllBuyRecord(int userId);
+//    public List<BuySellRecord> getAllBuyRecord(int userId);
 
 //    查询当前价格,以及记录最低价和记录最高价
     public List<StockPriceVo> checkNowPrice(int userId,int isWeitht,List<String> stockNums);
 
 //    历史数据图
-    public JSONObject getHistoryPrice(String stockNum);
+//    public JSONObject getHistoryPrice(String stockNum);
 
 //    观察数据涨跌超过5%邮件提醒
     public void reminder();
 
 //    观察上证指数,提高或者降低银行的权重
-    public void lookShangData();
+//    public void lookShangData();
 
 //    临时接口随时更改
-    public void test();
+//    public void test();
 
 //    定时任务提示在目标价格买入
     public void tagBuy();

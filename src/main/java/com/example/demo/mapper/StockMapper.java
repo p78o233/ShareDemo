@@ -1,4 +1,5 @@
-package com.example.demo.mapper;/*
+package com.example.demo.mapper;
+/*
  * @author p78o2
  * @date 2019/8/27
  */
@@ -25,23 +26,6 @@ public interface StockMapper {
     @Select("select stockNum from stock where userId = #{userId} and weight != 0 order by weight desc")
     List<String> getAllStockNumsByWeight(@Param("userId")int userId);
 
-    @Insert("insert into stock (stockNum,stockName,createTime,category,userId) values (#{s.stockNum},#{s.stockName},#{s.createTime},#{s.category},#{s.userId})")
-    int insertStock(@Param("s")Stock stock);
-
-    @Insert("insert into stock_record (beginPrice,endPrice,highPrice,lowPrice,stockId,stockNum,stockName,category,recordTime,flag,userId) values " +
-            "(#{s.beginPrice},#{s.endPrice},#{s.highPrice},#{s.lowPrice},#{s.stockId},#{s.stockNum},#{s.stockName},#{s.category},#{s.recordTime},#{s.flag},#{s.userId})")
-    int daylyRecord(@Param("s")StockRecord stockRecord);
-
-    @Insert("insert into buy_sell_record (buyPrice,buyTime,stockNum,stockName,category,stockId,buyNum,userId) values (#{b.buyPrice},#{b.buyTime}" +
-            ",#{b.stockNum},#{b.stockName},#{b.category},#{b.stockId},#{b.buyNum},#{b.userId})")
-    int insertBuyRecord(@Param("b")BuySellRecord buySellRecord);
-
-    @Update("update buy_sell_record set sellPrice = #{b.sellPrice},sellTime = #{b.sellTime},profitOrLoss = #{b.profitOrLoss},isFinish = 1 where id = #{b.id}")
-    int updateSellRecord(@Param("b")BuySellRecord buySellRecord);
-
-    @Select("select * from buy_sell_record where id = #{id}")
-    BuySellRecord getOneBuySellRecord(@Param("id")int id);
-
     @Select("select * from buy_sell_record where userId = #{userId} and isFinish = 0 and buyTime < #{buyTime} and sendTimes < 1 order by buyTime desc")
     List<BuySellRecord> getAllNowBuySellRecord(@Param("buyTime")Date buyTime,@Param("userId")int userId);
 
@@ -53,33 +37,11 @@ public interface StockMapper {
             "</script>")
     int updateBuySellRecordSendTimes(@Param("idList")List<Integer>idList);
 
-    @Select("select stockNum,stockId,stockName,category from (select count(1) as num_count,stockNum,stockId,stockName,category from stock_record GROUP BY stockId) t where num_count >= #{dayNum} ")
-    List<StockRecordVo> getStockNums(@Param("dayNum")int dayNum);
-
-//    @Select("select min(lowPrice) from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
-//    Float getLatestLowestPrice(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
     @Select("select  min(lowPrice) from (select * from stock_record where stockNum = #{stockNum} order by recordTime desc limit 0,#{limitDay} )t;")
     Float getLatestLowestPrice(@Param("stockNum")String stockNum,@Param("limitDay")int limitDay);
 
     @Select("select  max(highPrice) from (select * from stock_record where stockNum = #{stockNum} order by recordTime desc limit 0,#{limitDay} )t;")
     Float getLatestHightPrice(@Param("stockNum")String stockNum,@Param("limitDay")int limitDay);
-
-//    @Select("select * from stock_record where recordTime between #{oldDay} and #{nowDay} and stockNum = #{stockNum}")
-//    List<StockRecord> getLatestRate(@Param("oldDay")Date oldDay,@Param("nowDay")Date nowDay,@Param("stockNum")String stockNum);
-    @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime desc limit #{start},#{end}")
-    List<StockRecord> getLatestRate(@Param("stockNum")String stockNum,@Param("start")int start,@Param("end")int end);
-
-
-    @Insert("insert into low_record (stockId,stockNum,stockName,category,recordDay,minPrice,recordPrice,recordTime,trend,lowHis,dayBefore,highHis,dayBeforeH,maxPrice) values " +
-            "(#{l.stockId},#{l.stockNum},#{l.stockName},#{l.category},#{l.recordDay},#{l.minPrice},#{l.recordPrice},#{l.recordTime},#{l.trend},#{l.lowHis},#{l.dayBefore}," +
-            "#{l.highHis},#{l.dayBeforeH},#{l.maxPrice})")
-    int insertLowRecord(@Param("l")LowRecord lowRecord);
-
-    @Select("select * from low_record where isSend = 0")
-    List<LowRecord> getAllLowRecordNotSend();
-
-    @Update("update low_record set isSend = 1 where isSend = 0")
-    int updateLowRecordIsSend();
 
     @Select("select stockName,stockNum,MAX(highPrice) as heightPriceHis,MIN(lowPrice) as lowPriceHis,count(1) as dayNums from stock_record where stockNum = #{stockNum} GROUP BY stockNum")
     StockPriceVo getMaxHisHighLowPrice(@Param("stockNum")String stockNum);
@@ -87,17 +49,8 @@ public interface StockMapper {
     @Select("select * from stock_record where stockNum = #{stockNum} order by lowPrice asc limit 0,1")
     StockRecord getLowestRecord(@Param("stockNum")String stockNum);
 
-    @Select("select * from stock_record where stockNum = #{stockNum} order by highPrice desc limit 0,1")
-    StockRecord getHighestRecord(@Param("stockNum")String stockNum);
-
     @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
     List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);
-
-//    @Select("select max(highPrice) from (select highPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t ")
-//    Float getStockLastestHigh(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
-//
-//    @Select("select min(lowPrice) from (select lowPrice from stock_record where stockNum = #{stockNum} order by id asc limit #{begin},#{end} )t")
-//    Float getStockLastestlow(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
 
     @Select("select max(highPrice) from (select highPrice from stock_record where stockNum = #{stockNum} order by id desc limit #{begin},#{end} )t ")
     Float getStockLastestHigh(@Param("stockNum")String stockNum,@Param("begin")int begin,@Param("end")int end);
@@ -118,18 +71,6 @@ public interface StockMapper {
             "where id = (select id from stock_record where lowPrice = " +
             "(select min(lowPrice) as lowPrice from  stock_record where stockNum = #{stockNum} ) and stockNum = #{stockNum} order by id desc limit 0,1);")
     int getLowPriceRecordDay(@Param("stockNum")String stockNum);
-
-    @Update("update stock set weight = #{weight} where stockName like '%银行%' and category = 1")
-    int changeBankStockWeight(@Param("weight")int weight);
-
-    @Select("select * from stock_record")
-    List<StockRecord> getAllStockRecord();
-    @Update("<script>"+"update stock_record set flag = #{flag} where id in "
-            + "<foreach item='item' index='index' collection='idList' open='(' separator=',' close=')'>"
-                + "#{item}"
-            + "</foreach>"
-            + "</script>")
-    int updateFlag(@Param("flag")int flag,@Param("idList")List<Integer>idList);
 
     @Select("select * from tag_buy_sell where isSend = 0 and flag = #{flag}")
     List<TagBuySell> getTagBuySellList(@Param("flag")boolean flag);

@@ -5,6 +5,7 @@ package com.example.demo.service.impl;/*
 
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
+import com.example.demo.entity.po.User;
 import com.example.demo.entity.vo.UserMailContentVo;
 import com.example.demo.mapper.TimmerMapper;
 import com.example.demo.service.TimmerService;
@@ -14,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -117,7 +121,7 @@ public class TimmerServiceImpl implements TimmerService {
             }
         }
     }
-
+//    邮件编写
     public List<UserMailContentVo> setUserMailContentVo(List<UserMailContentVo> userMailContentVoList, Stock stock, int dayNum, float maxRectPrice, float minRectPrice, float nowPrice, StockRecord historyLowPriceStockRecord, StockRecord historyHightPriceStockRecord) {
         //                当前价格小于最近天数的最小值
         String title = "";
@@ -147,5 +151,87 @@ public class TimmerServiceImpl implements TimmerService {
             }
         }
         return userMailContentVoList;
+    }
+
+    @Override
+    public void insertDaylyRecord() {
+        List<Stock> list = new ArrayList<Stock>();
+        list = timmerMapper.getAllStock();
+        for (Stock stock : list) {
+            String result[] = getStockNowPrice(stock.getStockNum());
+            StockRecord sr = new StockRecord();
+            sr.setBeginPrice(Float.valueOf(result[1]));
+            sr.setEndPrice(Float.valueOf(result[3]));
+            sr.setHighPrice(Float.valueOf(result[4]));
+            sr.setLowPrice(Float.valueOf(result[5]));
+            sr.setStockId(stock.getId());
+            sr.setStockName(stock.getStockName());
+            sr.setStockNum(stock.getStockNum());
+            sr.setCategory(stock.getCategory());
+            sr.setUserId(stock.getUserId());
+            if (Float.valueOf(result[1]) > Float.valueOf(result[3]))
+                sr.setFlag(-1);
+            else if (Float.valueOf(result[1]) == Float.valueOf(result[3]))
+                sr.setFlag(0);
+            else
+                sr.setFlag(1);
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd"); //加上时间
+            //必须捕获异常
+            try {
+                Date date = sDateFormat.parse(result[30]);
+                sr.setRecordTime(date);
+            } catch (ParseException px) {
+                px.printStackTrace();
+            }
+            timmerMapper.insertDaylyRecord(sr);
+        }
+    }
+
+    @Override
+    public void updateBankWeight() {
+//        上证指数
+        String shanghaiResult[] = getStockNowPrice("s_sh000001");
+//        深圳指数
+        String shenzhenResult[] = getStockNowPrice("s_sz399001");
+        if(Float.valueOf(shanghaiResult[3]) > 0.3 && Float.valueOf(shenzhenResult[3]) > 0.3){
+//            上海深圳指数上升大于0.3% 银行股下降权重
+                timmerMapper.updateBankWeight(-100);
+        }else{
+//            银行股上升权重
+            timmerMapper.updateBankWeight(100);
+        }
+    }
+
+    @Override
+    public void reminder() {
+        List<Stock> list = new ArrayList<Stock>();
+        list = timmerMapper.getAllStock();
+        for(Stock stock : list) {
+//        获取昨天的数据
+            StockRecord yesterdayRecord = timmerMapper.getYesterdayRecord(stock.getStockNum());
+//        获取当前的数据
+            String result [] = getStockNowPrice(stock.getStockNum());
+            if((Float.valueOf(result[3])/yesterdayRecord.getEndPrice())-1>0.05){
+//                升超过5%
+                List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
+                userList = timmerMapper.getUserByUserStock(stock.getId());
+                for(UserMailContentVo user : userList){
+                    user.setContentList(new ArrayList<String>());
+                    String strResult = stock.getStockNum()+":  :"+stock.getStockName()+": :涨幅超过5%";
+                    user.getContentList().add(strResult);
+                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "涨幅", user.getContentList().toString());
+                }
+            }else if((Float.valueOf(result[3])/yesterdayRecord.getEndPrice())-1 < -0.05){
+//                跌超过5%
+                List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
+                userList = timmerMapper.getUserByUserStock(stock.getId());
+                for(UserMailContentVo user : userList){
+                    user.setContentList(new ArrayList<String>());
+                    String strResult = stock.getStockNum()+":  :"+stock.getStockName()+": :跌幅超过5%";
+                    user.getContentList().add(strResult);
+                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "跌幅", user.getContentList().toString());
+                }
+            }
+        }
     }
 }

@@ -8,4 +8,10 @@ public interface TimmerService {
     public void noticeBuy();
 //    提示卖（定时任务）
     public void noticeSell();
+//    每天收盘记录数据
+    public void insertDaylyRecord();
+//    定时观察上证深证指数升降银行权重
+    public void updateBankWeight();
+//    观察涨跌超过5%，邮件警告
+    public void reminder();
 }

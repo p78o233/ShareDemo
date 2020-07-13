@@ -9,10 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @Controller
@@ -26,7 +23,7 @@ public class TimmerController {
     @RequestMapping(value = "/noticeBuyFirst", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒低价，10点30分，以及14点30分")
-    @Scheduled(cron = "0 30 10,14 * * ? ")
+//    @Scheduled(cron = "0 30 10,14 * * ? ")
     public void noticeBuyFirst() {
         timmerService.noticeBuy();
     }
@@ -34,7 +31,7 @@ public class TimmerController {
     @RequestMapping(value = "/noticeBuySecond", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒低价，11点，以及14点")
-    @Scheduled(cron = "0 0 11,14 * * ? ")
+//    @Scheduled(cron = "0 0 11,14 * * ? ")
     public void noticeBuySecond() {
         timmerService.noticeBuy();
     }
@@ -42,7 +39,7 @@ public class TimmerController {
     @RequestMapping(value = "/noticeSellFirst", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒高价，10点30分，以及14点30分")
-    @Scheduled(cron = "0 30 10,14 * * ? ")
+//    @Scheduled(cron = "0 30 10,14 * * ? ")
     public void noticeSellFirst() {
         timmerService.noticeSell();
     }
@@ -50,8 +47,32 @@ public class TimmerController {
     @RequestMapping(value = "/noticeSellSecond", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒高价，11点，以及14点")
-    @Scheduled(cron = "0 0 11,14 * * ? ")
+//    @Scheduled(cron = "0 0 11,14 * * ? ")
     public void noticeSellSecond() {
         timmerService.noticeSell();
+    }
+
+    @RequestMapping(value = "/insertDaylyRecord", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation("定时任务，每天收盘记录数据")
+//    @Scheduled(cron = "0 5 15 * * ? ")
+    public void insertDaylyRecord() {
+        timmerService.insertDaylyRecord();
+    }
+
+    @GetMapping("/updateBankWeight")
+    @ResponseBody
+    @ApiOperation("定时任务，升降银行股权重")
+//    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
+    public void updateBankWeight() {
+        timmerService.updateBankWeight();
+    }
+
+    @GetMapping("/reminder")
+    @ResponseBody
+    @ApiOperation("定时任务，涨跌超过5%邮件推送,每5分钟执行一次")
+//    @Scheduled(cron = "0 0/5 * * * ? ")
+    public void reminder(){
+        timmerService.reminder();
     }
 }
