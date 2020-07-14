@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2020-05-22 17:28:53
+Date: 2020-07-14 17:30:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -40,6 +40,32 @@ INSERT INTO `buy_record` VALUES ('1', '10', '2020-05-20', 'sh600022', '山东钢
 INSERT INTO `buy_record` VALUES ('2', '50', '2020-05-01', 'sh600022', '山东钢铁', '1', '1', '500', '1', '0');
 
 -- ----------------------------
+-- Table structure for `buy_sell_notice`
+-- ----------------------------
+DROP TABLE IF EXISTS `buy_sell_notice`;
+CREATE TABLE `buy_sell_notice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '买入卖出提示表',
+  `stockNum` varchar(10) DEFAULT NULL COMMENT '股票编号',
+  `stockName` varchar(10) DEFAULT NULL COMMENT '股票名称',
+  `userId` int(11) DEFAULT NULL COMMENT '用户id',
+  `price` float DEFAULT NULL COMMENT '目标价格',
+  `cate` tinyint(4) DEFAULT NULL COMMENT '1买入 2 卖出',
+  `content` varchar(100) DEFAULT NULL COMMENT '描述',
+  `createTime` datetime DEFAULT NULL COMMENT '创建时间',
+  `modifyTime` datetime DEFAULT NULL COMMENT '修改时间',
+  `isdel` tinyint(4) DEFAULT '0' COMMENT '0正常1删除',
+  `isSend` tinyint(4) DEFAULT '0' COMMENT '发送次数，最多3次',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of buy_sell_notice
+-- ----------------------------
+INSERT INTO `buy_sell_notice` VALUES ('1', 'sh600022', '山东钢铁', '1', '12', '1', '描述', '2020-07-09 16:38:27', '2020-07-14 16:52:24', '0', '3');
+INSERT INTO `buy_sell_notice` VALUES ('2', '1', '2', '1', '3', '2', '5', '2020-07-10 10:20:06', '2020-07-10 11:41:21', '1', '0');
+INSERT INTO `buy_sell_notice` VALUES ('3', 'sh600022', '山东钢铁', '1', '0.5', '2', '描述', '2020-07-14 16:44:56', '2020-07-14 16:52:43', '0', '3');
+
+-- ----------------------------
 -- Table structure for `sell_record`
 -- ----------------------------
 DROP TABLE IF EXISTS `sell_record`;
@@ -57,14 +83,15 @@ CREATE TABLE `sell_record` (
   `userId` int(11) DEFAULT NULL COMMENT '用户id',
   `isdel` int(11) DEFAULT '0' COMMENT '是否删除0正常1删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sell_record
 -- ----------------------------
 INSERT INTO `sell_record` VALUES ('1', '1', '5', '-500', '2020-05-20 13:26:25', 'sh600022', '山东', '1', '1', '100', '1', '0');
 INSERT INTO `sell_record` VALUES ('2', '1', '15', '500', '2020-05-20 13:27:56', 'sh600022', '山东', '1', '1', '100', '1', '0');
-INSERT INTO `sell_record` VALUES ('3', '1', '11', '800', '2020-05-20 13:28:41', 'sh600022', '山东', '1', '1', '800', '1', '0');
+INSERT INTO `sell_record` VALUES ('3', '1', '11', '800', '2020-05-20 13:28:41', 'sh600022', '山东', '1', '1', '800', '1', '1');
+INSERT INTO `sell_record` VALUES ('4', '1', '0', '0', null, 'sh600022', '山东钢铁', '0', '1', '0', '1', '1');
 
 -- ----------------------------
 -- Table structure for `stock`
@@ -3792,7 +3819,7 @@ CREATE TABLE `stock_user` (
 -- ----------------------------
 -- Records of stock_user
 -- ----------------------------
-INSERT INTO `stock_user` VALUES ('1', '1', '1', '2020-05-06 10:52:24', '', '0');
+INSERT INTO `stock_user` VALUES ('1', '1', '1', '2020-05-06 10:52:24', '', '1');
 INSERT INTO `stock_user` VALUES ('2', '1', '2', '2020-05-06 10:52:27', '', '0');
 INSERT INTO `stock_user` VALUES ('3', '1', '3', '2020-05-06 10:52:30', '', '0');
 INSERT INTO `stock_user` VALUES ('4', '1', '37', '2020-05-11 11:25:16', '', '0');
@@ -3815,4 +3842,22 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '13316046320', 'c4ca4238a0b923820dcc509a6f75849b', 'p78o2', '1', '0', 'p78o2@126.com');
+INSERT INTO `user` VALUES ('1', '13316046320', 'c4ca4238a0b923820dcc509a6f75849b', 'p78o2', '1', '0', '953712390@qq.com');
+
+-- ----------------------------
+-- Table structure for `user_setting`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_setting`;
+CREATE TABLE `user_setting` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户设置表',
+  `userId` int(11) DEFAULT NULL COMMENT '用户id',
+  `setVal` varchar(50) DEFAULT NULL COMMENT '设置的值',
+  `setCate` int(11) DEFAULT NULL COMMENT '设置类别 1、盈利百分比提醒  2、亏损百分比提醒',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of user_setting
+-- ----------------------------
+INSERT INTO `user_setting` VALUES ('1', '1', '1.5', '1');
+INSERT INTO `user_setting` VALUES ('2', '1', '1.3', '2');

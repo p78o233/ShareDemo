@@ -79,4 +79,6 @@ public interface StockService {
 //    查看观察数据最近走势
     public List<StockRecord> getStockRecordList(String stockNum,int size);
 
+
+
 }
