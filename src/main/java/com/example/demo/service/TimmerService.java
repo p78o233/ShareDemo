@@ -14,4 +14,6 @@ public interface TimmerService {
     public void updateBankWeight();
 //    观察涨跌超过5%，邮件警告
     public void reminder();
+//    定时任务，用户到达设置买卖的点提醒出售
+    public void noticeTarget();
 }

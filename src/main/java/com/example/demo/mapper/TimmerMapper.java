@@ -3,6 +3,7 @@ package com.example.demo.mapper;/*
  * @date 2020/7/10
  */
 
+import com.example.demo.entity.po.BuySellNotice;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
 import com.example.demo.entity.po.User;
@@ -13,6 +14,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -60,4 +62,20 @@ public interface TimmerMapper {
 //    获取购买了这个股票的用户
     @Select("select * from user where id in (select userId from stock_user where stockId = #{stockId} and isdel = 0)")
     List<UserMailContentVo> getUserByUserStock(@Param("stockId")int stockId);
+
+//    使用股票号查询买入卖出提示表获取符合条件的数据
+//    买入
+    @Select("select * from buy_sell_notice where stockNum = #{stockNum} and cate = 1 and price > #{price} and isSend < 3 and isdel = 0")
+    List<BuySellNotice> getBuyNotice(@Param("stockNum")String stockNum,@Param("price")Float price);
+//    卖出
+    @Select("select * from buy_sell_notice where stockNum = #{stockNum} and cate = 2 and price < #{price} and isSend < 3 and isdel = 0")
+    List<BuySellNotice> getSellNotice(@Param("stockNum")String stockNum,@Param("price")Float price);
+
+//    根据用户id获取用户详细信息
+    @Select("select * from user where id = #{id}")
+    User getUserDetail(@Param("id")int id);
+
+//    更新发送次数
+    @Update("update buy_sell_notice set isSend = isSend + 1 ,modifyTime = #{modifyTime} where id = #{id}")
+    int updateBuySellNoticeSendTimes(@Param("id")int id, @Param("modifyTime")Date modifyTime);
 }

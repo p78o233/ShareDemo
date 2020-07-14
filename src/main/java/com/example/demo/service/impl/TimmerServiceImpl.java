@@ -3,6 +3,7 @@ package com.example.demo.service.impl;/*
  * @date 2020/7/10
  */
 
+import com.example.demo.entity.po.BuySellNotice;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
 import com.example.demo.entity.po.User;
@@ -230,6 +231,45 @@ public class TimmerServiceImpl implements TimmerService {
                     String strResult = stock.getStockNum()+":  :"+stock.getStockName()+": :跌幅超过5%";
                     user.getContentList().add(strResult);
                     MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "跌幅", user.getContentList().toString());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void noticeTarget() {
+        List<Stock> stockList = new ArrayList<>();
+        stockList = timmerMapper.getAllStock();
+        for(Stock stock : stockList){
+//            获取当前价格
+            String result [] = getStockNowPrice(stock.getStockNum());
+//            根据股票编码对比设定价格与当前价格
+//            买入列表
+            List<BuySellNotice> buyList = new ArrayList<>();
+            buyList = timmerMapper.getBuyNotice(stock.getStockNum(),Float.valueOf(result[3]));
+//            卖出列表
+            List<BuySellNotice> sellList = new ArrayList<>();
+            sellList = timmerMapper.getSellNotice(stock.getStockNum(),Float.valueOf(result[3]));
+//            买列表处理
+            for(BuySellNotice notice : buyList){
+//                根据用户id查询用户邮件地址
+                User user = new User();
+                user = timmerMapper.getUserDetail(notice.getUserId());
+                timmerMapper.updateBuySellNoticeSendTimes(notice.getId(),new Date());
+                if(user != null){
+                    String sendStr = stock.getStockNum()+" 名称："+stock.getStockName()+",到达预定买入价格："+notice.getPrice()+",当前价格："+result[3];
+                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "买入提醒", sendStr);
+                }
+            }
+//            卖列表处理
+            for(BuySellNotice notice : sellList){
+//                根据用户id查询用户邮件地址
+                User user = new User();
+                user = timmerMapper.getUserDetail(notice.getUserId());
+                timmerMapper.updateBuySellNoticeSendTimes(notice.getId(),new Date());
+                if(user != null){
+                    String sendStr = stock.getStockNum()+" 名称："+stock.getStockName()+",到达预定卖出价格："+notice.getPrice()+",当前价格："+result[3];
+                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "卖出提醒", sendStr);
                 }
             }
         }

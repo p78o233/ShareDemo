@@ -17,9 +17,11 @@ public class BuySellNotice {
     private Date createTime;
     private Date modifyTime;
     private int isdel;
+    private int isSend;
 
     public BuySellNotice() {
     }
+
 
     @Override
     public String toString() {
@@ -34,6 +36,7 @@ public class BuySellNotice {
                 ", createTime=" + createTime +
                 ", modifyTime=" + modifyTime +
                 ", isdel=" + isdel +
+                ", isSend=" + isSend +
                 '}';
     }
 
@@ -117,7 +120,15 @@ public class BuySellNotice {
         this.isdel = isdel;
     }
 
-    public BuySellNotice(Integer id, String stockNum, String stockName, int userId, float price, int cate, String content, Date createTime, Date modifyTime, int isdel) {
+    public int getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(int isSend) {
+        this.isSend = isSend;
+    }
+
+    public BuySellNotice(Integer id, String stockNum, String stockName, int userId, float price, int cate, String content, Date createTime, Date modifyTime, int isdel, int isSend) {
         this.id = id;
         this.stockNum = stockNum;
         this.stockName = stockName;
@@ -128,5 +139,6 @@ public class BuySellNotice {
         this.createTime = createTime;
         this.modifyTime = modifyTime;
         this.isdel = isdel;
+        this.isSend = isSend;
     }
 }

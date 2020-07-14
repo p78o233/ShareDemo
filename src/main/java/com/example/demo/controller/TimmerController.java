@@ -72,7 +72,15 @@ public class TimmerController {
     @ResponseBody
     @ApiOperation("定时任务，涨跌超过5%邮件推送,每5分钟执行一次")
 //    @Scheduled(cron = "0 0/5 * * * ? ")
-    public void reminder(){
+    public void reminder() {
         timmerService.reminder();
+    }
+
+    @GetMapping("/noticeTarget")
+    @ResponseBody
+    @ApiOperation("定时任务，每1分钟观察数据到达出售买入价格")
+//    @Scheduled(cron = "0 0/1 * * * ? ")
+    public void noticeTarget(){
+        timmerService.noticeTarget();
     }
 }
