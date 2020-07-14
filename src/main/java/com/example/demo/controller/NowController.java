@@ -21,7 +21,7 @@ public class NowController {
     @Autowired
     private NowService nowService;
 
-    @GetMapping("/checkNowPrice/{userId}/{weight}")
+    @PostMapping("/checkNowPrice/{userId}/{weight}")
     @ResponseBody
     @ApiOperation("获取当前价格,权重不为零的数据,0查权重包含0的（即全部），1只查询权重不为0的")
     public R checkNowPrice(@PathVariable("userId")int userId, @PathVariable("weight")int weight, @RequestBody List<String> stockNums){

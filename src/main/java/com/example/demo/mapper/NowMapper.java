@@ -16,9 +16,9 @@ public interface NowMapper {
 
     @Select("select * from stock_record where stockNum = #{stockNum} order by recordTime asc")
     List<StockRecord> getHistoryPrice(@Param("stockNum")String stockNum);
-    @Select("select stockNum from stock where userId = #{userId} order by weight desc")
+    @Select("select stockNum from stock where id in (select stockId from stock_user where userId = #{userId} order by weight desc)")
     List<String> getAllStockNums(@Param("userId")int userId);
-    @Select("select stockNum from stock where userId = #{userId} and weight != 0 order by weight desc")
+    @Select("select stockNum from stock where id in (select stockId from stock_user where userId = #{userId} and weight != 0 order by weight desc)")
     List<String> getAllStockNumsByWeight(@Param("userId")int userId);
     @Select("select stockName,stockNum,MAX(highPrice) as heightPriceHis,MIN(lowPrice) as lowPriceHis,count(1) as dayNums from stock_record where stockNum = #{stockNum} GROUP BY stockNum")
     StockPriceVo getMaxHisHighLowPrice(@Param("stockNum")String stockNum);
