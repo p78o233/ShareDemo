@@ -3,10 +3,7 @@ package com.example.demo.mapper;/*
  * @date 2020/7/10
  */
 
-import com.example.demo.entity.po.BuySellNotice;
-import com.example.demo.entity.po.Stock;
-import com.example.demo.entity.po.StockRecord;
-import com.example.demo.entity.po.User;
+import com.example.demo.entity.po.*;
 import com.example.demo.entity.vo.UserMailContentVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -78,4 +75,11 @@ public interface TimmerMapper {
 //    更新发送次数
     @Update("update buy_sell_notice set isSend = isSend + 1 ,modifyTime = #{modifyTime} where id = #{id}")
     int updateBuySellNoticeSendTimes(@Param("id")int id, @Param("modifyTime")Date modifyTime);
+
+//    获取昨天的数据
+    @Select("select endPrice from stock_record where stockId = #{stockId} and endPrice != 0.0 order by id desc limit 0 , 1")
+    float getYesterdayPrice(@Param("stockId")int stockId);
+
+    @Insert("insert into stock_rate (stockId,cate,createTime,ratio) values (#{s.stockId},#{s.cate},#{s.createTime},#{s.ratio})")
+    int insertStockRate(@Param("s")StockRate stockRate);
 }

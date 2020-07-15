@@ -80,7 +80,16 @@ public class TimmerController {
     @ResponseBody
     @ApiOperation("定时任务，每1分钟观察数据到达出售买入价格")
 //    @Scheduled(cron = "0 0/1 * * * ? ")
-    public void noticeTarget(){
+    public void noticeTarget() {
         timmerService.noticeTarget();
     }
+
+    @GetMapping("/theGapEachDay")
+    @ResponseBody
+    @ApiOperation("定时任务，每1分钟获取当前价格记录比率")
+//    @Scheduled(cron = "0 0/1 * * * ? ")
+    public void theGapEachDay(){
+        timmerService.theGapEachDay();
+    }
+
 }

@@ -3,10 +3,7 @@ package com.example.demo.service.impl;/*
  * @date 2020/7/10
  */
 
-import com.example.demo.entity.po.BuySellNotice;
-import com.example.demo.entity.po.Stock;
-import com.example.demo.entity.po.StockRecord;
-import com.example.demo.entity.po.User;
+import com.example.demo.entity.po.*;
 import com.example.demo.entity.vo.UserMailContentVo;
 import com.example.demo.mapper.TimmerMapper;
 import com.example.demo.service.TimmerService;
@@ -16,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -271,6 +270,48 @@ public class TimmerServiceImpl implements TimmerService {
                     String sendStr = stock.getStockNum()+" 名称："+stock.getStockName()+",到达预定卖出价格："+notice.getPrice()+",当前价格："+result[3];
                     MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "卖出提醒", sendStr);
                 }
+            }
+        }
+    }
+
+    @Override
+    public void theGapEachDay() {
+        List<Stock> stockList = new ArrayList<>();
+        stockList = timmerMapper.getAllStock();
+        for(Stock stock : stockList){
+            String result [] = getStockNowPrice(stock.getStockNum());
+//            不是停牌的数据
+            if(Float.valueOf(result[3])!=0.0f){
+//                获取昨天的数据
+                float yesterdayPrice = timmerMapper.getYesterdayPrice(stock.getId());
+                StockRate stockRate = new StockRate();
+                if(Float.valueOf(result[3]) < yesterdayPrice){
+//                    当前价格比昨天的低
+                    float ratio = ((yesterdayPrice/Float.valueOf(result[3]))-1);
+                    DecimalFormat decimalFormat = new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                    String p = decimalFormat.format(ratio);
+                    ratio = Float.valueOf(p);
+                    stockRate.setStockId(stock.getId());
+                    stockRate.setCate(-1);
+                    stockRate.setCreateTime(new Time(new Date().getTime()));
+                    stockRate.setRatio(ratio);
+                }else if(Float.valueOf(result[3]) == yesterdayPrice){
+                    stockRate.setStockId(stock.getId());
+                    stockRate.setCate(0);
+                    stockRate.setCreateTime(new Time(new Date().getTime()));
+                    stockRate.setRatio(0.0f);
+                }else if(Float.valueOf(result[3]) > yesterdayPrice){
+                    float ratio = ((Float.valueOf(result[3])/yesterdayPrice)-1);
+                    DecimalFormat decimalFormat = new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                    String p = decimalFormat.format(ratio);
+                    ratio = Float.valueOf(p);
+                    stockRate.setStockId(stock.getId());
+                    stockRate.setCate(1);
+                    stockRate.setCreateTime(new Time(new Date().getTime()));
+                    stockRate.setRatio(ratio);
+                }
+//                新增数据库
+                timmerMapper.insertStockRate(stockRate);
             }
         }
     }

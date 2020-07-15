@@ -16,4 +16,6 @@ public interface TimmerService {
     public void reminder();
 //    定时任务，用户到达设置买卖的点提醒出售
     public void noticeTarget();
+//    定时任务获取股票的最大涨跌幅出现的时间
+    public void theGapEachDay();
 }
