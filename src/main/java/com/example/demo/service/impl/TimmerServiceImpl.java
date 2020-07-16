@@ -287,7 +287,7 @@ public class TimmerServiceImpl implements TimmerService {
                 StockRate stockRate = new StockRate();
                 if(Float.valueOf(result[3]) < yesterdayPrice){
 //                    当前价格比昨天的低
-                    float ratio = ((yesterdayPrice/Float.valueOf(result[3]))-1);
+                    float ratio = ((yesterdayPrice/Float.valueOf(result[3]))-1)*100;
                     DecimalFormat decimalFormat = new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                     String p = decimalFormat.format(ratio);
                     ratio = Float.valueOf(p);
@@ -301,7 +301,7 @@ public class TimmerServiceImpl implements TimmerService {
                     stockRate.setCreateTime(new Time(new Date().getTime()));
                     stockRate.setRatio(0.0f);
                 }else if(Float.valueOf(result[3]) > yesterdayPrice){
-                    float ratio = ((Float.valueOf(result[3])/yesterdayPrice)-1);
+                    float ratio = ((Float.valueOf(result[3])/yesterdayPrice)-1)*100;
                     DecimalFormat decimalFormat = new DecimalFormat("00.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                     String p = decimalFormat.format(ratio);
                     ratio = Float.valueOf(p);

@@ -133,6 +133,9 @@ public interface StockMapper {
     @Select("select id from stock where stockName like '%${stockName}%' and isdel = 0")
     List<Integer> getStockIdByStockName(@Param("stockName")String stockName);
 
+    @Select("select * from stock_rate where stockId = #{stockId} and cate = #{cate} and createTime between #{beginTime} and #{endTime}")
+    List<StockRate> getAllStockRatio(@Param("stockId")int stockId,@Param("cate")int cate,@Param("beginTime")String beginTime,@Param("endTime")String endTime);
+
 
 //    根据股票号码获取最近走势
     @Select("select * from stock_record where stockNum = #{stockNum} and beginPrice != 0 order by id asc")

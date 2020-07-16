@@ -10,6 +10,7 @@ import com.example.demo.entity.po.BuySellRecord;
 import com.example.demo.entity.po.SellRecord;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
+import com.example.demo.entity.vo.GetRatioVo;
 import com.example.demo.entity.vo.StockPriceVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -80,5 +81,7 @@ public interface StockService {
     public List<StockRecord> getStockRecordList(String stockNum,int size);
 
 
+//    根据股票id获取涨跌幅柱状图
+    public List<GetRatioVo> getRatio(int stockId,int cate);
 
 }

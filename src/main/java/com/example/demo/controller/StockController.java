@@ -210,4 +210,11 @@ public class StockController {
         return new R(true,200,stockService.getStockRecordList(stockNum,size),"查询成功");
     }
 
+    @GetMapping(value = "/getRatio")
+    @ResponseBody
+    @ApiOperation("获取不同时间段的涨跌比例")
+    public R getRatio(@RequestParam int stockId,@RequestParam int cate){
+        return new R(true,200,stockService.getRatio(stockId,cate),"查询成功");
+    }
+
 }

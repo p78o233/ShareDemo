@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.callback.PageInfo;
 import com.example.demo.callback.R;
 import com.example.demo.entity.po.*;
+import com.example.demo.entity.vo.GetRatioVo;
 import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.entity.vo.StockRecordVo;
 import com.example.demo.mapper.StockMapper;
@@ -723,4 +724,36 @@ public class StockServiceImpl implements StockService {
         return stockName;
     }
 
+    @Override
+    public List<GetRatioVo> getRatio(int stockId, int cate) {
+        ArrayList<String> timeNums = new ArrayList<String>() {{
+            add("09:30:00");add("09:40:00");add("09:50:00");add("10:00:00");add("10:10:00");
+            add("10:20:00");add("10:30:00");add("10:40:00");add("10:50:00");add("11:00:00");
+            add("11:10:00");add("11:20:00");add("11:30:00");add("13:00:00");add("13:10:00");
+            add("13:20:00");add("13:30:00");add("13:40:00");add("13:50:00");add("14:00:00");
+            add("14:10:00");add("14:20:00");add("14:30:00");add("14:40:00");add("14:50:00");
+            add("14:55:00");add("14:58:00");add("15:00:00");
+        }};
+        List<GetRatioVo> vos = new ArrayList<>();
+        for(int i = 0;i < timeNums.size();i++){
+            if(i < timeNums.size()-1) {
+                List<StockRate> scList = new ArrayList<>();
+                scList = stockMapper.getAllStockRatio(stockId, cate, timeNums.get(i), timeNums.get(i + 1));
+//                计算平均值
+                GetRatioVo vo = new GetRatioVo();
+                vo.setTime(timeNums.get(i));
+                if (scList.size() != 0) {
+                    float ratioSum = 0.0f;
+                    for (StockRate stockRate : scList) {
+                        ratioSum += stockRate.getRatio();
+                    }
+                    vo.setRatio(ratioSum / scList.size());
+                }else{
+                    vo.setRatio(0.0f);
+                }
+               vos.add(vo);
+            }
+        }
+        return vos;
+    }
 }
