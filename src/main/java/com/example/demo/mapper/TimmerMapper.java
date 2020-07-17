@@ -54,7 +54,7 @@ public interface TimmerMapper {
     int updateBankWeight(@Param("weight") int weight);
 
 //    获取某个股票的昨天收盘数据
-    @Select("select * from stock_record where stockNum = #{stockNum}")
+    @Select("select * from stock_record where stockNum = #{stockNum} order by id desc limit 0 , 1")
     StockRecord getYesterdayRecord(@Param("stockNum")String stockNum);
 //    获取购买了这个股票的用户
     @Select("select * from user where id in (select userId from stock_user where stockId = #{stockId} and isdel = 0)")
