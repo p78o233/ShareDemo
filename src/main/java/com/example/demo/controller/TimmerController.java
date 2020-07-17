@@ -23,7 +23,7 @@ public class TimmerController {
     @RequestMapping(value = "/noticeBuyFirst", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒低价，10点30分，以及14点30分")
-//    @Scheduled(cron = "0 30 10,14 * * ? ")
+    @Scheduled(cron = "0 30 10,14 * * ? ")
     public void noticeBuyFirst() {
         timmerService.noticeBuy();
     }
@@ -31,7 +31,7 @@ public class TimmerController {
     @RequestMapping(value = "/noticeBuySecond", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒低价，11点，以及14点")
-//    @Scheduled(cron = "0 0 11,14 * * ? ")
+    @Scheduled(cron = "0 0 11,14 * * ? ")
     public void noticeBuySecond() {
         timmerService.noticeBuy();
     }
@@ -39,7 +39,7 @@ public class TimmerController {
     @RequestMapping(value = "/noticeSellFirst", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒高价，10点30分，以及14点30分")
-//    @Scheduled(cron = "0 30 10,14 * * ? ")
+    @Scheduled(cron = "0 30 10,14 * * ? ")
     public void noticeSellFirst() {
         timmerService.noticeSell();
     }
@@ -47,7 +47,7 @@ public class TimmerController {
     @RequestMapping(value = "/noticeSellSecond", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务提醒高价，11点，以及14点")
-//    @Scheduled(cron = "0 0 11,14 * * ? ")
+    @Scheduled(cron = "0 0 11,14 * * ? ")
     public void noticeSellSecond() {
         timmerService.noticeSell();
     }
@@ -55,7 +55,7 @@ public class TimmerController {
     @RequestMapping(value = "/insertDaylyRecord", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("定时任务，每天收盘记录数据")
-//    @Scheduled(cron = "0 5 15 * * ? ")
+    @Scheduled(cron = "0 5 15 * * ? ")
     public void insertDaylyRecord() {
         timmerService.insertDaylyRecord();
     }
@@ -63,7 +63,7 @@ public class TimmerController {
     @GetMapping("/updateBankWeight")
     @ResponseBody
     @ApiOperation("定时任务，升降银行股权重")
-//    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
+    @Scheduled(cron = "0 0,10,20,30,40,50 9,10,11,13,14 * * ? ")
     public void updateBankWeight() {
         timmerService.updateBankWeight();
     }
@@ -71,7 +71,7 @@ public class TimmerController {
     @GetMapping("/reminder")
     @ResponseBody
     @ApiOperation("定时任务，涨跌超过5%邮件推送,每5分钟执行一次")
-//    @Scheduled(cron = "0 0/5 * * * ? ")
+    @Scheduled(cron = "0 0/5 * * * ? ")
     public void reminder() {
         timmerService.reminder();
     }
@@ -79,7 +79,7 @@ public class TimmerController {
     @GetMapping("/noticeTarget")
     @ResponseBody
     @ApiOperation("定时任务，每1分钟观察数据到达出售买入价格")
-//    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0/1 * * * ? ")
     public void noticeTarget() {
         timmerService.noticeTarget();
     }
@@ -87,7 +87,7 @@ public class TimmerController {
     @GetMapping("/theGapEachDay")
     @ResponseBody
     @ApiOperation("定时任务，每1分钟获取当前价格记录比率")
-//    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0/1 * * * ? ")
     public void theGapEachDay(){
         timmerService.theGapEachDay();
     }
