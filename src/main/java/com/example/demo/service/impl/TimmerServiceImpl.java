@@ -204,32 +204,37 @@ public class TimmerServiceImpl implements TimmerService {
 
     @Override
     public void reminder() {
-        List<Stock> list = new ArrayList<Stock>();
-        list = timmerMapper.getAllStock();
-        for(Stock stock : list) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        if((hour==9&&min>30)||(hour == 10)||(hour==11&&min<30)||(hour==13)||(hour == 14)) {
+            List<Stock> list = new ArrayList<Stock>();
+            list = timmerMapper.getAllStock();
+            for (Stock stock : list) {
 //        获取昨天的数据
-            StockRecord yesterdayRecord = timmerMapper.getYesterdayRecord(stock.getStockNum());
+                StockRecord yesterdayRecord = timmerMapper.getYesterdayRecord(stock.getStockNum());
 //        获取当前的数据
-            String result [] = getStockNowPrice(stock.getStockNum());
-            if((Float.valueOf(result[3])/yesterdayRecord.getEndPrice())-1>0.05){
+                String result[] = getStockNowPrice(stock.getStockNum());
+                if ((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1 > 0.05) {
 //                升超过5%
-                List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
-                userList = timmerMapper.getUserByUserStock(stock.getId());
-                for(UserMailContentVo user : userList){
-                    user.setContentList(new ArrayList<String>());
-                    String strResult = stock.getStockNum()+":  :"+stock.getStockName()+": :涨幅超过5%";
-                    user.getContentList().add(strResult);
-                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "涨幅", user.getContentList().toString());
-                }
-            }else if((Float.valueOf(result[3])/yesterdayRecord.getEndPrice())-1 < -0.05){
+                    List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
+                    userList = timmerMapper.getUserByUserStock(stock.getId());
+                    for (UserMailContentVo user : userList) {
+                        user.setContentList(new ArrayList<String>());
+                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :涨幅超过5%";
+                        user.getContentList().add(strResult);
+                        MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "涨幅", user.getContentList().toString());
+                    }
+                } else if ((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1 < -0.05) {
 //                跌超过5%
-                List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
-                userList = timmerMapper.getUserByUserStock(stock.getId());
-                for(UserMailContentVo user : userList){
-                    user.setContentList(new ArrayList<String>());
-                    String strResult = stock.getStockNum()+":  :"+stock.getStockName()+": :跌幅超过5%";
-                    user.getContentList().add(strResult);
-                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "跌幅", user.getContentList().toString());
+                    List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
+                    userList = timmerMapper.getUserByUserStock(stock.getId());
+                    for (UserMailContentVo user : userList) {
+                        user.setContentList(new ArrayList<String>());
+                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :跌幅超过5%";
+                        user.getContentList().add(strResult);
+                        MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "跌幅", user.getContentList().toString());
+                    }
                 }
             }
         }
@@ -237,38 +242,43 @@ public class TimmerServiceImpl implements TimmerService {
 
     @Override
     public void noticeTarget() {
-        List<Stock> stockList = new ArrayList<>();
-        stockList = timmerMapper.getAllStock();
-        for(Stock stock : stockList){
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        if((hour==9&&min>30)||(hour == 10)||(hour==11&&min<30)||(hour==13)||(hour == 14)) {
+            List<Stock> stockList = new ArrayList<>();
+            stockList = timmerMapper.getAllStock();
+            for (Stock stock : stockList) {
 //            获取当前价格
-            String result [] = getStockNowPrice(stock.getStockNum());
+                String result[] = getStockNowPrice(stock.getStockNum());
 //            根据股票编码对比设定价格与当前价格
 //            买入列表
-            List<BuySellNotice> buyList = new ArrayList<>();
-            buyList = timmerMapper.getBuyNotice(stock.getStockNum(),Float.valueOf(result[3]));
+                List<BuySellNotice> buyList = new ArrayList<>();
+                buyList = timmerMapper.getBuyNotice(stock.getStockNum(), Float.valueOf(result[3]));
 //            卖出列表
-            List<BuySellNotice> sellList = new ArrayList<>();
-            sellList = timmerMapper.getSellNotice(stock.getStockNum(),Float.valueOf(result[3]));
+                List<BuySellNotice> sellList = new ArrayList<>();
+                sellList = timmerMapper.getSellNotice(stock.getStockNum(), Float.valueOf(result[3]));
 //            买列表处理
-            for(BuySellNotice notice : buyList){
+                for (BuySellNotice notice : buyList) {
 //                根据用户id查询用户邮件地址
-                User user = new User();
-                user = timmerMapper.getUserDetail(notice.getUserId());
-                timmerMapper.updateBuySellNoticeSendTimes(notice.getId(),new Date());
-                if(user != null){
-                    String sendStr = stock.getStockNum()+" 名称："+stock.getStockName()+",到达预定买入价格："+notice.getPrice()+",当前价格："+result[3];
-                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "买入提醒", sendStr);
+                    User user = new User();
+                    user = timmerMapper.getUserDetail(notice.getUserId());
+                    timmerMapper.updateBuySellNoticeSendTimes(notice.getId(), new Date());
+                    if (user != null) {
+                        String sendStr = stock.getStockNum() + " 名称：" + stock.getStockName() + ",到达预定买入价格：" + notice.getPrice() + ",当前价格：" + result[3];
+                        MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "买入提醒", sendStr);
+                    }
                 }
-            }
 //            卖列表处理
-            for(BuySellNotice notice : sellList){
+                for (BuySellNotice notice : sellList) {
 //                根据用户id查询用户邮件地址
-                User user = new User();
-                user = timmerMapper.getUserDetail(notice.getUserId());
-                timmerMapper.updateBuySellNoticeSendTimes(notice.getId(),new Date());
-                if(user != null){
-                    String sendStr = stock.getStockNum()+" 名称："+stock.getStockName()+",到达预定卖出价格："+notice.getPrice()+",当前价格："+result[3];
-                    MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "卖出提醒", sendStr);
+                    User user = new User();
+                    user = timmerMapper.getUserDetail(notice.getUserId());
+                    timmerMapper.updateBuySellNoticeSendTimes(notice.getId(), new Date());
+                    if (user != null) {
+                        String sendStr = stock.getStockNum() + " 名称：" + stock.getStockName() + ",到达预定卖出价格：" + notice.getPrice() + ",当前价格：" + result[3];
+                        MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "卖出提醒", sendStr);
+                    }
                 }
             }
         }
