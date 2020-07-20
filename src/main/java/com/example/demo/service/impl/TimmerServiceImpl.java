@@ -221,7 +221,7 @@ public class TimmerServiceImpl implements TimmerService {
                     userList = timmerMapper.getUserByUserStock(stock.getId());
                     for (UserMailContentVo user : userList) {
                         user.setContentList(new ArrayList<String>());
-                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :涨幅超过5%";
+                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :涨幅超过5%,当前幅度为："+ String.valueOf((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1);
                         user.getContentList().add(strResult);
                         MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "涨幅", user.getContentList().toString());
                     }
@@ -231,7 +231,7 @@ public class TimmerServiceImpl implements TimmerService {
                     userList = timmerMapper.getUserByUserStock(stock.getId());
                     for (UserMailContentVo user : userList) {
                         user.setContentList(new ArrayList<String>());
-                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :跌幅超过5%";
+                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :跌幅超过5% ,当前幅度为："+String.valueOf((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1);;
                         user.getContentList().add(strResult);
                         MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "跌幅", user.getContentList().toString());
                     }

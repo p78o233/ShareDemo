@@ -70,8 +70,8 @@ public class TimmerController {
 
     @GetMapping("/reminder")
     @ResponseBody
-    @ApiOperation("定时任务，涨跌超过5%邮件推送,每5分钟执行一次")
-    @Scheduled(cron = "0 0/5 * * * ? ")
+    @ApiOperation("定时任务，涨跌超过5%邮件推送,每10分钟执行一次")
+    @Scheduled(cron = "0 0/10 * * * ? ")
     public void reminder() {
         timmerService.reminder();
     }
