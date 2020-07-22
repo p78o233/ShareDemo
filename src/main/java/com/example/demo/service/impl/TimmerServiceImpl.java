@@ -204,10 +204,7 @@ public class TimmerServiceImpl implements TimmerService {
 
     @Override
     public void reminder() {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
-        if((hour==9&&min>30)||(hour == 10)||(hour==11&&min<30)||(hour==13)||(hour == 14)) {
+        if(checkTimeNow()) {
             List<Stock> list = new ArrayList<Stock>();
             list = timmerMapper.getAllStock();
             for (Stock stock : list) {
@@ -242,10 +239,7 @@ public class TimmerServiceImpl implements TimmerService {
 
     @Override
     public void noticeTarget() {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
-        if((hour==9&&min>30)||(hour == 10)||(hour==11&&min<30)||(hour==13)||(hour == 14)) {
+        if(checkTimeNow()) {
             List<Stock> stockList = new ArrayList<>();
             stockList = timmerMapper.getAllStock();
             for (Stock stock : stockList) {
@@ -287,10 +281,7 @@ public class TimmerServiceImpl implements TimmerService {
     @Override
     public void theGapEachDay() {
         List<Stock> stockList = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
-        if((hour==9&&min>30)||(hour == 10)||(hour==11&&min<30)||(hour==13)||(hour == 14)) {
+        if(checkTimeNow()) {
             stockList = timmerMapper.getAllStock();
             for (Stock stock : stockList) {
                 String result[] = getStockNowPrice(stock.getStockNum());
@@ -328,6 +319,18 @@ public class TimmerServiceImpl implements TimmerService {
                     timmerMapper.insertStockRate(stockRate);
                 }
             }
+        }
+    }
+
+    public boolean checkTimeNow(){
+//        确定是否交易时间
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        if((hour==9&&min>30)||(hour == 10)||(hour==11&&min<30)||(hour==13)||(hour == 14)) {
+            return true;
+        }else{
+            return false;
         }
     }
 }
