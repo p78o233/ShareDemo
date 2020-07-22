@@ -4,6 +4,7 @@ package com.example.demo.service.impl;/*
  */
 
 import com.example.demo.entity.po.StockRecord;
+import com.example.demo.entity.vo.StockAvgVo;
 import com.example.demo.entity.vo.StockPriceVo;
 import com.example.demo.mapper.NowMapper;
 import com.example.demo.service.NowService;
@@ -239,5 +240,56 @@ public class NowServiceImpl implements NowService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<StockAvgVo> getStockAvg(List<String> stockNums) {
+        if(stockNums.size()==0){
+//            查询全部
+            stockNums = nowMapper.getAllStockNum();
+        }
+        List<StockAvgVo> vos = new ArrayList<>();
+        for(String stockNum : stockNums){
+            StockAvgVo vo = new StockAvgVo();
+            List<Float> endPriceList = new ArrayList<>();
+            endPriceList = nowMapper.getAllEndPrice(stockNum);
+            if(endPriceList.size()!=0){
+                vo.setStockNum(stockNum);
+                vo.setStockName(nowMapper.getStockName(stockNum));
+                vo.setHisAvg(getAvg(endPriceList));
+                vo.setHisVariance(variance(endPriceList));
+                vo.setFiveAvg(getAvg(nowMapper.getPartEndPrice(stockNum,5)));
+                vo.setFiveVariance(variance(nowMapper.getPartEndPrice(stockNum,5)));
+                vo.setTenAvg(getAvg(nowMapper.getPartEndPrice(stockNum,10)));
+                vo.setTenVariance(variance(nowMapper.getPartEndPrice(stockNum,10)));
+                vo.setTwentyAvg(getAvg(nowMapper.getPartEndPrice(stockNum,20)));
+                vo.setTwentyVariance(variance(nowMapper.getPartEndPrice(stockNum,20)));
+                vos.add(vo);
+            }
+        }
+        return vos;
+    }
+    public float getAvg(List<Float> x){
+//        平均值函数
+        int m=x.size();
+        float sum=0;
+        for(int i=0;i<m;i++){//求和
+            sum+=x.get(i);
+        }
+        return sum/m;//求平均值
+    }
+    public float variance(List<Float> x) {
+//        方差函数
+        int m=x.size();
+        float sum=0;
+        for(int i=0;i<m;i++){//求和
+            sum+=x.get(i);
+        }
+        float dAve=sum/m;//求平均值
+        float dVar=0;
+        for(int i=0;i<m;i++){//求方差
+            dVar+=(x.get(i)-dAve)*(x.get(i)-dAve);
+        }
+        return dVar/m;
     }
 }

@@ -46,4 +46,17 @@ public interface NowMapper {
 
     @Select("select  max(highPrice) from (select * from stock_record where stockNum = #{stockNum} order by recordTime desc limit 0,#{limitDay} )t;")
     Float getLatestHightPrice(@Param("stockNum")String stockNum,@Param("limitDay")int limitDay);
+
+    @Select("select stockNum from stock where isdel = 0")
+    List<String> getAllStockNum();
+
+//    查询全部收盘价格
+    @Select("select endPrice from stock_record where beginPrice != 0 and stockNum = #{stockNum}")
+    List<Float> getAllEndPrice(@Param("stockNum")String stockNum);
+//    查询部分收盘价格
+    @Select("select endPrice from stock_record where beginPrice != 0 and stockNum = #{stockNum} order by id desc limit 0,#{pageSize}")
+    List<Float> getPartEndPrice(@Param("stockNum")String stockNum,@Param("pageSize")int pageSize);
+//    查询股票名字
+    @Select("select stockName from stock where stockNum = #{stockNum} and isdel = 0")
+    String getStockName(@Param("stockNum")String stockNum);
 }

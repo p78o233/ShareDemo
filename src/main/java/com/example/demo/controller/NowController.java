@@ -27,4 +27,11 @@ public class NowController {
     public R checkNowPrice(@PathVariable("userId")int userId, @PathVariable("weight")int weight, @RequestBody List<String> stockNums){
         return new R(true,200,nowService.checkNowPrice(userId,weight,stockNums),"查询成功");
     }
+
+    @PostMapping("/getStockAvg")
+    @ResponseBody
+    @ApiOperation("获取平均值方差之类的")
+    public R getStockAvg(@RequestBody List<String> stockNums){
+        return new R(true,200,nowService.getStockAvg(stockNums),"查询成功");
+    }
 }
