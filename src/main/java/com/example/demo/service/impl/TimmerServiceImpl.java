@@ -64,14 +64,14 @@ public class TimmerServiceImpl implements TimmerService {
                 float minRectPrice = timmerMapper.getLowestRectDay(stockList.get(i).getStockNum(), dayNum);
 //                某个天数的最大值
                 float maxRectPrice = timmerMapper.getHeightRectDay(stockList.get(i).getStockNum(), dayNum);
-                if(minRectPrice > nowPrice) {
+                if (minRectPrice > nowPrice) {
                     userMailContentVoList = setUserMailContentVo(userMailContentVoList, stockList.get(i), dayNum, maxRectPrice, minRectPrice, nowPrice, historyminStockRecord, historyMaxStockRecord);
                 }
             }
         }
         //                发送邮件
         for (UserMailContentVo vo : userMailContentVoList) {
-            if(vo.getContentList() != null) {
+            if (vo.getContentList() != null) {
                 MailUtils.sendSimpleMail(sender, vo.getEmailAddress(), "买入建议", vo.getContentList().toString());
             }
         }
@@ -106,19 +106,20 @@ public class TimmerServiceImpl implements TimmerService {
                 float minRectPrice = timmerMapper.getLowestRectDay(stockList.get(i).getStockNum(), dayNum);
 //                某个天数的最大值
                 float maxRectPrice = timmerMapper.getHeightRectDay(stockList.get(i).getStockNum(), dayNum);
-                if(nowPrice > maxRectPrice) {
+                if (nowPrice > maxRectPrice) {
                     userMailContentVoList = setUserMailContentVo(userMailContentVoList, stockList.get(i), dayNum, maxRectPrice, minRectPrice, nowPrice, historyminStockRecord, historyMaxStockRecord);
                 }
             }
         }
         //                发送邮件
         for (UserMailContentVo vo : userMailContentVoList) {
-            if(vo.getContentList() != null) {
+            if (vo.getContentList() != null) {
                 MailUtils.sendSimpleMail(sender, vo.getEmailAddress(), "买入建议", vo.getContentList().toString());
             }
         }
     }
-//    邮件编写
+
+    //    邮件编写
     public List<UserMailContentVo> setUserMailContentVo(List<UserMailContentVo> userMailContentVoList, Stock stock, int dayNum, float maxRectPrice, float minRectPrice, float nowPrice, StockRecord historyLowPriceStockRecord, StockRecord historyHightPriceStockRecord) {
         //                当前价格小于最近天数的最小值
         String title = "";
@@ -137,10 +138,10 @@ public class TimmerServiceImpl implements TimmerService {
                     String contentStr = title + stock.getStockName() + ",编号：" + stock.getStockNum() + ",类别：股票，" +
                             "," + dayNum + "天最低价：" + minRectPrice + ",当前价格：" + nowPrice + "," + dayNum + "天最高价：" + maxRectPrice + ",历史最低价："
                             + historyLowPriceStockRecord.getLowPrice()
-                            + ",历史最高价：" + historyHightPriceStockRecord.getHighPrice()+"%\n";
-                    if(vo.getContentList()!=null) {
+                            + ",历史最高价：" + historyHightPriceStockRecord.getHighPrice() + "%\n";
+                    if (vo.getContentList() != null) {
                         vo.getContentList().add(contentStr);
-                    }else{
+                    } else {
                         vo.setContentList(new ArrayList<String>());
                         vo.getContentList().add(contentStr);
                     }
@@ -157,7 +158,7 @@ public class TimmerServiceImpl implements TimmerService {
         for (Stock stock : list) {
             String result[] = getStockNowPrice(stock.getStockNum());
 //            今天没有停牌
-            if(Float.valueOf(result[1]) != 0.0f) {
+            if (Float.valueOf(result[1]) != 0.0f) {
                 StockRecord sr = new StockRecord();
                 sr.setBeginPrice(Float.valueOf(result[1]));
                 sr.setEndPrice(Float.valueOf(result[3]));
@@ -193,10 +194,10 @@ public class TimmerServiceImpl implements TimmerService {
         String shanghaiResult[] = getStockNowPrice("s_sh000001");
 //        深圳指数
         String shenzhenResult[] = getStockNowPrice("s_sz399001");
-        if(Float.valueOf(shanghaiResult[3]) > 0.3 && Float.valueOf(shenzhenResult[3]) > 0.3){
+        if (Float.valueOf(shanghaiResult[3]) > 0.3 && Float.valueOf(shenzhenResult[3]) > 0.3) {
 //            上海深圳指数上升大于0.3% 银行股下降权重
-                timmerMapper.updateBankWeight(-100);
-        }else{
+            timmerMapper.updateBankWeight(-100);
+        } else {
 //            银行股上升权重
             timmerMapper.updateBankWeight(100);
         }
@@ -204,7 +205,7 @@ public class TimmerServiceImpl implements TimmerService {
 
     @Override
     public void reminder() {
-        if(checkTimeNow()) {
+        if (checkTimeNow()) {
             List<Stock> list = new ArrayList<Stock>();
             list = timmerMapper.getAllStock();
             for (Stock stock : list) {
@@ -213,25 +214,38 @@ public class TimmerServiceImpl implements TimmerService {
 //        获取当前的数据
                 String result[] = getStockNowPrice(stock.getStockNum());
                 if ((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1 > 0.05) {
-//                升超过5%
+//                升超过5%但是没有发过邮件
+                    if (stock.getIsSend() != 1) {
                     List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
                     userList = timmerMapper.getUserByUserStock(stock.getId());
-                    for (UserMailContentVo user : userList) {
-                        user.setContentList(new ArrayList<String>());
-                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :涨幅超过5%,当前幅度为："+ String.valueOf((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1);
-                        user.getContentList().add(strResult);
-                        MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "涨幅", user.getContentList().toString());
+//                        涨幅超过5%但是还没有发过邮件的
+                        for (UserMailContentVo user : userList) {
+                            user.setContentList(new ArrayList<String>());
+                            String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :涨幅超过5%,当前幅度为：" + String.valueOf((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1);
+                            user.getContentList().add(strResult);
+                            MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "涨幅", user.getContentList().toString());
+                        }
+//                        设置已发送标志位
+                        timmerMapper.updateStockIsSend(1,stock.getId());
                     }
                 } else if ((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1 < -0.05) {
-//                跌超过5%
-                    List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
-                    userList = timmerMapper.getUserByUserStock(stock.getId());
-                    for (UserMailContentVo user : userList) {
-                        user.setContentList(new ArrayList<String>());
-                        String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :跌幅超过5% ,当前幅度为："+String.valueOf((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1);;
-                        user.getContentList().add(strResult);
-                        MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "跌幅", user.getContentList().toString());
+//                跌超过5%但是没有发过邮件的
+                    if (stock.getIsSend() != -1) {
+                        List<UserMailContentVo> userList = new ArrayList<UserMailContentVo>();
+                        userList = timmerMapper.getUserByUserStock(stock.getId());
+                        for (UserMailContentVo user : userList) {
+                            user.setContentList(new ArrayList<String>());
+                            String strResult = stock.getStockNum() + ":  :" + stock.getStockName() + ": :跌幅超过5% ,当前幅度为：" + String.valueOf((Float.valueOf(result[3]) / yesterdayRecord.getEndPrice()) - 1);
+                            ;
+                            user.getContentList().add(strResult);
+                            MailUtils.sendSimpleMail(sender, user.getEmailAddress(), "跌幅", user.getContentList().toString());
+                        }
+//                        设置已发送标志位
+                        timmerMapper.updateStockIsSend(-1,stock.getId());
                     }
+                }else{
+//                    把涨跌幅发邮件标志位归零
+                    timmerMapper.updateStockIsSend(0,stock.getId());
                 }
             }
         }
@@ -239,7 +253,7 @@ public class TimmerServiceImpl implements TimmerService {
 
     @Override
     public void noticeTarget() {
-        if(checkTimeNow()) {
+        if (checkTimeNow()) {
             List<Stock> stockList = new ArrayList<>();
             stockList = timmerMapper.getAllStock();
             for (Stock stock : stockList) {
@@ -281,7 +295,7 @@ public class TimmerServiceImpl implements TimmerService {
     @Override
     public void theGapEachDay() {
         List<Stock> stockList = new ArrayList<>();
-        if(checkTimeNow()) {
+        if (checkTimeNow()) {
             stockList = timmerMapper.getAllStock();
             for (Stock stock : stockList) {
                 String result[] = getStockNowPrice(stock.getStockNum());
@@ -322,14 +336,14 @@ public class TimmerServiceImpl implements TimmerService {
         }
     }
 
-    public boolean checkTimeNow(){
+    public boolean checkTimeNow() {
 //        确定是否交易时间
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
-        if((hour==9&&min>30)||(hour == 10)||(hour==11&&min<30)||(hour==13)||(hour == 14)) {
+        if ((hour == 9 && min > 30) || (hour == 10) || (hour == 11 && min < 30) || (hour == 13) || (hour == 14)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

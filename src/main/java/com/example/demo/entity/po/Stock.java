@@ -14,16 +14,9 @@ public class Stock {
     private int weight;
     private int userId;
     private int isdel;
+    private int isSend;
 
     public Stock() {
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
     }
 
     @Override
@@ -37,38 +30,11 @@ public class Stock {
                 ", weight=" + weight +
                 ", userId=" + userId +
                 ", isdel=" + isdel +
+                ", isSend=" + isSend +
                 '}';
     }
 
-    public int getIsdel() {
-        return isdel;
-    }
-
-    public void setIsdel(int isdel) {
-        this.isdel = isdel;
-    }
-
-    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category, int weight, int userId, int isdel) {
-        this.id = id;
-        this.stockNum = stockNum;
-        this.stockName = stockName;
-        this.createTime = createTime;
-        this.category = category;
-        this.weight = weight;
-        this.userId = userId;
-        this.isdel = isdel;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public Integer getId() {
-
         return id;
     }
 
@@ -108,5 +74,47 @@ public class Stock {
         this.category = category;
     }
 
+    public int getWeight() {
+        return weight;
+    }
 
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(int isdel) {
+        this.isdel = isdel;
+    }
+
+    public int getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(int isSend) {
+        this.isSend = isSend;
+    }
+
+    public Stock(Integer id, String stockNum, String stockName, Date createTime, int category, int weight, int userId, int isdel, int isSend) {
+        this.id = id;
+        this.stockNum = stockNum;
+        this.stockName = stockName;
+        this.createTime = createTime;
+        this.category = category;
+        this.weight = weight;
+        this.userId = userId;
+        this.isdel = isdel;
+        this.isSend = isSend;
+    }
 }

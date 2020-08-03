@@ -59,7 +59,9 @@ public interface TimmerMapper {
 //    获取购买了这个股票的用户
     @Select("select * from user where id in (select userId from stock_user where stockId = #{stockId} and isdel = 0)")
     List<UserMailContentVo> getUserByUserStock(@Param("stockId")int stockId);
-
+//    把涨跌幅发邮件标志位归零或者已经发送
+    @Update("update stock set isSend = #{isSend} where id = #{id}")
+    int updateStockIsSend(@Param("isSend")int isSend,@Param("id")int id);
 //    使用股票号查询买入卖出提示表获取符合条件的数据
 //    买入
     @Select("select * from buy_sell_notice where stockNum = #{stockNum} and cate = 1 and price > #{price} and isSend < 3 and isdel = 0")
