@@ -62,6 +62,8 @@ public interface TimmerMapper {
 //    把涨跌幅发邮件标志位归零或者已经发送
     @Update("update stock set isSend = #{isSend} where id = #{id}")
     int updateStockIsSend(@Param("isSend")int isSend,@Param("id")int id);
+    @Update("update stock set isSend = 0")
+    int resetStockIsSend();
 //    使用股票号查询买入卖出提示表获取符合条件的数据
 //    买入
     @Select("select * from buy_sell_notice where stockNum = #{stockNum} and cate = 1 and price > #{price} and isSend < 3 and isdel = 0")

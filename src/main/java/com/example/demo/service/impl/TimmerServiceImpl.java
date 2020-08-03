@@ -186,6 +186,9 @@ public class TimmerServiceImpl implements TimmerService {
                 timmerMapper.insertDaylyRecord(sr);
             }
         }
+
+//        重置stock表的isSend
+        timmerMapper.resetStockIsSend();
     }
 
     @Override
