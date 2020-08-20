@@ -3,6 +3,7 @@ package com.example.demo.service.impl;/*
  * @date 2020/7/13
  */
 
+import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
 import com.example.demo.entity.vo.StockAvgVo;
 import com.example.demo.entity.vo.StockPriceVo;
@@ -291,5 +292,23 @@ public class NowServiceImpl implements NowService {
             dVar+=(x.get(i)-dAve)*(x.get(i)-dAve);
         }
         return dVar/m;
+    }
+
+    @Override
+    public void get(List<String> stockNums) {
+//        获取最近20的记录状况
+        if(stockNums.size() == 0){
+//            获取全部
+            stockNums = nowMapper.getAllStock();
+        }
+        for(String stockNum : stockNums){
+            List<StockRecord> stockRecords = new ArrayList<>();
+            stockRecords = nowMapper.getStockRecordByStockNum(stockNum);
+            int raiseSeries = 0;
+            int dropSeries = 0;
+            for(int i = 0;i<stockRecords.size();i++){
+
+            }
+        }
     }
 }

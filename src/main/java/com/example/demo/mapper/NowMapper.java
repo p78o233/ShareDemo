@@ -3,6 +3,7 @@ package com.example.demo.mapper;/*
  * @date 2020/7/13
  */
 
+import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
 import com.example.demo.entity.vo.StockPriceVo;
 import org.apache.ibatis.annotations.Param;
@@ -59,4 +60,11 @@ public interface NowMapper {
 //    查询股票名字
     @Select("select stockName from stock where stockNum = #{stockNum} and isdel = 0")
     String getStockName(@Param("stockNum")String stockNum);
+
+//    获取全部股票数据
+    @Select("select stockNum from stock where isdel = 0 ")
+    List<String> getAllStock();
+//    获取stockRecord近20天数据，不计算停牌的
+    @Select("select * from stock_record where stockNum = #{stockNum} and beginPrice != 0 order by id desc limit 0,20")
+    List<StockRecord> getStockRecordByStockNum(@Param("stockNum")String stockNum);
 }

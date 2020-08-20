@@ -13,4 +13,6 @@ public interface NowService {
     public List<StockPriceVo> checkNowPrice(int userId, int isWeitht, List<String> stockNums);
 //    获取股票列表获取历史平均值，最近平均值，方差
     public List<StockAvgVo> getStockAvg(List<String> stockNums);
+//    查看某个股票20不停牌的交易日内的连续状况
+    public void get(List<String> stockNums);
 }
