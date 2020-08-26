@@ -3,6 +3,7 @@ package com.example.demo.service.impl;/*
  * @date 2020/7/13
  */
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.po.Stock;
 import com.example.demo.entity.po.StockRecord;
 import com.example.demo.entity.vo.StockAvgVo;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -295,20 +297,62 @@ public class NowServiceImpl implements NowService {
     }
 
     @Override
-    public void get(List<String> stockNums) {
+    public List<JSONObject> getTwenty(List<String> stockNums) {
 //        获取最近20的记录状况
         if(stockNums.size() == 0){
 //            获取全部
             stockNums = nowMapper.getAllStock();
         }
+//        检查stockNum记录是否大于等于20天,小于20天的数据去除
+        Iterator<String> iterator = stockNums.iterator();
+        while (iterator.hasNext()) {
+            String s = iterator.next();
+            if (nowMapper.getCountRecord(s)<20) {
+                iterator.remove();//使用迭代器的删除方法删除
+            }
+        }
+        List<JSONObject> resultJson = new ArrayList<>();
+//        获取超过20天的数据
         for(String stockNum : stockNums){
             List<StockRecord> stockRecords = new ArrayList<>();
             stockRecords = nowMapper.getStockRecordByStockNum(stockNum);
             int raiseSeries = 0;
+            int blanceSeries = 0;
             int dropSeries = 0;
-            for(int i = 0;i<stockRecords.size();i++){
+            for(int i = 0;i < stockRecords.size();i++){
+                if(i == 0){
+                    if(stockRecords.get(i).getFlag()<0)
+                        dropSeries++;
+                    else if(stockRecords.get(i).getFlag()==0)
+                        blanceSeries++;
+                    else if(stockRecords.get(i).getFlag()>0)
+                        raiseSeries++;
 
+                }else{
+                    if(stockRecords.get(i).getFlag()<0) {
+//                        raiseSeries = 0;
+//                        blanceSeries = 0;
+                        dropSeries++;
+                    }else if(stockRecords.get(i).getFlag()==0) {
+//                        raiseSeries = 0;
+//                        dropSeries = 0;
+                        blanceSeries++;
+                    } else if(stockRecords.get(i).getFlag()>0) {
+//                        dropSeries = 0;
+//                        blanceSeries = 0;
+                        raiseSeries++;
+                    }
+                }
+                JSONObject result = new JSONObject();
+                result.put("stockNum",stockRecords.get(i).getStockNum());
+                result.put("stockName",stockRecords.get(i).getStockName());
+                result.put("raiseSeries",raiseSeries);
+                result.put("blanceSeries",blanceSeries);
+                result.put("dropSeries",dropSeries);
+                resultJson.add(result);
             }
         }
+
+        return resultJson;
     }
 }

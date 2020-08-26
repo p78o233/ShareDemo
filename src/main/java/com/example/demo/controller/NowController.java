@@ -34,4 +34,11 @@ public class NowController {
     public R getStockAvg(@RequestBody List<String> stockNums){
         return new R(true,200,nowService.getStockAvg(stockNums),"查询成功");
     }
+
+    @PostMapping("/getTwenty")
+    @ResponseBody
+    @ApiOperation("获取近二十天数据")
+    public R getTwenty(@RequestBody List<String> stockNums){
+        return new R(true,200,nowService.getTwenty(stockNums),"查询成功");
+    }
 }

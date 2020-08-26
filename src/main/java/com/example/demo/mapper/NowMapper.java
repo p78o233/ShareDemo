@@ -64,7 +64,10 @@ public interface NowMapper {
 //    获取全部股票数据
     @Select("select stockNum from stock where isdel = 0 ")
     List<String> getAllStock();
-//    获取stockRecord近20天数据，不计算停牌的
+//    查询记录是否大于20条
+    @Select("select count(*) from stock_record where stockNum = #{stockNum} and beginPrice != 0")
+    int getCountRecord (@Param("stockNum")String stockNum);
+    //    获取stockRecord近20天数据，不计算停牌的
     @Select("select * from stock_record where stockNum = #{stockNum} and beginPrice != 0 order by id desc limit 0,20")
     List<StockRecord> getStockRecordByStockNum(@Param("stockNum")String stockNum);
 }
