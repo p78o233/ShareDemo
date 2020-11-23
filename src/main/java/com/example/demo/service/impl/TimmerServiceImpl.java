@@ -114,7 +114,7 @@ public class TimmerServiceImpl implements TimmerService {
         //                发送邮件
         for (UserMailContentVo vo : userMailContentVoList) {
             if (vo.getContentList() != null) {
-                MailUtils.sendSimpleMail(sender, vo.getEmailAddress(), "买入建议", vo.getContentList().toString());
+                MailUtils.sendSimpleMail(sender, vo.getEmailAddress(), "卖出建议", vo.getContentList().toString());
             }
         }
     }
