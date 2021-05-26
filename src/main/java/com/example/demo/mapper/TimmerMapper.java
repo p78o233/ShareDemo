@@ -33,7 +33,7 @@ public interface TimmerMapper {
     StockRecord getHeightestPrice(@Param("stockNum") String stockNum);
 
     //    获取历史最低价
-    @Select("select * from stock_record where stockNum = #{stockNum} and lowPrice =  (select MIN(lowPrice) from stock_record where stockNum = #{stockNum} ) ORDER BY id desc limit 0,1;")
+    @Select("select * from stock_record where stockNum = #{stockNum} and lowPrice =  (select MIN(lowPrice) from stock_record where stockNum = #{stockNum} and lowPrice != 0.0) ORDER BY id desc limit 0,1;")
     StockRecord getLowestPrice(@Param("stockNum") String stockNum);
 
     //    查询系统中全部用户列表
