@@ -4,8 +4,10 @@ package com.example.demo.service.impl;/*
  */
 
 import com.example.demo.entity.po.*;
+import com.example.demo.entity.vo.StockAvgVo;
 import com.example.demo.entity.vo.UserMailContentVo;
 import com.example.demo.mapper.TimmerMapper;
+import com.example.demo.service.NowService;
 import com.example.demo.service.TimmerService;
 import com.example.demo.utils.HttpUtils;
 import com.example.demo.utils.MailUtils;
@@ -21,6 +23,8 @@ import java.util.*;
 
 @Service
 public class TimmerServiceImpl implements TimmerService {
+    @Autowired
+    private NowService nowService;
     @Autowired
     private TimmerMapper timmerMapper;
     @Autowired
@@ -348,6 +352,49 @@ public class TimmerServiceImpl implements TimmerService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void downHillType() {
+        List<Stock> list = new ArrayList<Stock>();
+        list = timmerMapper.getAllStock();
+        List<String> stockNums = new ArrayList<>();
+        for(Stock item : list){
+//            获取记录天数大于20天的
+            if(timmerMapper.getRecordCount(item.getStockNum())>20) {
+                stockNums.add(item.getStockNum());
+            }
+        }
+        List<StockAvgVo> vos = new ArrayList<>();
+        vos = nowService.getStockAvg(stockNums);
+        Iterator<StockAvgVo> iterator = vos.iterator();
+        while (iterator.hasNext()){
+            StockAvgVo vo = iterator.next();
+            if(!(vo.getFiveAvg()<vo.getTenAvg()&&vo.getTenAvg()<vo.getTwentyAvg())){
+                iterator.remove();
+            }
+        }
+//        上面剩下的再执行是否购买sql
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+//        当天的零时零分零秒
+        Date zero = calendar.getTime();
+//        获取一个月前的数据
+        Date monthBefore = new Date(zero.getTime()-30*24*60*60*1000L);
+        String sendMsg = "";
+        for(StockAvgVo vo : vos){
+            if(timmerMapper.countLastTransactionLower(vo.getStockNum(),vo.getFiveAvg()-0.03,monthBefore)/timmerMapper.countLastTransaction(vo.getStockNum(),monthBefore)<0.2){
+//                小于预计买入价格占总天数小于20%才发邮件
+                sendMsg+="股票编号："+vo.getStockNum()+"，股票名称："+vo.getStockName()+"，建议买入价格："+String.valueOf(vo.getFiveAvg()-0.03)
+                        +"，近一个月的最高价格："+ String.valueOf(timmerMapper.maxLastTransaction(vo.getStockNum(),monthBefore))+"\n";
+            }
+        }
+        if(!"".equals(sendMsg)) {
+            MailUtils.sendSimpleMail(sender, "953712390@qq.com", "下坡型买入建议", sendMsg);
         }
     }
 }

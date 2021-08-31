@@ -18,4 +18,6 @@ public interface TimmerService {
     public void noticeTarget();
 //    定时任务获取股票的最大涨跌幅出现的时间
     public void theGapEachDay();
+//    每天开盘之前获取下坡型的数据
+    public void downHillType();
 }

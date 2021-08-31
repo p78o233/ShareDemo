@@ -86,4 +86,16 @@ public interface TimmerMapper {
 
     @Insert("insert into stock_rate (stockId,cate,createTime,ratio) values (#{s.stockId},#{s.cate},#{s.createTime},#{s.ratio})")
     int insertStockRate(@Param("s")StockRate stockRate);
+
+//    获取股票的记录数量
+    @Select("select count(*) from stock_record where stockNum = #{stockNum}")
+    int getRecordCount(@Param("stockNum")String stockNum);
+
+//    是否购入sql语句
+    @Select("select count(*) from stock_record where stockNum = #{stockNum} and recordTime > #{recordTime}")
+    float countLastTransaction(@Param("stockNum")String stockNum,@Param("recordTime")Date recordTime);
+    @Select("select count(*) from stock_record where stockNum = #{stockNum} and endPrice < #{endPrice} and recordTime > #{recordTime}")
+    float countLastTransactionLower(@Param("stockNum")String stockNum,@Param("endPrice")double endPrice,@Param("recordTime")Date recordTime);
+    @Select("select MAX(highPrice) from stock_record where stockNum = #{stockNum} and recordTime > #{recordTime}")
+    float maxLastTransaction(@Param("stockNum")String stockNum,@Param("recordTime")Date recordTime);
 }
