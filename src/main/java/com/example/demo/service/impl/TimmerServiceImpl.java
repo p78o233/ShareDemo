@@ -395,6 +395,8 @@ public class TimmerServiceImpl implements TimmerService {
         }
         if(!"".equals(sendMsg)) {
             MailUtils.sendSimpleMail(sender, "953712390@qq.com", "下坡型买入建议", sendMsg);
+        }else{
+            MailUtils.sendSimpleMail(sender, "953712390@qq.com", "下坡型买入建议", "今天没有买入建议");
         }
     }
 }
