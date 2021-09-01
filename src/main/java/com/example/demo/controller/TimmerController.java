@@ -95,7 +95,7 @@ public class TimmerController {
     @GetMapping("/downHillType")
     @ResponseBody
     @ApiOperation("定时任务，每天9点15分获取下坡型预计可以买的股票")
-    @Scheduled(cron = "0 15 9 * * ? ")
+    @Scheduled(cron = "0 10 15 * * ? ")
     public void downHillType(){
         timmerService.downHillType();
     }
