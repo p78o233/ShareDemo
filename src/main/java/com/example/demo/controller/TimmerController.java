@@ -92,11 +92,19 @@ public class TimmerController {
         timmerService.theGapEachDay();
     }
 
-    @GetMapping("/downHillType")
+    @GetMapping("/downHillTypeFinish")
     @ResponseBody
     @ApiOperation("定时任务，每天9点15分获取下坡型预计可以买的股票")
     @Scheduled(cron = "0 10 15 * * ? ")
-    public void downHillType(){
+    public void downHillTypeFinish(){
+        timmerService.downHillType();
+    }
+
+    @GetMapping("/downHillTypeNow")
+    @ResponseBody
+    @ApiOperation("定时任务，每天9点15分获取下坡型预计可以买的股票")
+    @Scheduled(cron = "0 30 14 * * ? ")
+    public void downHillTypeNow(){
         timmerService.downHillType();
     }
 }
