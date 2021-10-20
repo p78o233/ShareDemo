@@ -98,4 +98,8 @@ public interface TimmerMapper {
     float countLastTransactionLower(@Param("stockNum")String stockNum,@Param("endPrice")double endPrice,@Param("recordTime")Date recordTime);
     @Select("select MAX(highPrice) from stock_record where stockNum = #{stockNum} and recordTime > #{recordTime}")
     float maxLastTransaction(@Param("stockNum")String stockNum,@Param("recordTime")Date recordTime);
+
+//    获取buysellnotice表中的买入卖出数据
+    @Select("select * from buy_sell_notice where isdel = 0 and isSend < 3 and cate = #{cate}")
+    List<BuySellNotice> getAllBuySellNotice(@Param("cate")int cate);
 }

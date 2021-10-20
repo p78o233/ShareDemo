@@ -399,4 +399,33 @@ public class TimmerServiceImpl implements TimmerService {
             MailUtils.sendSimpleMail(sender, "953712390@qq.com", "下坡型买入建议", "今天没有买入建议");
         }
     }
+
+    @Override
+    public void getBuySellNotice() {
+        String mailContent = "";
+//        获取全部买入提醒的
+        List <BuySellNotice> listNotice = new ArrayList<BuySellNotice>();
+        listNotice = timmerMapper.getAllBuySellNotice(1);
+        mailContent += "买入：\n";
+        for (BuySellNotice notice : listNotice){
+            String result[] = getStockNowPrice(notice.getStockNum());
+            float nowPrice = Float.valueOf(result[3]);
+            float rate = 0.0f;
+            rate = nowPrice/notice.getPrice()-1;
+            mailContent += "股票编号："+notice.getStockNum()+",股票名称："+notice.getStockName()+"，距离买入的百分比："+String.valueOf(rate)+
+                    "，目标买入价格："+notice.getPrice()+"，当前价格："+String.valueOf(nowPrice)+"\n";
+        }
+        mailContent += "卖出：\n";
+        listNotice = new ArrayList<BuySellNotice>();
+        listNotice = timmerMapper.getAllBuySellNotice(2);
+        for (BuySellNotice notice : listNotice){
+            String result[] = getStockNowPrice(notice.getStockNum());
+            float nowPrice = Float.valueOf(result[3]);
+            float rate = 0.0f;
+            rate = 1 - (nowPrice/notice.getPrice());
+            mailContent += "股票编号："+notice.getStockNum()+",股票名称："+notice.getStockName()+"，距离卖出的百分比："+String.valueOf(rate)+
+                    "，目标卖出价格："+notice.getPrice()+"，当前价格："+String.valueOf(nowPrice)+"\n";
+        }
+        MailUtils.sendSimpleMail(sender, "953712390@qq.com", "买入卖出提示", mailContent);
+    }
 }

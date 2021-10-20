@@ -20,4 +20,6 @@ public interface TimmerService {
     public void theGapEachDay();
 //    每天开盘之前获取下坡型的数据
     public void downHillType();
+//    每天收盘之后获取在买入卖出的股票当前价格与准备操作的价格之间的差值
+    public void getBuySellNotice();
 }

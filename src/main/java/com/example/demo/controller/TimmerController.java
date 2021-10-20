@@ -94,7 +94,7 @@ public class TimmerController {
 
     @GetMapping("/downHillTypeFinish")
     @ResponseBody
-    @ApiOperation("定时任务，每天9点15分获取下坡型预计可以买的股票")
+    @ApiOperation("定时任务，每天15点10分获取下坡型预计可以买的股票")
     @Scheduled(cron = "0 10 15 * * ? ")
     public void downHillTypeFinish(){
         timmerService.downHillType();
@@ -102,9 +102,17 @@ public class TimmerController {
 
     @GetMapping("/downHillTypeNow")
     @ResponseBody
-    @ApiOperation("定时任务，每天9点15分获取下坡型预计可以买的股票")
+    @ApiOperation("定时任务，每天14点30分获取下坡型预计可以买的股票")
     @Scheduled(cron = "0 30 14 * * ? ")
     public void downHillTypeNow(){
         timmerService.downHillType();
+    }
+
+    @GetMapping("/getBuySellNotice")
+    @ResponseBody
+    @ApiOperation("定时任务，每天15点05分获取准备买入和卖出的差值")
+    @Scheduled(cron = "0 5 15 * * ? ")
+    public void getBuySellNotice(){
+        timmerService.getBuySellNotice();
     }
 }
